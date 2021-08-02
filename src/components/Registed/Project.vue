@@ -14,13 +14,13 @@
           <q-input v-model="project.tipo" label="Tipo" outlined class="col-xs-12 col-md-6"/>
           <q-input v-model="data" label="Data" outlined class="col-xs-12 col-md-6">
              <template v-slot:append>
-                <q-icon :name="mdiCalendarMonth" class="cursor-pointer">
+                <q-btn :icon="mdiCalendarMonth" flat dense color="positive">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                     <q-date v-model="data">
-                        <q-btn label="Fechar" color="primary" flat v-close-popup />
+                        <q-btn label="Fechar" color="positive" flat v-close-popup />
                     </q-date>
                   </q-popup-proxy>
-                </q-icon>
+                </q-btn>
               </template>
           </q-input>
           <q-input v-model="project.descricao" label="Descrição" outlined type="textarea" class="col-xs-12"/>

@@ -55,9 +55,6 @@ import { date, useQuasar } from 'quasar'
 import ProjectEditor from 'src/components/Registed/Project.vue'
 
 export default defineComponent({
-  // components: {
-  //   Project: defineAsyncComponent(() => import('src/components/Registed/Project.vue')),
-  // },
   setup () {
     const $q = useQuasar()
     const loading = ref(false)
