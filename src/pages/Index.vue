@@ -11,6 +11,7 @@
       control-color="white"
       transition-prev="slide-right"
       transition-next="slide-left" class="window-height">
+      
       <q-carousel-slide
         class="q-pa-none"
         :name="1"
@@ -35,6 +36,7 @@
           </div>
         </div>
       </q-carousel-slide>
+      
       <q-carousel-slide
         class="q-pa-none"
         :name="2"
@@ -44,21 +46,21 @@
           style="background-color: rgba(0, 0, 0, 0.68) !important">
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
-              <span :style="'color:' + theme_color">PTPC</span>
+              Banco Mundial
+              <span :style="'color:' + theme_color">(BM)</span>
             </h2>
-            <h4 class="animation_1 text-white">
-              Plataforma Tecnológica Portuguesa da Construção
-            </h4>
+
             <div class="animation_2">
               <q-btn
                 size="xl"
                 :style="'background:' + theme_color + '; color: white'"
-                label="VER PROJETOS" 
+                label="APRESENTAÇÃO" 
                 to="/Projetos"/>
             </div>
           </div>
         </div>
       </q-carousel-slide>
+      
       <q-carousel-slide
         class="q-pa-none"
         :name="3"
@@ -68,16 +70,60 @@
           style="background-color: rgba(0, 0, 0, 0.68) !important">
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
-              <span :style="'color:' + theme_color">CLUSTER AEC</span>
+              Banco Interamericano de Desenvolvimento
+              <span :style="'color:' + theme_color">(BID)</span>
             </h2>
-            <h4 class="animation_1 text-white">
-              Arquitetura, Engenharia e Construção
-            </h4>
             <div class="animation_2">
               <q-btn
                 size="xl"
                 :style="'background:' + theme_color + '; color: white'"
-                label="VER PROJETOS" 
+                label="APRESENTAÇÃO" 
+                to="/Projetos" />
+            </div>
+          </div>
+        </div>
+      </q-carousel-slide>
+
+      <q-carousel-slide
+        class="q-pa-none"
+        :name="4"
+        img-src="/images/mainslide2_compressed.jpg">
+        <div
+          class="full-height full-width flex flex-center"
+          style="background-color: rgba(0, 0, 0, 0.68) !important">
+          <div class="custom-caption">
+            <h2 class="animation_2 text-white">
+              Banco Europeu para a Reconstrução e Desenvolvimento
+              <span :style="'color:' + theme_color">(BERD)</span>
+            </h2>
+            <div class="animation_2">
+              <q-btn
+                size="xl"
+                :style="'background:' + theme_color + '; color: white'"
+                label="APRESENTAÇÃO" 
+                to="/Projetos" />
+            </div>
+          </div>
+        </div>
+      </q-carousel-slide>
+
+      <q-carousel-slide
+        class="q-pa-none"
+        :name="5"
+        img-src="/images/mainslide2_compressed.jpg">
+        <div
+          class="full-height full-width flex flex-center"
+          style="background-color: rgba(0, 0, 0, 0.68) !important">
+          <div class="custom-caption">
+            <h2 class="animation_2 text-white">
+              Banco Europeu de Investimento
+              <span :style="'color:' + theme_color">(BEI)</span>
+            </h2>
+            <div class="animation_2">
+              <q-btn
+                size="xl"
+                :style="'background:' + theme_color + '; color: white'"
+                label="APRESENTAÇÃO" 
                 to="/Projetos" />
             </div>
           </div>

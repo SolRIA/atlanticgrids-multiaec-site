@@ -15,8 +15,13 @@
       v-model:selected="selectedProject"
       @request="onServerRequest">
       
-      <template v-slot:top-right>
-        <q-btn label="Novo" color="positive" @click="onNewProject" class="q-mr-md" :icon="mdiPlusBoxOutline"/>
+      <template v-slot:top>
+        <q-select label="País" outlined v-model="country" dense :options="countries" class="q-mr-md" />
+        <q-select label="Banco" outlined v-model="bank" dense :options="banks" class="q-mr-md" />
+        <q-input label="Projeto" outlined dense/>
+        <q-space/>
+        <q-btn label="Novo" color="positive" @click="onNewProject" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
+        <q-btn label="Cache" color="positive" @click="onRefresh" :icon="mdiRefreshCircle"/>
       </template>
 
       <template v-slot:item="props">
@@ -50,7 +55,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { methods, config } from 'boot/config.js'
-import { mdiPencil, mdiPlusBoxOutline, mdiDelete } from '@quasar/extras/mdi-v5'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete } from '@quasar/extras/mdi-v5'
 import { date, useQuasar } from 'quasar'
 import ProjectEditor from 'src/components/Registed/Project.vue'
 
@@ -58,6 +63,12 @@ export default defineComponent({
   setup () {
     const $q = useQuasar()
     const loading = ref(false)
+
+    let countries = ref(['Todos', 'Angola', 'Moçambique'])
+    let country = ref('Todos')
+
+    let banks = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
+    let bank = ref('Banco Mundial (BM)')
 
     let projects = ref(methods.getProjects())
     const columns = [
@@ -126,22 +137,33 @@ export default defineComponent({
       projects.value.splice(0, projects.value.length, ...savedProjects)
     }
 
+    const onRefresh = function () {
+      methods.resetCache()
+      projects = ref(methods.getProjects())
+    }
+
     return {
       mdiPencil,
       mdiPlusBoxOutline,
+      mdiRefreshCircle,
       mdiDelete,
       theme_color: config.theme_color,
       bg_color: config.bg_color,
       loading,
       pagination,
       tableRef,
+      countries,
+      country,
+      banks,
+      bank,
       projects,
       columns,
       selectedProject,
       onNewProject,
       onEditProject,
       onDeleteProject,
-      onServerRequest
+      onServerRequest,
+      onRefresh
     }
   }
 })
