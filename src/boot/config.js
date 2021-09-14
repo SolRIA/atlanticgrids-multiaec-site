@@ -15,7 +15,7 @@ const methods = {
         config.projects = [
           { id: 1, nome: 'Barragem', pais: 'Angola', data: '2021-07-10', descricao: 'Construção barragem', imagem: '/Images/barragem.jpeg' },
           { id: 2, nome: 'Energia', pais: 'Moçambique', data: '2021-07-08', descricao: 'Energia', imagem: '/Images/ag_energia.png' },
-          { id: 3, nome: 'Auto estrada', pais: 'Moçambique', data: '2021-07-08', descricao: 'Construção auto estrada', imagem: '/Images/auto-estrada.jpg' },
+          { id: 3, nome: 'Água e Saneamento', pais: 'Moçambique', data: '2021-07-08', descricao: 'Água e Saneamento', imagem: '/Images/ag_aguas_saneamento.png' },
           { id: 4, nome: 'Ponte', pais: 'Moçambique', data: '2021-07-09', descricao: 'Construção ponte', imagem: '/Images/ponte.jpg' },
           { id: 5, nome: 'Mobilidade', pais: 'Moçambique', data: '2021-07-09', descricao: 'Mobilidade', imagem: '/Images/ag_mobilidade.png' },
           { id: 6, nome: 'Projeto e Consulturia', pais: 'Moçambique', data: '2021-07-09', descricao: 'Projeto e Consulturia', imagem: '/Images/ag_projeto_consulturia.png' },

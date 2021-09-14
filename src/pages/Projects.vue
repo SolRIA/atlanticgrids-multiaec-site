@@ -13,6 +13,11 @@
       :loading="loading"
       v-model:pagination="pagination"
       v-model:selected="selectedProject">
+
+      <template v-slot:top>
+        <q-select label="Banco" outlined v-model="bank" dense :options="banks" class="q-mr-md" />
+      </template>
+
       <template v-slot:item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
             :style="props.selected ? 'transform: scale(0.98);' : ''">
@@ -49,6 +54,9 @@ export default defineComponent({
   setup () {
     const loading = ref(false)
 
+    let banks = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
+    let bank = ref('Banco Mundial (BM)')
+
     const projects = methods.getProjects()
     const columns = [
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
@@ -72,6 +80,8 @@ export default defineComponent({
       bg_color: config.bg_color,
       loading,
       pagination,
+      banks,
+      bank,
       projects,
       columns,
       selectedProject

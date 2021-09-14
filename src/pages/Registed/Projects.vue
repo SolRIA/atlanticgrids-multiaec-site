@@ -140,6 +140,7 @@ export default defineComponent({
     const onRefresh = function () {
       methods.resetCache()
       projects = ref(methods.getProjects())
+      document.location.reload()
     }
 
     return {
