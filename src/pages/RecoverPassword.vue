@@ -1,22 +1,20 @@
 <template>
   <q-page-container class="col-sm-12 col-md-9">
     <q-page padding class="fit row justify-center items-center">
-      <q-card dark bordered class="card-login">
+      <q-card bordered class="card-login">
         <q-card-section>
           <div class="text-h6">Recuperar password</div>
         </q-card-section>
 
-        <q-separator dark inset />
+        <q-separator inset />
 
         <q-card-section>
-          <q-form class="q-gutter-sm">
-            <q-input v-model="email" dark outlined type="email" label="email"
-                    :rules="[isEmailRule]" ref="inputName">
-              <template v-if="email" v-slot:append>
-                <q-icon :name="mdiCloseCircle" @click.stop="email = null" class="cursor-pointer" />
-              </template>
-            </q-input>
-          </q-form>
+          <q-input v-model="email" outlined type="email" label="email"
+                  :rules="[isEmailRule]" ref="inputName">
+            <template v-if="email" v-slot:append>
+              <q-icon :name="mdiCloseCircle" @click.stop="email = null" class="cursor-pointer" />
+            </template>
+          </q-input>
         </q-card-section>
         
         <q-card-actions>
@@ -25,7 +23,7 @@
         </q-card-actions>
         <q-card-section class="q-pa-none">
           <q-btn-group spread>
-            <q-btn label="Voltar" type="reset" color="white" flat
+            <q-btn label="Voltar" type="reset" flat
                 @click="returnPrevious"/>
           </q-btn-group>
         </q-card-section>
