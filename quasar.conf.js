@@ -81,7 +81,25 @@ module.exports = configure(function (ctx) {
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      config: {},
+      config: {
+        brand: {
+          primary: '#027BE3',
+          secondary: '#26A69A',
+          accent: '#9C27B0',
+
+          dark: '#333333',
+
+          positive: '#21BA45',
+          negative: '#f50000',
+          info: '#31CCEC',
+          warning: '#F2C037'
+        },
+        notify: {
+          position: 'top-right',
+          progress: true
+        }
+      },
+      dark: 'auto',
 
       iconSet: 'svg-material-icons', // Quasar icon set
       lang: 'pt', // Quasar language pack
@@ -95,6 +113,7 @@ module.exports = configure(function (ctx) {
 
       // Quasar plugins
       plugins: [
+        'Notify',
         'Dialog'
       ]
     },

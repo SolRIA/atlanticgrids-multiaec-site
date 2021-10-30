@@ -5,8 +5,8 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'Projetos', component: () => import('pages/Projects.vue') },
-      { path: 'CompanyProfile', component: () => import('pages/CompanyProfile.vue') }
+      { path: 'Projetos', component: () => import('src/pages/Projetos.vue') },
+      { path: 'CompanyProfile', component: () => import('src/pages/PerfilEmpresa.vue') }
     ]
   },
   {
@@ -23,8 +23,12 @@ const routes = [
     path: '/registed',
     component: () => import('layouts/Registed.vue'),
     children: [
-      { path: '', component: () => import('pages/Registed/Projects.vue') },
-      { path: 'Conta', component: () => import('pages/Registed/Account.vue') }
+      { path: '', component: () => import('src/pages/Registed/Projetos.vue') },
+      { path: 'Bancos', component: () => import('src/pages/Registed/Bancos.vue') },
+      { path: 'Conta', component: () => import('src/pages/Registed/Conta.vue') },
+      { path: 'Empresas', component: () => import('src/pages/Registed/Empresas.vue') },
+      { path: 'Paises', component: () => import('src/pages/Registed/Paises.vue') },
+      { path: 'Utilizadores', component: () => import('src/pages/Registed/Utilizadores.vue') }
     ]
   },
 

@@ -7,15 +7,16 @@
       no-data-label="Sem dados"
       row-key="id"
       grid
-      :rows="projects"
+      :rows="projetos"
       :columns="columns"
       :rows-per-page-options="[5, 10, 15, 20, 50]"
       :loading="loading"
       v-model:pagination="pagination"
-      v-model:selected="selectedProject">
+      v-model:selected="projetoEscolhido">
 
       <template v-slot:top>
-        <q-select label="Banco" outlined v-model="bank" dense :options="banks" class="q-mr-md" />
+        <q-select v-model="banco" :options="bancos" option-value="id" option-label="nome" emit-value map-options
+          label="Banco" outlined dense class="q-mr-md" />
       </template>
 
       <template v-slot:item="props">
@@ -47,17 +48,33 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { config, methods } from 'boot/config.js'
+import { defineComponent, ref, onMounted } from 'vue'
+import { get } from 'boot/api'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   setup () {
+    const $q = useQuasar()
+
     const loading = ref(false)
 
-    let banks = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
-    let bank = ref('Banco Mundial (BM)')
+    onMounted(async () => {
+      loading.value = true
+      try {
+        const result = await get('bancos/read.php')
 
-    const projects = methods.getProjects()
+        bancos.value = await result.json()
+      } catch {
+          $q.notify({ message: 'Não foi possível efetuar obter os bancos', type: 'warning' })
+      }
+      loading.value = false
+    })
+
+    //const banks = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
+    const bancos = ref([])
+    const banco = ref({})
+
+    const projetos = ref([])
     const columns = [
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'tipo', label: 'Tipo', field: 'tipo', align: 'left' },
@@ -73,18 +90,18 @@ export default defineComponent({
       rowsNumber: 10
     }
 
-    const selectedProject = ref([])
+    const projetoEscolhido = ref([])
 
     return {
       theme_color: config.theme_color,
       bg_color: config.bg_color,
       loading,
       pagination,
-      banks,
-      bank,
-      projects,
-      columns,
-      selectedProject
+      bancos,
+      banco,
+      projetos,
+      projetoEscolhido,
+      columns
     }
   }
 })

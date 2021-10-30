@@ -7,21 +7,22 @@
       no-data-label="Sem dados"
       row-key="id"
       grid
-      :rows="projects"
+      :rows="projetos"
       :columns="columns"
       :rows-per-page-options="[5, 10, 15, 20, 50]"
       :loading="loading"
       v-model:pagination="pagination"
-      v-model:selected="selectedProject"
+      v-model:selected="projetoEscolhido"
       @request="onServerRequest">
       
       <template v-slot:top>
-        <q-select label="País" outlined v-model="country" dense :options="countries" class="q-mr-md" />
-        <q-select label="Banco" outlined v-model="bank" dense :options="banks" class="q-mr-md" />
+        <q-select label="País" outlined v-model="pais" dense :options="paises" class="q-mr-md" 
+          option-value="id" option-label="nome" emit-value map-options/>
+        <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="q-mr-md" 
+          option-value="id" option-label="nome" emit-value map-options/>
         <q-input label="Projeto" outlined dense/>
         <q-space/>
-        <q-btn label="Novo" color="positive" @click="onNewProject" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
-        <q-btn label="Cache" color="positive" @click="onRefresh" :icon="mdiRefreshCircle"/>
+        <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
       </template>
 
       <template v-slot:item="props">
@@ -43,7 +44,6 @@
                 {{ props.row.data }}
               </q-chip>
               <q-btn :icon="mdiPencil" flat color="positive" @click="onEditProject(props.row)"/>
-              <q-btn :icon="mdiDelete" flat color="negative" @click="onDeleteProject(props.row)"/>
             </q-card-actions>
           </q-card>
         </div>
@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { methods, config } from 'boot/config.js'
+import { defineComponent, ref, onMounted } from 'vue'
 import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete } from '@quasar/extras/mdi-v5'
 import { date, useQuasar } from 'quasar'
+import { postAuth, get } from 'boot/api'
 import ProjectEditor from 'src/components/Registed/Project.vue'
 
 export default defineComponent({
@@ -64,13 +64,32 @@ export default defineComponent({
     const $q = useQuasar()
     const loading = ref(false)
 
-    let countries = ref(['Todos', 'Angola', 'Moçambique'])
-    let country = ref('Todos')
+    onMounted(async () => {
+      try {
+        const result = await get('paises/read.php')
 
-    let banks = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
-    let bank = ref('Banco Mundial (BM)')
+        paises.value = await result.json()
+      } catch {
+          $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
+      }
 
-    let projects = ref(methods.getProjects())
+      try {
+        const result = await get('bancos/read.php')
+
+        bancos.value = await result.json()
+      } catch {
+          $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
+      }
+    })
+
+    const paises = ref([])
+    const pais = ref({})
+
+    //const bancos = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
+    const bancos = ref([])
+    const banco = ref({})
+
+    const projetos = ref([])
     const columns = [
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'tipo', label: 'Tipo', field: 'tipo', align: 'left' },
@@ -87,10 +106,10 @@ export default defineComponent({
     })
     const tableRef = ref(null)
 
-    let selectedProject = ref([])
+    const projetoEscolhido = ref([])
 
-    const onNewProject = function () {
-      const projectEdit = {
+    const onNovo = () => {
+      const p = {
         id: projects.value.length + 1,
         nome: '',
         tipo: '',
@@ -101,46 +120,41 @@ export default defineComponent({
       $q.dialog({
         component: ProjectEditor,
         componentProps: {
-          p: projectEdit
+          p: p
         }
-      }).onOk(() => {
-        tableRef.value.requestServerInteraction()
+      }).onOk(async () => {
+        try {
+          await postAuth('projetos/update.php', p)
+          tableRef.value.requestServerInteraction()
+        } catch {
+          $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
+        }
       })
     }
-    const onEditProject = function (project) {
+    const onEditProject = (project) => {
       $q.dialog({
         component: ProjectEditor,
         componentProps: {
           p: project
         }
-      }).onOk(() => {
-        tableRef.value.requestServerInteraction()
+      }).onOk(async () => {
+        try {
+          await postAuth('projetos/update.php', project)
+          tableRef.value.requestServerInteraction()
+        } catch {
+          $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
+        }
       })
     }
 
-    const onDeleteProject = function (project) {
-      $q.dialog({
-        title: 'Apagar projeto',
-        message: `Quer apagar o projeto ${project.nome}?`,
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        methods.deleteProject(project.id)
-      }).onDismiss(() => {
-        tableRef.value.requestServerInteraction()
-      })
-    }
-
-    const onServerRequest = function (props) {
-      const savedProjects = methods.getProjects()
-
-      projects.value.splice(0, projects.value.length, ...savedProjects)
-    }
-
-    const onRefresh = function () {
-      methods.resetCache()
-      projects = ref(methods.getProjects())
-      document.location.reload()
+    const onServerRequest = async (props) => {
+      try {
+        // TODO: pagging and filter
+        const result = await get('projetos/read.php')
+        projects.value = await result.json()
+      } catch {
+          $q.notify({ message: 'Não foi possível obter os projetos', type: 'warning' })
+      }
     }
 
     return {
@@ -153,18 +167,16 @@ export default defineComponent({
       loading,
       pagination,
       tableRef,
-      countries,
-      country,
-      banks,
-      bank,
-      projects,
+      paises,
+      pais,
+      bancos,
+      banco,
+      projetos,
+      projetoEscolhido,
       columns,
-      selectedProject,
-      onNewProject,
+      onNovo,
       onEditProject,
-      onDeleteProject,
-      onServerRequest,
-      onRefresh
+      onServerRequest
     }
   }
 })

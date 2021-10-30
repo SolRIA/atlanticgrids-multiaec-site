@@ -53,11 +53,13 @@
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle } from '@quasar/extras/mdi-v5'
-import { methods } from 'boot/config.js'
-
+import { post } from 'boot/api'
+import { useQuasar } from 'quasar'
+ 
 export default defineComponent({
   setup () {
     const $router = useRouter()
+    const $q = useQuasar()
 
     const inputName = ref(null)
     const inputPassword = ref(null)
@@ -73,13 +75,22 @@ export default defineComponent({
     const isPasswordValid = function (val) {
       return !!val || 'Insira a password'
     }
-    const doLogin = function () {
+    const doLogin = async () => {
       // do login
       if (inputName.value.validate() && inputPassword.value.validate()) {
         onLogin = true
-        
-        methods.setUsername(email)
-        $router.push('registed')
+
+        try {
+          const response = await post('user/login.php', { username: email.value, password: password.value });
+          console.log(response)
+          localStorage.setItem('login', JSON.stringify({ user: email.value }))
+          localStorage.setItem('token', JSON.stringify(response))
+          
+          $router.push('registed')
+        } catch (error) {
+          console.log(error)
+          $q.notify({ message: 'Não foi possível efetuar o login', type: 'warning' })
+        }
 
         onLogin = false
       }

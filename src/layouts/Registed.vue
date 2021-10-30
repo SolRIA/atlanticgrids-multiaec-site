@@ -67,8 +67,7 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { mdiMenu, mdiLogout, mdiCogs, mdiAccountHardHat } from '@quasar/extras/mdi-v5'
-import { methods } from 'boot/config.js'
+import { mdiMenu, mdiLogout, mdiCogs, mdiAccountHardHat, mdiAccountGroup, mdiBank, mdiFlag } from '@quasar/extras/mdi-v5'
 
 export default {
   setup () {
@@ -84,8 +83,20 @@ export default {
         label: 'Conta'
       },
       {
+        icon: mdiAccountGroup,
+        label: 'Empresas'
+      },
+      {
         icon: mdiAccountHardHat,
         label: 'Projetos'
+      },
+      {
+        icon: mdiBank,
+        label: 'Bancos'
+      },
+      {
+        icon: mdiFlag,
+        label: 'Paises'
       }
     ]
 
