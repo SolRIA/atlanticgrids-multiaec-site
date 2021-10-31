@@ -36,9 +36,8 @@
 </template>
 
 <script>
-import { mdiWindowClose, mdiAccountHardHat, mdiCalendarMonth } from '@quasar/extras/mdi-v5'
+import { mdiWindowClose, mdiAccountHardHat, mdiCalendarMonth } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref } from 'vue'
-import { methods } from 'boot/config.js'
 import { useDialogPluginComponent } from 'quasar'
 
 export default defineComponent({
@@ -51,7 +50,7 @@ export default defineComponent({
   ],
   setup (props) {
     const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-    let project = ref(Object.assign({}, props.p))
+    const project = ref(Object.assign({}, props.p))
 
     return {
       mdiWindowClose,
@@ -64,7 +63,7 @@ export default defineComponent({
       dialogRef,
 
       onOKClick () {
-        methods.saveProject(project.value)
+        // TODO: save to the api
         // on OK, it is REQUIRED to
         // call onDialogOK (with optional payload)
         onDialogOK()

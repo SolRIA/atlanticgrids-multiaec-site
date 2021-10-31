@@ -42,7 +42,7 @@
       <q-scroll-area class="fit">
         <q-list>
           <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item clickable exact v-ripple active-class="text-green">
+            <q-item clickable exact v-ripple active-class="text-white" :to="menuItem.link">
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
@@ -64,39 +64,62 @@
   </q-layout>
 </template>
 
+<style scoped lang="sass">
+.q-router-link--exact-active
+    background: $positive
+</style>
+
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { mdiMenu, mdiLogout, mdiCogs, mdiAccountHardHat, mdiAccountGroup, mdiBank, mdiFlag } from '@quasar/extras/mdi-v5'
+import { mdiMenu, mdiLogout, mdiCogs, mdiAccountHardHat, mdiAccountGroup, mdiBank, mdiFlag, mdiAccountCircle, mdiOfficeBuildingCogOutline, mdiArchiveCogOutline } from '@quasar/extras/mdi-v6'
 
 export default {
   setup () {
     const $router = useRouter()
-
-    methods.init()
 
     const leftDrawerOpen = ref(false)
 
     const menuList = [
       {
         icon: mdiCogs,
-        label: 'Conta'
-      },
-      {
-        icon: mdiAccountGroup,
-        label: 'Empresas'
+        label: 'Conta',
+        link: '/registed/conta'
       },
       {
         icon: mdiAccountHardHat,
-        label: 'Projetos'
+        label: 'Projetos',
+        link: '/registed'
+      },
+      {
+        icon: mdiAccountGroup,
+        label: 'Empresas',
+        link: '/registed/empresas'
       },
       {
         icon: mdiBank,
-        label: 'Bancos'
+        label: 'Bancos',
+        link: '/registed/bancos'
       },
       {
         icon: mdiFlag,
-        label: 'Paises'
+        label: 'Paises',
+        link: '/registed/paises'
+      },
+      {
+        icon: mdiAccountCircle,
+        label: 'Utilizadores',
+        link: '/registed/utilizadores'
+      },
+      {
+        icon: mdiOfficeBuildingCogOutline,
+        label: 'Tipos Empresa',
+        link: '/registed/tiposempresa'
+      },
+      {
+        icon: mdiArchiveCogOutline,
+        label: 'Tipos Projeto',
+        link: '/registed/tiposprojeto'
       }
     ]
 
@@ -106,7 +129,7 @@ export default {
       leftDrawerOpen,
       miniState: ref(true),
       menuList,
-      username: methods.getUsername(),
+      username: localStorage.getItem('login'),
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },

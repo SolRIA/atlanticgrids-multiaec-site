@@ -61,16 +61,13 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true
       try {
-        const result = await get('bancos/read.php')
-
-        bancos.value = await result.json()
+        bancos.value = await get('bancos/read.php')
       } catch {
           $q.notify({ message: 'Não foi possível efetuar obter os bancos', type: 'warning' })
       }
       loading.value = false
     })
 
-    //const banks = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
     const bancos = ref([])
     const banco = ref({})
 

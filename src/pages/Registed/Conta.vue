@@ -6,12 +6,12 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { methods } from 'boot/config.js'
 
 export default defineComponent({
   setup () {
     return {
-      username: methods.getUsername()
+      username: localStorage.getItem('login')
+
     }
   }
 })

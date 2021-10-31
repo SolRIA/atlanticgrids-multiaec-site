@@ -34,7 +34,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { mdiEmailSend, mdiCloseCircle } from '@quasar/extras/mdi-v5'
+import { mdiEmailSend, mdiCloseCircle } from '@quasar/extras/mdi-v6'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({

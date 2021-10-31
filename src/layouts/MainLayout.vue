@@ -26,14 +26,12 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { config, methods } from 'boot/config.js'
+import { config } from 'boot/config.js'
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup () {
-    methods.init()
-
     return {
       theme_color: config.theme_color,
       bg_color: config.bg_color

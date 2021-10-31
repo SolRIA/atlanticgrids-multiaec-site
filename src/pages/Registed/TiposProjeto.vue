@@ -1,17 +1,17 @@
 <template>
   <q-page padding>
     <q-table class="q-mt-sm" color="positive"
-      title="Países"
+      title="Tipos Projeto"
       ref="tableRef"
       selection="single"
       no-data-label="Sem dados"
       row-key="id"
-      :rows="paises"
+      :rows="tipos"
       :columns="colunas"
       :rows-per-page-options="[0, 5, 10]"
       :loading="loading"
       v-model:pagination="pagination"
-      v-model:selected="paisEscolhido"
+      v-model:selected="tipoEscolhido"
       @request="onServerRequest">
       
       <template v-slot:top-right>
@@ -35,16 +35,16 @@
     <q-dialog persistent v-model="mostraEditor">
       <q-card style="min-width: 60vw;">
         <q-card-section class="row items-center q-pb-md bg-primary text-white">
-          <q-icon :name="mdiFlag" left size="2rem" />
-          <div class="text-h6">{{ pais.nome }} ({{ pais.id }})</div>
+          <q-icon :name="mdiArchiveCogOutline" left size="2rem" />
+          <div class="text-h6">{{ tipo.nome }} ({{ tipo.id }})</div>
           <q-space />
           <q-btn :icon="mdiWindowClose" flat dense v-close-popup />
         </q-card-section>
 
         <q-card-section class="q-pt-md">
           <div class="row q-col-gutter-sm">
-            <q-input v-model="pais.nome" label="Nome" outlined class="col-xs-12" />
-            <q-checkbox v-model="pais.ativo" label="Ativo" />
+            <q-input v-model="tipo.nome" label="Nome" outlined class="col-xs-12" />
+            <q-checkbox v-model="tipo.ativo" label="Ativo" />
           </div>
         </q-card-section>
 
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mdiFlag, mdiWindowClose, mdiPlusBoxOutline, mdiPencil } from '@quasar/extras/mdi-v6'
+import { mdiArchiveCogOutline, mdiWindowClose, mdiPlusBoxOutline, mdiPencil } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { get, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
@@ -75,9 +75,9 @@ export default defineComponent({
         tableRef.value.requestServerInteraction()
     })
 
-    const paises = ref([])
-    const paisEscolhido = ref([])
-    const pais = ref({ id: 0, nome: '', ativo: true })
+    const tipos = ref([])
+    const tipoEscolhido = ref([])
+    const tipo = ref({ id: 0, nome: '', ativo: true })
     const colunas = [
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
@@ -93,42 +93,42 @@ export default defineComponent({
     const onServerRequest = async (_props) => {
       loading.value = true
       try {
-        paises.value = await get('paises/read.php')
+        tipos.value = await get('tiposprojeto/read.php')
       } catch {
-          $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
+          $q.notify({ message: 'Não foi possível obter os tipos de projeto', type: 'warning' })
       }
       loading.value = false
     }
 
     return {
-      mdiFlag,
+      mdiArchiveCogOutline,
       mdiWindowClose,
       mdiPlusBoxOutline,
       mdiPencil,
       loading,
-      mostraEditor,
       tableRef,
-      paises,
-      paisEscolhido,
-      pais,
+      mostraEditor,
+      tipos,
+      tipoEscolhido,
+      tipo,
       colunas,
       pagination,
       onServerRequest,
       onNovo: () => {
-        pais.value = { id: 0, nome: '', ativo: true }
+        tipo.value = { id: 0, nome: '', ativo: true }
         mostraEditor.value = true
       },
-      onEdit: (p) => {
-        pais.value = p
-        paisEscolhido.value = [p]
+      onEdit: (b) => {
+        tipo.value = b
+        tipoEscolhido.value = [b]
         mostraEditor.value = true
       },
       onOk: async () => {
         try {
-          await postAuth('paises/update.php', pais.value)
+          await postAuth('tiposprojeto/update.php', tipo.value)
           tableRef.value.requestServerInteraction()
           mostraEditor.value = false
-        } catch (error) {
+        } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
       }

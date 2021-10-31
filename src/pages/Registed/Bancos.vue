@@ -6,7 +6,6 @@
       selection="single"
       no-data-label="Sem dados"
       row-key="id"
-      grid
       :rows="bancos"
       :columns="colunas"
       :rows-per-page-options="[0, 5, 10]"
@@ -15,7 +14,7 @@
       v-model:selected="bancoEscolhido"
       @request="onServerRequest">
       
-      <template v-slot:top>
+      <template v-slot:top-right>
         <q-space/>
         <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
       </template>
@@ -28,7 +27,7 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
-          <q-btn dense flat color="positive" icon="edit" @click="onEdit(props.row)"/>
+          <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEdit(props.row)"/>
         </q-td>
       </template>
     </q-table>
@@ -59,7 +58,7 @@
 </template>
 
 <script>
-import { mdiBank, mdiWindowClose, mdiPlusBoxOutline } from '@quasar/extras/mdi-v5'
+import { mdiBank, mdiWindowClose, mdiPlusBoxOutline, mdiPencil } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { get, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
@@ -94,9 +93,7 @@ export default defineComponent({
     const onServerRequest = async (_props) => {
       loading.value = true
       try {
-        const result = await get('bancos/read.php')
-
-        bancos.value = await result.json()
+        bancos.value = await get('bancos/read.php')
       } catch {
           $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
       }
@@ -107,7 +104,9 @@ export default defineComponent({
       mdiBank,
       mdiWindowClose,
       mdiPlusBoxOutline,
+      mdiPencil,
       loading,
+      tableRef,
       mostraEditor,
       bancos,
       bancoEscolhido,
@@ -116,16 +115,19 @@ export default defineComponent({
       pagination,
       onServerRequest,
       onNovo: () => {
-        banco.value = ref({ id: 0, nome: '', ativo: true })
+        banco.value = { id: 0, nome: '', ativo: true }
         mostraEditor.value = true
       },
       onEdit: (b) => {
         banco.value = b
+        bancoEscolhido.value = [b]
         mostraEditor.value = true
       },
       onOk: async () => {
         try {
-          await postAuth('bancos/update.php', banco)
+          await postAuth('bancos/update.php', banco.value)
+          tableRef.value.requestServerInteraction()
+          mostraEditor.value = false
         } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }

@@ -39,9 +39,9 @@
             <q-btn label="Voltar" type="reset" flat
                 @click="returnPrevious"/>
             <q-btn label="Criar conta" type="reset" flat
-                to="/login/Register"/>
+                to="/login/registo"/>
             <q-btn label="Recuperar senha" type="reset" flat
-                to="/login/RecoverPassword" />
+                to="/login/recuperarPassword" />
           </q-btn-group>
         </q-card-section>
       </q-card>
@@ -52,7 +52,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle } from '@quasar/extras/mdi-v5'
+import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle } from '@quasar/extras/mdi-v6'
 import { post } from 'boot/api'
 import { useQuasar } from 'quasar'
  
@@ -81,12 +81,16 @@ export default defineComponent({
         onLogin = true
 
         try {
-          const response = await post('user/login.php', { username: email.value, password: password.value });
+          const response = await post('utilizadores/login.php', { username: email.value, password: password.value });
           console.log(response)
-          localStorage.setItem('login', JSON.stringify({ user: email.value }))
-          localStorage.setItem('token', JSON.stringify(response))
-          
-          $router.push('registed')
+          if (response.ok) {
+            localStorage.setItem('login', email.value)
+            localStorage.setItem('token', JSON.stringify(response))
+            
+            $router.push('registed')
+          } else {
+            $q.notify({ message: 'Credenciais inválidas', type: 'warning' })
+          }
         } catch (error) {
           console.log(error)
           $q.notify({ message: 'Não foi possível efetuar o login', type: 'warning' })

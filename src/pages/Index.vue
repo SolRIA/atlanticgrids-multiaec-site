@@ -320,7 +320,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { config } from 'boot/config.js'
-import { mdiBallot, mdiViewComfy, mdiVuejs, mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiGithub, mdiEmail } from '@quasar/extras/mdi-v5'
+import { mdiBallot, mdiViewComfy, mdiVuejs, mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiGithub, mdiEmail } from '@quasar/extras/mdi-v6'
 
 export default defineComponent({
   setup () {

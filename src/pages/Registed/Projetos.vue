@@ -4,7 +4,8 @@
       title="Projetos"
       ref="tableRef"
       selection="single"
-      no-data-label="Sem dados"
+      no-data-label="Não existem dados"
+      no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
       row-key="id"
       grid
       :rows="projetos"
@@ -17,9 +18,9 @@
       
       <template v-slot:top>
         <q-select label="País" outlined v-model="pais" dense :options="paises" class="q-mr-md" 
-          option-value="id" option-label="nome" emit-value map-options/>
+          option-value="id" option-label="nome" emit-value map-options clearable style="min-width: 150px"/>
         <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="q-mr-md" 
-          option-value="id" option-label="nome" emit-value map-options/>
+          option-value="id" option-label="nome" emit-value map-options clearable style="min-width: 150px"/>
         <q-input label="Projeto" outlined dense/>
         <q-space/>
         <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
@@ -48,15 +49,25 @@
           </q-card>
         </div>
       </template>
+
+      <template v-slot:no-data="{ message }">
+        <div class="full-width row flex-center text-accent">
+          <q-icon size="xl" :name="mdiAlertDecagram" class="q-mr-md"/>
+          <h3>
+            {{ message }}
+          </h3>
+        </div>
+      </template>
     </q-table>
   </q-page>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete } from '@quasar/extras/mdi-v5'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete, mdiAlertDecagram } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
 import { postAuth, get } from 'boot/api'
+import { config } from 'boot/config'
 import ProjectEditor from 'src/components/Registed/Project.vue'
 
 export default defineComponent({
@@ -66,28 +77,23 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        const result = await get('paises/read.php')
-
-        paises.value = await result.json()
+        paises.value = await get('paises/read.php')
       } catch {
           $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
       }
 
       try {
-        const result = await get('bancos/read.php')
-
-        bancos.value = await result.json()
+        bancos.value = await get('bancos/read.php')
       } catch {
           $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
       }
     })
 
     const paises = ref([])
-    const pais = ref({})
+    const pais = ref(null)
 
-    //const bancos = ref(['Banco Mundial (BM)', 'Banco Interamericano de Desenvolvimento (BID)', 'Banco Europeu para a Reconstrução e Desenvolvimento (BERD)', 'Banco Europeu de Investimento (BEI)'])
     const bancos = ref([])
-    const banco = ref({})
+    const banco = ref(null)
 
     const projetos = ref([])
     const columns = [
@@ -110,7 +116,7 @@ export default defineComponent({
 
     const onNovo = () => {
       const p = {
-        id: projects.value.length + 1,
+        id: projetos.value.length + 1,
         nome: '',
         tipo: '',
         data: date.formatDate(new Date(), 'YYYY-MM-DD'),
@@ -150,8 +156,7 @@ export default defineComponent({
     const onServerRequest = async (props) => {
       try {
         // TODO: pagging and filter
-        const result = await get('projetos/read.php')
-        projects.value = await result.json()
+        projetos.value = await get('projetos/read.php')
       } catch {
           $q.notify({ message: 'Não foi possível obter os projetos', type: 'warning' })
       }
@@ -162,6 +167,7 @@ export default defineComponent({
       mdiPlusBoxOutline,
       mdiRefreshCircle,
       mdiDelete,
+      mdiAlertDecagram,
       theme_color: config.theme_color,
       bg_color: config.bg_color,
       loading,
