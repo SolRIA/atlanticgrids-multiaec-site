@@ -24,9 +24,15 @@
         </q-td>
       </template>
 
+      <template v-slot:body-cell-logo="props">
+        <q-td :props="props">
+          <q-img :src="apiPublicUrl(props.row.logo)" style="height: 60px;" fit="scale-down"/>
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
-          <q-btn dense flat color="positive" icon="edit" @click="onEdit(props.row)"/>
+          <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEdit(props.row)"/>
         </q-td>
       </template>
     </q-table>
@@ -40,44 +46,144 @@
           <q-btn :icon="mdiWindowClose" flat dense v-close-popup />
         </q-card-section>
 
-       <q-card-section>
-      <div class="row q-col-gutter-sm">
-        <q-input v-model="empresa.nome" outlined label="Nome" class="col-xs-12 col-md-9"/>
-        <q-select v-model="empresa.tipo_id" :options="tipos" label="Àrea de especialização" outlined option-label="nome" option-value="id" map-options emit-value class="col-xs-12 col-md-3"/>
-        <q-input v-model="empresa.web" outlined label="Web" class="col-xs-12 col-md-3">
-          <template v-slot:append>
-            <q-icon :name="mdiWeb" color="primary"/>
-          </template>
-        </q-input>
-        <q-input v-model="empresa.facebook" outlined label="Facebook" class="col-xs-12 col-md-3">
-        <template v-slot:append>
-            <q-icon :name="mdiFacebook" color="primary"/>
-          </template>
-        </q-input>
-        <q-input v-model="empresa.twitter" outlined label="Twitter" class="col-xs-12 col-md-3">
-          <template v-slot:append>
-            <q-icon :name="mdiTwitter" color="primary"/>
-          </template>
-        </q-input>
-        <q-input v-model="empresa.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-3">
-          <template v-slot:append>
-            <q-icon :name="mdiLinkedin" color="primary"/>
-          </template>
-        </q-input>
-      </div>
-    </q-card-section>
+        <q-card-section>
+          <q-tabs
+            v-model="tab"
+            outside-arrows
+            inline-label
+            mobile-arrows
+            dense
+            align="center"
+            narrow-indicator>
+              <q-tab name="geral" :icon="mdiBadgeAccountHorizontalOutline" label="Geral" />
+              <q-tab name="descricao" :icon="mdiFileDocumentEditOutline" label="Descrição" />
+          </q-tabs>
 
-    <q-card-section>
-      <div class="row q-col-gutter-sm">
-        <div class="col-xs-12 col-md-9">
-          <q-editor v-model="empresa.descricao" />
-        </div>
+          <q-separator />
 
-        <div class="col-xs-12 col-md-3">
-          <q-uploader url="http://localhost" label="Logotipo" flat bordered />
-        </div>
-      </div>
-    </q-card-section>
+          <q-tab-panels v-model="tab">
+            <q-tab-panel name="geral">
+              <div class="row q-col-gutter-sm">
+                <q-input v-model="empresa.nome" outlined label="Nome" class="col-xs-12"/>
+                <q-input v-model="empresa.email" outlined label="Email" class="col-xs-12 col-md-6"/>
+                <q-select v-model="empresa.tipo_id" :options="tipos" label="Àrea de especialização" outlined option-label="nome" option-value="id" map-options emit-value class="col-xs-12 col-md-6"/>
+                <q-input v-model="empresa.website" outlined label="Web" class="col-xs-12 col-md-3">
+                  <template v-slot:append>
+                    <q-icon :name="mdiWeb" color="primary"/>
+                  </template>
+                </q-input>
+                <q-input v-model="empresa.facebook" outlined label="Facebook" class="col-xs-12 col-md-3">
+                  <template v-slot:append>
+                    <q-icon :name="mdiFacebook" color="primary"/>
+                  </template>
+                </q-input>
+                <q-input v-model="empresa.twitter" outlined label="Twitter" class="col-xs-12 col-md-3">
+                  <template v-slot:append>
+                    <q-icon :name="mdiTwitter" color="primary"/>
+                  </template>
+                </q-input>
+                <q-input v-model="empresa.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-3">
+                  <template v-slot:append>
+                    <q-icon :name="mdiLinkedin" color="primary"/>
+                  </template>
+                </q-input>
+
+                <div class="col-xs-12 col-md-6">
+                  <q-file outlined v-model="empresa.logo" label="Logotipo">
+                    <template v-slot:prepend>
+                      <q-icon :name="mdiImageSearchOutline" />
+                    </template>
+                  </q-file>
+                </div>
+                
+                <q-checkbox v-model="empresa.ativo" label="Ativo" class="col-xs-3"/>
+              </div>
+            </q-tab-panel>
+
+            <q-tab-panel name="descricao">
+              <q-editor v-model="empresa.descricao" 
+                :toolbar="[
+                  [
+                    {
+                      label: $q.lang.editor.align,
+                      icon: $q.iconSet.editor.align,
+                      fixedLabel: true,
+                      options: ['left', 'center', 'right', 'justify']
+                    },
+                    'fullscreen'
+                  ],
+                  ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                  ['token', 'hr', 'link', 'custom_btn'],
+                  [
+                    {
+                      label: $q.lang.editor.formatting,
+                      icon: $q.iconSet.editor.formatting,
+                      list: 'no-icons',
+                      options: [
+                        'p',
+                        'h1',
+                        'h2',
+                        'h3',
+                        'h4',
+                        'h5',
+                        'h6',
+                        'code'
+                      ]
+                    },
+                    {
+                      label: $q.lang.editor.fontSize,
+                      icon: $q.iconSet.editor.fontSize,
+                      fixedLabel: true,
+                      fixedIcon: true,
+                      list: 'no-icons',
+                      options: [
+                        'size-1',
+                        'size-2',
+                        'size-3',
+                        'size-4',
+                        'size-5',
+                        'size-6',
+                        'size-7'
+                      ]
+                    },
+                    {
+                      label: $q.lang.editor.defaultFont,
+                      icon: $q.iconSet.editor.font,
+                      fixedIcon: true,
+                      list: 'no-icons',
+                      options: [
+                        'default_font',
+                        'arial',
+                        'arial_black',
+                        'comic_sans',
+                        'courier_new',
+                        'impact',
+                        'lucida_grande',
+                        'times_new_roman',
+                        'verdana'
+                      ]
+                    },
+                    'removeFormat'
+                  ],
+                  ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+                  ['undo', 'redo'],
+                  ['viewsource']
+                ]"
+                :fonts="{
+                  arial: 'Arial',
+                  arial_black: 'Arial Black',
+                  comic_sans: 'Comic Sans MS',
+                  courier_new: 'Courier New',
+                  impact: 'Impact',
+                  lucida_grande: 'Lucida Grande',
+                  times_new_roman: 'Times New Roman',
+                  verdana: 'Verdana'
+                }"/>
+            </q-tab-panel>
+
+          </q-tab-panels>
+        </q-card-section>
 
         <q-card-actions align="right">
           <q-btn label="Cancelar" flat v-close-popup />
@@ -89,9 +195,9 @@
 </template>
 
 <script>
-import { mdiAccountTie, mdiWindowClose, mdiPlusBoxOutline, mdiAccountGroup, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin } from '@quasar/extras/mdi-v6'
+import { mdiAccountTie, mdiWindowClose, mdiPlusBoxOutline, mdiPencil, mdiAccountGroup, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiImageSearchOutline, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
-import { get } from 'boot/api'
+import { get, postFormAuth, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -101,6 +207,7 @@ export default defineComponent({
     const loading = ref(false)
     const mostraEditor = ref(false)
     const tableRef = ref(null)
+    const tab = ref('geral')
 
     onMounted(async () => {
       try {
@@ -114,8 +221,9 @@ export default defineComponent({
     const tipos = ref([])
     const empresas = ref([])
     const empresaEscolhida = ref([])
-    const empresa = ref({ id: 0, email: '', password: '', nome: '', ativo: true, tipo_id: 1, descricao: null, web: null, facebook: null, twitter: null, linkedin: null, logo: null })
+    const empresa = ref({ id: 0, nome: '', ativo: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null })
     const colunas = [
+      { name: 'logo', label: '', field: 'logo', align: 'center', style: 'width: 100px' },
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
       { name: 'actions', label: '', field: 'actions' }
@@ -141,12 +249,17 @@ export default defineComponent({
       mdiAccountTie,
       mdiWindowClose,
       mdiPlusBoxOutline,
+      mdiPencil,
       mdiAccountGroup,
       mdiWeb,
       mdiFacebook,
       mdiTwitter,
       mdiLinkedin,
+      mdiImageSearchOutline,
+      mdiBadgeAccountHorizontalOutline,
+      mdiFileDocumentEditOutline,
       tableRef,
+      tab,
       loading,
       mostraEditor,
       tipos,
@@ -156,17 +269,35 @@ export default defineComponent({
       colunas,
       pagination,
       onServerRequest,
+      apiPublicUrl,
       onNovo: () => {
-        empresa.value = { id: 0, email: '', password: '', nome: '', ativo: true, tipo_id: 1, descricao: null, web: null, facebook: null, twitter: null, linkedin: null, logo: null }
+        empresa.value = { id: 0, nome: '', ativo: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }
         mostraEditor.value = true
       },
-      onEdit: (b) => {
-        empresa.value = b
+      onEdit: async (b) => {
+        empresa.value = await get('empresas/read-single.php?id=' + b.id)
+        empresaEscolhida.value = [b]
         mostraEditor.value = true
       },
       onOk: async () => {
         try {
-          await postAuth('empresas/update.php', banco)
+          const data = new FormData()
+          data.append('logo', empresa.value.logo)
+          data.append('id', empresa.value.id)
+          data.append('nome', empresa.value.nome)
+          data.append('ativo', empresa.value.ativo)
+          data.append('tipo_id', empresa.value.tipo_id)
+          data.append('descricao', empresa.value.descricao)
+          data.append('telefone', empresa.value.telefone)
+          data.append('telemovel', empresa.value.telemovel)
+          data.append('email', empresa.value.email)
+          data.append('website', empresa.value.website)
+          data.append('facebook', empresa.value.facebook)
+          data.append('twitter', empresa.value.twitter)
+          data.append('linkedin', empresa.value.linkedin)
+          await postFormAuth('empresas/update.php', data)
+          mostraEditor.value = false
+          tableRef.value.requestServerInteraction()
         } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }

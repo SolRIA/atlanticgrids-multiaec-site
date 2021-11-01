@@ -82,7 +82,6 @@ export default defineComponent({
 
         try {
           const response = await post('utilizadores/login.php', { username: email.value, password: password.value });
-          console.log(response)
           if (response.ok) {
             localStorage.setItem('login', email.value)
             localStorage.setItem('token', JSON.stringify(response))

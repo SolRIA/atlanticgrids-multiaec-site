@@ -24,7 +24,7 @@
         <div class="text-h6 col-12">Empresa</div>
         <q-input v-model="register.nome" outlined label="Nome" class="col-xs-12 col-md-9"/>
         <q-select v-model="register.tipo_id" :options="tipos" label="Àrea de especialização" outlined option-label="nome" option-value="id" map-options emit-value class="col-xs-12 col-md-3"/>
-        <q-input v-model="register.web" outlined label="Web" class="col-xs-12 col-md-3">
+        <q-input v-model="register.website" outlined label="Web" class="col-xs-12 col-md-3">
           <template v-slot:append>
             <q-icon :name="mdiWeb" color="primary"/>
           </template>
@@ -83,7 +83,7 @@ export default defineComponent({
   setup (props, { emit }) {
     const $q = useQuasar()
 
-    const register = ref(Object.assign({ email: '', password: '', nome: '', ativo: true, tipo_id: 1, descricao: null, web: null, facebook: null, twitter: null, linkedin: null, logo: null }, props.p))
+    const register = ref(Object.assign({ email: '', password: '', nome: '', ativo: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }, props.p))
 
     onMounted(async () => {
       try {

@@ -16,7 +16,7 @@
 
       <template v-slot:top>
         <q-select v-model="banco" :options="bancos" option-value="id" option-label="nome" emit-value map-options
-          label="Banco" outlined dense class="q-mr-md" />
+          label="Banco" outlined dense class="q-mr-md" style="min-width: 200px"/>
       </template>
 
       <template v-slot:item="props">
@@ -43,13 +43,24 @@
           </q-card>
         </div>
       </template>
+
+      <template v-slot:no-data="{ message }">
+        <div class="full-width row flex-center text-accent">
+          <q-icon size="xl" :name="mdiAlertDecagram" class="q-mr-md"/>
+          <h3>
+            {{ message }}
+          </h3>
+        </div>
+      </template>
     </q-table>
   </q-page>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
+import { mdiAlertDecagram } from '@quasar/extras/mdi-v6'
 import { get } from 'boot/api'
+import { config } from 'boot/config'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -69,7 +80,7 @@ export default defineComponent({
     })
 
     const bancos = ref([])
-    const banco = ref({})
+    const banco = ref()
 
     const projetos = ref([])
     const columns = [
@@ -90,6 +101,7 @@ export default defineComponent({
     const projetoEscolhido = ref([])
 
     return {
+      mdiAlertDecagram,
       theme_color: config.theme_color,
       bg_color: config.bg_color,
       loading,
