@@ -129,5 +129,8 @@ export async function get (url, data) {
 
   var response = await fetch(apiBaseUrl() + url, config)
 
+  // const text = await response.text()
+  // console.log('get ' + url, text)
+
   return await response.json()
 }

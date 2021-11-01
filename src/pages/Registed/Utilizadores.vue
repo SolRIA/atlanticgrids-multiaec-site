@@ -10,18 +10,29 @@
       :columns="colunas"
       :rows-per-page-options="[0, 5, 10]"
       :loading="loading"
+      :filter="filter"
       v-model:pagination="pagination"
       v-model:selected="utilizadorEscolhido"
       @request="onServerRequest">
       
       <template v-slot:top-right>
-        <q-space/>
         <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
+        <q-input v-model="filter" outlined dense clearable debounce="500">
+          <template v-slot:append>
+            <q-icon :name="mdiFilterOutline" />
+          </template>
+        </q-input>
       </template>
 
       <template v-slot:body-cell-ativo="props">
         <q-td :props="props" auto-width>
           <q-checkbox v-model="props.row.ativo" disable/>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-perfil_id="props">
+        <q-td :props="props">
+          {{ displayTipo(props.row) }}
         </q-td>
       </template>
 
@@ -61,7 +72,7 @@
             </q-input>
           </div>
           <div class="row q-col-gutter-sm">
-            <q-select v-model="utilizador.tipo_id" :options="perfis" option-value="id" option-label="nome" emit-value map-options 
+            <q-select v-model="utilizador.perfil_id" :options="perfis" option-value="id" option-label="nome" emit-value map-options 
               label="Perfil" outlined class="col-xs-12 col-md-6" />
             <q-select v-model="utilizador.empresa_id" :options="empresas" option-value="id" option-label="nome" emit-value map-options clearable 
               label="Empresa" outlined class="col-xs-12 col-md-6" />
@@ -81,9 +92,9 @@
 </template>
 
 <script>
-import { mdiAccountHardHat, mdiWindowClose, mdiPlusBoxOutline, mdiPencil, mdiCloseCircle, mdiEye, mdiEyeOff } from '@quasar/extras/mdi-v6'
+import { mdiAccountHardHat, mdiWindowClose, mdiPlusBoxOutline, mdiPencil, mdiCloseCircle, mdiEye, mdiEyeOff, mdiFilterOutline } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
-import { get, getAuth, postAuth } from 'boot/api'
+import { get, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -92,30 +103,32 @@ export default defineComponent({
 
     const loading = ref(false)
     const mostraEditor = ref(false)
-    const isPwd = ref(false)
+    const isPwd = ref(true)
     const tableRef = ref(null)
 
     onMounted(async () => {
-        tableRef.value.requestServerInteraction()
-        try {
-          perfis.value = await getAuth('perfilutilizador/read.php')
-        } catch {
-            $q.notify({ message: 'Não foi possível obter os perfis de utilizador', type: 'warning' })
-        }
-        try {
-          empresas.value = await get('empresas/read-ativo.php')
-        } catch {
-            $q.notify({ message: 'Não foi possível obter as empresas', type: 'warning' })
-        }
+      try {
+        perfis.value = await get('perfilutilizador/read.php')
+      } catch (e) {
+        console.log(e)
+        $q.notify({ message: 'Não foi possível obter os perfis de utilizador', type: 'warning' })
+      }
+      try {
+        empresas.value = await get('empresas/read-ativo.php')
+      } catch {
+        $q.notify({ message: 'Não foi possível obter as empresas', type: 'warning' })
+      }
+      tableRef.value.requestServerInteraction()
     })
 
     const perfis = ref([])
     const empresas = ref([])
     const utilizadores = ref([])
     const utilizadorEscolhido = ref([])
-    const utilizador = ref({ id: 0, username: '', password: '', tipo_id: 1, empresa_id: null, ativo: true })
+    const utilizador = ref({ id: 0, username: '', password: '', perfil_id: 1, empresa_id: null, ativo: true })
     const colunas = [
       { name: 'username', label: 'Utilizador', field: 'username', align: 'left' },
+      { name: 'perfil_id', label: 'Perfil', field: 'perfil_id', align: 'left' },
       { name: 'empresa', label: 'Empresa', field: 'empresa', align: 'left' },
       { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
       { name: 'actions', label: '', field: 'actions' }
@@ -125,17 +138,31 @@ export default defineComponent({
       descending: false,
       page: 1,
       rowsPerPage: 10,
-      rowsNumber: 10
+      rowsNumber: 10,
+      sortBy: null
     })
+    const filter = ref(null)
+
     const isPasswordValid = function (val) {
       return !!val || 'Insira a password'
     }
-    const onServerRequest = async (_props) => {
+    const onServerRequest = async (props) => {
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      const filter = props.filter
+
       loading.value = true
       try {
-        utilizadores.value = await getAuth('utilizadores/read.php')
+        const result = await postAuth('utilizadores/read.php', { page, rowsPerPage, sortBy, descending, filter })
+
+        utilizadores.value = result.rows
+
+        pagination.value.rowsNumber = result.count
+        pagination.value.page = page
+        pagination.value.rowsPerPage = rowsPerPage
+        pagination.value.sortBy = sortBy
+        pagination.value.descending = descending
       } catch {
-          $q.notify({ message: 'Não foi possível obter os utilizadores', type: 'warning' })
+        $q.notify({ message: 'Não foi possível obter os utilizadores', type: 'warning' })
       }
       loading.value = false
     }
@@ -148,6 +175,7 @@ export default defineComponent({
       mdiCloseCircle,
       mdiEye,
       mdiEyeOff,
+      mdiFilterOutline,
       loading,
       mostraEditor,
       isPwd,
@@ -159,25 +187,39 @@ export default defineComponent({
       utilizador,
       colunas,
       pagination,
+      filter,
       isPasswordValid,
       onServerRequest,
       onNovo: () => {
-        utilizador.value = { id: 0, username: '', password: '', tipo_id: 1, empresa_id: null, ativo: true }
+        utilizador.value = { id: 0, username: '', password: '', perfil_id: 1, empresa_id: null, ativo: true }
         mostraEditor.value = true
       },
       onEdit: (p) => {
+        p.password = null
         utilizador.value = p
         utilizadorEscolhido.value = [p]
         mostraEditor.value = true
       },
       onOk: async () => {
         try {
-          await postAuth('utilizadores/update.php', utilizador.value)
+          if (utilizador.value.id > 0) {
+            await postAuth('utilizadores/update.php', utilizador.value)
+          } else {
+            await postAuth('utilizadores/create.php', utilizador.value)
+          }
           tableRef.value.requestServerInteraction()
           mostraEditor.value = false
         } catch (error) {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
+      },
+      displayTipo: (t) => {
+        if (t.perfil_id === null || perfis.value === null || perfis.value.length === 0) {
+          return ''
+        }
+        const perfil = perfis.value.find(p => p.id === t.perfil_id)
+
+        return perfil !== null ? perfil.nome : ''
       }
     }
   }

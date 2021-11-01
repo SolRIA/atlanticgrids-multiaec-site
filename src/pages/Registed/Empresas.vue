@@ -10,12 +10,18 @@
       :columns="colunas"
       :rows-per-page-options="[0, 5, 10]"
       :loading="loading"
+      :filter="filter"
       v-model:pagination="pagination"
       v-model:selected="empresaEscolhida"
       @request="onServerRequest">
       
       <template v-slot:top-right>
         <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
+        <q-input v-model="filter" outlined dense clearable debounce="500">
+          <template v-slot:append>
+            <q-icon :name="mdiFilterOutline" />
+          </template>
+        </q-input>
       </template>
 
       <template v-slot:body-cell-ativo="props">
@@ -24,9 +30,15 @@
         </q-td>
       </template>
 
+      <template v-slot:body-cell-pendente="props">
+        <q-td :props="props" auto-width>
+          <q-checkbox v-model="props.row.pendente" disable/>
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-logo="props">
         <q-td :props="props">
-          <q-img :src="apiPublicUrl(props.row.logo)" style="height: 60px;" fit="scale-down"/>
+          <q-img :src="apiPublicUrl(props.row.logo)" style="height: 50px;" fit="scale-down"/>
         </q-td>
       </template>
 
@@ -89,7 +101,7 @@
                 </q-input>
 
                 <div class="col-xs-12 col-md-6">
-                  <q-file outlined v-model="empresa.logo" label="Logotipo">
+                  <q-file outlined v-model="logo" label="Logotipo">
                     <template v-slot:prepend>
                       <q-icon :name="mdiImageSearchOutline" />
                     </template>
@@ -97,6 +109,7 @@
                 </div>
                 
                 <q-checkbox v-model="empresa.ativo" label="Ativo" class="col-xs-3"/>
+                <q-checkbox v-model="empresa.pendente" label="Pendente" class="col-xs-3"/>
               </div>
             </q-tab-panel>
 
@@ -195,9 +208,9 @@
 </template>
 
 <script>
-import { mdiAccountTie, mdiWindowClose, mdiPlusBoxOutline, mdiPencil, mdiAccountGroup, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiImageSearchOutline, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline } from '@quasar/extras/mdi-v6'
+import { mdiAccountTie, mdiWindowClose, mdiPlusBoxOutline, mdiPencil, mdiAccountGroup, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiImageSearchOutline, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiFilterOutline } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
-import { get, postFormAuth, apiPublicUrl } from 'boot/api'
+import { get, postFormAuth, apiPublicUrl, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -221,11 +234,13 @@ export default defineComponent({
     const tipos = ref([])
     const empresas = ref([])
     const empresaEscolhida = ref([])
-    const empresa = ref({ id: 0, nome: '', ativo: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null })
+    const empresa = ref({ id: 0, nome: '', ativo: true, pendente: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null })
+    const logo = ref(null)
     const colunas = [
       { name: 'logo', label: '', field: 'logo', align: 'center', style: 'width: 100px' },
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
+      { name: 'pendente', label: 'Pendente', field: 'pendente', align: 'left' },
       { name: 'actions', label: '', field: 'actions' }
     ]
 
@@ -233,12 +248,25 @@ export default defineComponent({
       descending: false,
       page: 1,
       rowsPerPage: 10,
-      rowsNumber: 10
+      rowsNumber: 10,
+      sortBy: null
     })
-    const onServerRequest = async (_props) => {
+    const filter = ref(null)
+    const onServerRequest = async (props) => {
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      const filter = props.filter
+
       loading.value = true
       try {
-        empresas.value = await get('empresas/read.php')
+        const result = await postAuth('empresas/read.php', { page, rowsPerPage, sortBy, descending, filter })
+
+        empresas.value = result.rows
+
+        pagination.value.rowsNumber = result.count
+        pagination.value.page = page
+        pagination.value.rowsPerPage = rowsPerPage
+        pagination.value.sortBy = sortBy
+        pagination.value.descending = descending
       } catch {
         $q.notify({ message: 'Não foi possível obter as empresas', type: 'warning' })
       }
@@ -258,20 +286,23 @@ export default defineComponent({
       mdiImageSearchOutline,
       mdiBadgeAccountHorizontalOutline,
       mdiFileDocumentEditOutline,
+      mdiFilterOutline,
       tableRef,
       tab,
       loading,
+      filter,
       mostraEditor,
       tipos,
       empresas,
       empresaEscolhida,
       empresa,
+      logo,
       colunas,
       pagination,
       onServerRequest,
       apiPublicUrl,
       onNovo: () => {
-        empresa.value = { id: 0, nome: '', ativo: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }
+        empresa.value = { id: 0, nome: '', ativo: true, pendente: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }
         mostraEditor.value = true
       },
       onEdit: async (b) => {
@@ -282,7 +313,7 @@ export default defineComponent({
       onOk: async () => {
         try {
           const data = new FormData()
-          data.append('logo', empresa.value.logo)
+          data.append('logo', logo.value)
           data.append('id', empresa.value.id)
           data.append('nome', empresa.value.nome)
           data.append('ativo', empresa.value.ativo)
