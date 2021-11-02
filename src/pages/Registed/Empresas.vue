@@ -317,6 +317,7 @@ export default defineComponent({
           data.append('id', empresa.value.id)
           data.append('nome', empresa.value.nome)
           data.append('ativo', empresa.value.ativo)
+          data.append('pendente', empresa.value.pendente)
           data.append('tipo_id', empresa.value.tipo_id)
           data.append('descricao', empresa.value.descricao)
           data.append('telefone', empresa.value.telefone)

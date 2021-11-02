@@ -1,80 +1,176 @@
 <template>
   <q-card bordered class="card-login">
     <q-card-section>
-      <div class="row q-col-gutter-sm">
-        <div class="text-h6 col-12">Utilizador</div>
-        <q-input v-model="register.email" outlined type="email" label="Email" class="col-xs-12 col-md-6"
-                :rules="[isEmailRule]" ref="inputName">
-          <template v-if="register.email" v-slot:append>
-            <q-icon :name="mdiCloseCircle" @click.stop="register.email = null" class="cursor-pointer" />
-          </template>
-        </q-input>
-        <q-input v-model="register.password" outlined
-                :type="isPwd ? 'password' : 'text'" label="Password" class="col-xs-12 col-md-6"
-                :rules="[isPasswordValid]" ref="inputPassword">
-          <template v-slot:append>
-            <q-icon
-              :name="isPwd ? mdiEyeOff : mdiEye"
-              class="cursor-pointer" aria-hidden="true"
-              @click="isPwd = !isPwd"/>
-            <q-icon v-if="register.password" :name="mdiCloseCircle" @click.stop="register.password = null" class="cursor-pointer" />
-          </template>
-        </q-input>
+      <q-tabs
+        v-model="tab"
+        outside-arrows
+        inline-label
+        mobile-arrows
+        dense
+        align="center"
+        narrow-indicator>
+          <q-tab name="geral" :icon="mdiBadgeAccountHorizontalOutline" label="Geral" />
+          <q-tab name="descricao" :icon="mdiFileDocumentEditOutline" label="Descrição" />
+      </q-tabs>
 
-        <div class="text-h6 col-12">Empresa</div>
-        <q-input v-model="register.nome" outlined label="Nome" class="col-xs-12 col-md-9"/>
-        <q-select v-model="register.tipo_id" :options="tipos" label="Àrea de especialização" outlined option-label="nome" option-value="id" map-options emit-value class="col-xs-12 col-md-3"/>
-        <q-input v-model="register.website" outlined label="Web" class="col-xs-12 col-md-3">
-          <template v-slot:append>
-            <q-icon :name="mdiWeb" color="primary"/>
-          </template>
-        </q-input>
-        <q-input v-model="register.facebook" outlined label="Facebook" class="col-xs-12 col-md-3">
-        <template v-slot:append>
-            <q-icon :name="mdiFacebook" color="primary"/>
-          </template>
-        </q-input>
-        <q-input v-model="register.twitter" outlined label="Twitter" class="col-xs-12 col-md-3">
-          <template v-slot:append>
-            <q-icon :name="mdiTwitter" color="primary"/>
-          </template>
-        </q-input>
-        <q-input v-model="register.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-3">
-          <template v-slot:append>
-            <q-icon :name="mdiLinkedin" color="primary"/>
-          </template>
-        </q-input>
-      </div>
-    </q-card-section>
+      <q-separator />
 
-    <q-card-section>
-      <div class="row q-col-gutter-sm">
-        <div class="col-xs-12 col-md-9">
-          <q-editor v-model="register.descricao" />
-        </div>
+      <q-tab-panels v-model="tab">
+        <q-tab-panel name="geral">
+          <div class="row q-col-gutter-sm">
+            <div class="text-h6 col-12">Utilizador</div>
+            <q-input v-model="empresa.username" outlined label="Utilizador" class="col-xs-12 col-md-6"
+                    :rules="[isEmailRule]" ref="inputName">
+              <template v-if="empresa.username" v-slot:append>
+                <q-icon :name="mdiCloseCircle" @click.stop="empresa.username = null" class="cursor-pointer" />
+              </template>
+            </q-input>
+            <q-input v-model="empresa.password" outlined
+                    :type="isPwd ? 'password' : 'text'" label="Password" class="col-xs-12 col-md-6"
+                    :rules="[isPasswordValid]" ref="inputPassword">
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? mdiEyeOff : mdiEye"
+                  class="cursor-pointer" aria-hidden="true"
+                  @click="isPwd = !isPwd"/>
+                <q-icon v-if="empresa.password" :name="mdiCloseCircle" @click.stop="empresa.password = null" class="cursor-pointer" />
+              </template>
+            </q-input>
+            <div class="text-h6 col-12">Empresa</div>
+            <q-input v-model="empresa.nome" outlined label="Nome" class="col-xs-12"/>
+            <q-input v-model="empresa.email" outlined label="Email" class="col-xs-12 col-md-6"/>
+            <q-select v-model="empresa.tipo_id" :options="tipos" label="Àrea de especialização" outlined option-label="nome" option-value="id" map-options emit-value class="col-xs-12 col-md-6"/>
+            <q-input v-model="empresa.website" outlined label="Web" class="col-xs-12 col-md-3">
+              <template v-slot:append>
+                <q-icon :name="mdiWeb" color="primary"/>
+              </template>
+            </q-input>
+            <q-input v-model="empresa.facebook" outlined label="Facebook" class="col-xs-12 col-md-3">
+              <template v-slot:append>
+                <q-icon :name="mdiFacebook" color="primary"/>
+              </template>
+            </q-input>
+            <q-input v-model="empresa.twitter" outlined label="Twitter" class="col-xs-12 col-md-3">
+              <template v-slot:append>
+                <q-icon :name="mdiTwitter" color="primary"/>
+              </template>
+            </q-input>
+            <q-input v-model="empresa.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-3">
+              <template v-slot:append>
+                <q-icon :name="mdiLinkedin" color="primary"/>
+              </template>
+            </q-input>
 
-        <div class="col-xs-12 col-md-3">
-          <q-uploader url="http://localhost" label="Logotipo" flat bordered />
-        </div>
-      </div>
+            <div class="col-xs-12 col-md-6">
+              <q-file outlined v-model="empresa.logo" label="Logotipo">
+                <template v-slot:prepend>
+                  <q-icon :name="mdiImageSearchOutline" />
+                </template>
+              </q-file>
+            </div>
+          </div>
+        </q-tab-panel>
+
+        <q-tab-panel name="descricao">
+          <q-editor v-model="empresa.descricao" 
+            :toolbar="[
+              [
+                {
+                  label: $q.lang.editor.align,
+                  icon: $q.iconSet.editor.align,
+                  fixedLabel: true,
+                  options: ['left', 'center', 'right', 'justify']
+                },
+                'fullscreen'
+              ],
+              ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+              ['token', 'hr', 'link', 'custom_btn'],
+              [
+                {
+                  label: $q.lang.editor.formatting,
+                  icon: $q.iconSet.editor.formatting,
+                  list: 'no-icons',
+                  options: [
+                    'p',
+                    'h1',
+                    'h2',
+                    'h3',
+                    'h4',
+                    'h5',
+                    'h6',
+                    'code'
+                  ]
+                },
+                {
+                  label: $q.lang.editor.fontSize,
+                  icon: $q.iconSet.editor.fontSize,
+                  fixedLabel: true,
+                  fixedIcon: true,
+                  list: 'no-icons',
+                  options: [
+                    'size-1',
+                    'size-2',
+                    'size-3',
+                    'size-4',
+                    'size-5',
+                    'size-6',
+                    'size-7'
+                  ]
+                },
+                {
+                  label: $q.lang.editor.defaultFont,
+                  icon: $q.iconSet.editor.font,
+                  fixedIcon: true,
+                  list: 'no-icons',
+                  options: [
+                    'default_font',
+                    'arial',
+                    'arial_black',
+                    'comic_sans',
+                    'courier_new',
+                    'impact',
+                    'lucida_grande',
+                    'times_new_roman',
+                    'verdana'
+                  ]
+                },
+                'removeFormat'
+              ],
+              ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+              ['undo', 'redo'],
+              ['viewsource']
+            ]"
+            :fonts="{
+              arial: 'Arial',
+              arial_black: 'Arial Black',
+              comic_sans: 'Comic Sans MS',
+              courier_new: 'Courier New',
+              impact: 'Impact',
+              lucida_grande: 'Lucida Grande',
+              times_new_roman: 'Times New Roman',
+              verdana: 'Verdana'
+            }"/>
+        </q-tab-panel>
+
+      </q-tab-panels>
     </q-card-section>
 
     <q-separator inset />
     
     <q-card-actions align="right">
-      <q-btn label="Voltar" type="reset" flat
-            @click="onCancel"/>
+      <q-btn label="Voltar" type="reset" flat @click="onCancel"/>
       <q-btn color="primary" label="Criar conta" :icon="mdiLogin" size="lg"
-          @click="onCancel" :loading="onCreatingAcount"/>
+          @click="onRegister" :loading="onCreatingAcount"/>
     </q-card-actions>
   </q-card>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin } from '@quasar/extras/mdi-v6'
+import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiImageSearchOutline } from '@quasar/extras/mdi-v6'
 import { useQuasar } from 'quasar'
-import { get } from 'boot/api'
+import { get, postForm } from 'boot/api'
 
 export default defineComponent({
   name: 'RegistroEmpresa',
@@ -83,7 +179,7 @@ export default defineComponent({
   setup (props, { emit }) {
     const $q = useQuasar()
 
-    const register = ref(Object.assign({ email: '', password: '', nome: '', ativo: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }, props.p))
+    const empresa = ref(Object.assign({ username: '', password: '', email: '', nome: '', tipo_id: 1, descricao: '', telefone: null, telemovel: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }, props.p))
 
     onMounted(async () => {
       try {
@@ -98,7 +194,8 @@ export default defineComponent({
 
     const tipos = ref([])
     const isPwd = ref(true)
-    let onCreatingAcount = ref(false)
+    const tab = ref('geral')
+    const onCreatingAcount = ref(false)
 
     const isEmailRule = function (val) {
       return !!val || 'Insira o utilizador'
@@ -106,16 +203,34 @@ export default defineComponent({
     const isPasswordValid = function (val) {
       return !!val || 'Insira a password'
     }
-    const onRegister = function () {
+    const onRegister = async () => {
       // do login
       if (inputName.value.validate() && inputPassword.value.validate()) {
-        onCreatingAcount = true
+        onCreatingAcount.value = true
         
         // account has been created, 
-        // TODO: create account on the api and show message to the user to wait for the aproval
-
-        onCreatingAcount = false
-        emit('saved')
+        const data = new FormData()
+        data.append('logo', empresa.value.logo)
+        data.append('username', empresa.value.username)
+        data.append('password', empresa.value.password)
+        data.append('nome', empresa.value.nome)
+        data.append('tipo_id', empresa.value.tipo_id)
+        data.append('descricao', empresa.value.descricao)
+        data.append('telefone', empresa.value.telefone)
+        data.append('telemovel', empresa.value.telemovel)
+        data.append('email', empresa.value.email)
+        data.append('website', empresa.value.website)
+        data.append('facebook', empresa.value.facebook)
+        data.append('twitter', empresa.value.twitter)
+        data.append('linkedin', empresa.value.linkedin)
+        try {
+          await postForm('empresas/create.php', data)
+          emit('saved')
+        } catch {
+          $q.notify({ message: 'Não foi possível criar o registo', type: 'warning' })
+        } finally {
+          onCreatingAcount.value = false
+        }
       }
     }
 
@@ -132,9 +247,13 @@ export default defineComponent({
       mdiFacebook,
       mdiTwitter,
       mdiLinkedin,
+      mdiBadgeAccountHorizontalOutline,
+      mdiFileDocumentEditOutline,
+      mdiImageSearchOutline,
       inputName,
       inputPassword,
-      register,
+      tab,
+      empresa,
       tipos,
       isPwd,
       onCreatingAcount,

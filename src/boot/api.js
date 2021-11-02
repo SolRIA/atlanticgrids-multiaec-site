@@ -118,6 +118,17 @@ export async function post (url, data) {
   return await response.json()
 }
 
+export async function postForm (url, data) {
+  const config = {
+    method: 'POST',
+    body: data
+  }
+
+  var response = await fetch(apiBaseUrl() + url, config)
+
+  return await response.json()
+}
+
 export async function get (url, data) {
   const config = {
     method: 'GET',
@@ -128,9 +139,6 @@ export async function get (url, data) {
   }
 
   var response = await fetch(apiBaseUrl() + url, config)
-
-  // const text = await response.text()
-  // console.log('get ' + url, text)
 
   return await response.json()
 }
