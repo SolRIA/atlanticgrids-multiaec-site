@@ -75,26 +75,53 @@
 
           <q-tab-panels v-model="tab">
             <q-tab-panel name="geral">
-              <div class="row q-col-gutter-sm">
-                <q-input v-model="empresa.nome" outlined label="Nome" class="col-xs-12"/>
-                <q-input v-model="empresa.email" outlined label="Email" class="col-xs-12 col-md-6"/>
-                <q-select v-model="empresa.tipo_id" :options="tipos" label="Àrea de especialização" outlined option-label="nome" option-value="id" map-options emit-value class="col-xs-12 col-md-6"/>
-                <q-input v-model="empresa.website" outlined label="Web" class="col-xs-12 col-md-3">
+              <div class="row q-col-gutter-md">
+                <q-input v-model="empresa.nome" label="Nome" outlined class="col-xs-12 col-md-6"/>
+                <q-input v-model="empresa.email" label="Email" outlined clearable class="col-xs-12 col-md-6"/>
+                
+                <q-select v-model="empresa.tipos_empresa" :options="tiposEmpresa" label="Àreas de especialização" option-label="nome" option-value="id" class="col-xs-12 col-md-6"
+                  multiple emit-value map-options outlined>
+                  <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
+                    <q-item v-bind="itemProps">
+                      <q-item-section>
+                        <q-item-label>{{ opt.nome }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section side>
+                        <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+                <q-select v-model="empresa.tipos_projeto" :options="tiposProjeto" label="Tipos de projetos" option-label="nome" option-value="id" class="col-xs-12 col-md-6"
+                  multiple emit-value map-options outlined>
+                  <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
+                    <q-item v-bind="itemProps">
+                      <q-item-section>
+                        <q-item-label>{{ opt.nome }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section side>
+                        <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+
+                <q-input v-model="empresa.website" label="Web" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiWeb" color="primary"/>
                   </template>
                 </q-input>
-                <q-input v-model="empresa.facebook" outlined label="Facebook" class="col-xs-12 col-md-3">
+                <q-input v-model="empresa.facebook" label="Facebook" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiFacebook" color="primary"/>
                   </template>
                 </q-input>
-                <q-input v-model="empresa.twitter" outlined label="Twitter" class="col-xs-12 col-md-3">
+                <q-input v-model="empresa.twitter" label="Twitter" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiTwitter" color="primary"/>
                   </template>
                 </q-input>
-                <q-input v-model="empresa.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-3">
+                <q-input v-model="empresa.linkedin" label="LinkedIn" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiLinkedin" color="primary"/>
                   </template>
@@ -224,17 +251,23 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        tipos.value = await get('tiposempresa/read-ativo.php')
+        tiposEmpresa.value = await get('tiposempresa/read-ativo.php')
       } catch {
         $q.notify({ message: 'Não foi possível obter os tipos de empresa', type: 'warning' })
+      }
+      try {
+        tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
+      } catch {
+        $q.notify({ message: 'Não foi possível obter os tipos de projeto', type: 'warning' })
       }
       tableRef.value.requestServerInteraction()
     })
 
-    const tipos = ref([])
+    const tiposEmpresa = ref([])
+    const tiposProjeto = ref([])
     const empresas = ref([])
     const empresaEscolhida = ref([])
-    const empresa = ref({ id: 0, nome: '', ativo: true, pendente: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null })
+    const empresa = ref({ id: 0, nome: '', ativo: true, pendente: true, tipos_empresa: [], tipos_projeto: [], descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null })
     const logo = ref(null)
     const colunas = [
       { name: 'logo', label: '', field: 'logo', align: 'center', style: 'width: 100px' },
@@ -292,7 +325,8 @@ export default defineComponent({
       loading,
       filter,
       mostraEditor,
-      tipos,
+      tiposEmpresa,
+      tiposProjeto,
       empresas,
       empresaEscolhida,
       empresa,
@@ -302,7 +336,8 @@ export default defineComponent({
       onServerRequest,
       apiPublicUrl,
       onNovo: () => {
-        empresa.value = { id: 0, nome: '', ativo: true, pendente: true, tipo_id: 1, descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }
+        logo.value = null
+        empresa.value = { id: 0, nome: '', ativo: true, pendente: true, tipos_empresa: [], tipos_projeto: [], descricao: null, telefone: null, telemovel: null, email: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }
         mostraEditor.value = true
       },
       onEdit: async (b) => {
@@ -318,7 +353,8 @@ export default defineComponent({
           data.append('nome', empresa.value.nome)
           data.append('ativo', empresa.value.ativo)
           data.append('pendente', empresa.value.pendente)
-          data.append('tipo_id', empresa.value.tipo_id)
+          data.append('tipos_empresa', empresa.value.tipos_empresa)
+          data.append('tipos_projeto', empresa.value.tipos_projeto)
           data.append('descricao', empresa.value.descricao)
           data.append('telefone', empresa.value.telefone)
           data.append('telemovel', empresa.value.telemovel)

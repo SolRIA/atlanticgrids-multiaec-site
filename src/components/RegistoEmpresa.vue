@@ -17,7 +17,7 @@
 
       <q-tab-panels v-model="tab">
         <q-tab-panel name="geral">
-          <div class="row q-col-gutter-sm">
+          <div class="row q-col-gutter-md">
             <div class="text-h6 col-12">Utilizador</div>
             <q-input v-model="empresa.username" outlined label="Utilizador" class="col-xs-12 col-md-6"
                     :rules="[isEmailRule]" ref="inputName">
@@ -37,9 +37,36 @@
               </template>
             </q-input>
             <div class="text-h6 col-12">Empresa</div>
-            <q-input v-model="empresa.nome" outlined label="Nome" class="col-xs-12"/>
+            <q-input v-model="empresa.nome" outlined label="Nome" class="col-xs-12 col-md-6"/>
             <q-input v-model="empresa.email" outlined label="Email" class="col-xs-12 col-md-6"/>
-            <q-select v-model="empresa.tipo_id" :options="tipos" label="Àrea de especialização" outlined option-label="nome" option-value="id" map-options emit-value class="col-xs-12 col-md-6"/>
+            
+            <q-select v-model="empresa.tipos_empresa" :options="tiposEmpresa" label="Àreas de especialização" option-label="nome" option-value="id" class="col-xs-12 col-md-6"
+              multiple emit-value map-options outlined>
+              <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
+                <q-item v-bind="itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ opt.nome }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+            <q-select v-model="empresa.tipos_projeto" :options="tiposProjeto" label="Tipos de projetos" option-label="nome" option-value="id" class="col-xs-12 col-md-6"
+              multiple emit-value map-options outlined>
+              <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
+                <q-item v-bind="itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ opt.nome }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+
             <q-input v-model="empresa.website" outlined label="Web" class="col-xs-12 col-md-3">
               <template v-slot:append>
                 <q-icon :name="mdiWeb" color="primary"/>
@@ -179,20 +206,26 @@ export default defineComponent({
   setup (props, { emit }) {
     const $q = useQuasar()
 
-    const empresa = ref(Object.assign({ username: '', password: '', email: '', nome: '', tipo_id: 1, descricao: '', telefone: null, telemovel: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }, props.p))
+    const empresa = ref(Object.assign({ username: '', password: '', email: '', nome: '', tipos_empresa: [], tipos_projeto: [], descricao: '', telefone: null, telemovel: null, website: null, facebook: null, twitter: null, linkedin: null, logo: null }, props.p))
 
     onMounted(async () => {
       try {
-        tipos.value = await get('tiposempresa/read-ativo.php')
+        tiposEmpresa.value = await get('tiposempresa/read-ativo.php')
       } catch {
         $q.notify({ message: 'Não foi possível obter os tipos de empresa', type: 'warning' })
+      }
+      try {
+        tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
+      } catch {
+        $q.notify({ message: 'Não foi possível obter os tipos de projeto', type: 'warning' })
       }
     })
 
     const inputName = ref(null)
     const inputPassword = ref(null)
 
-    const tipos = ref([])
+    const tiposEmpresa = ref([])
+    const tiposProjeto = ref([])
     const isPwd = ref(true)
     const tab = ref('geral')
     const onCreatingAcount = ref(false)
@@ -214,7 +247,8 @@ export default defineComponent({
         data.append('username', empresa.value.username)
         data.append('password', empresa.value.password)
         data.append('nome', empresa.value.nome)
-        data.append('tipo_id', empresa.value.tipo_id)
+        data.append('tipos_empresa', empresa.value.tipos_empresa)
+        data.append('tipos_projeto', empresa.value.tipos_projeto)
         data.append('descricao', empresa.value.descricao)
         data.append('telefone', empresa.value.telefone)
         data.append('telemovel', empresa.value.telemovel)
@@ -254,7 +288,8 @@ export default defineComponent({
       inputPassword,
       tab,
       empresa,
-      tipos,
+      tiposEmpresa,
+      tiposProjeto,
       isPwd,
       onCreatingAcount,
       isEmailRule,

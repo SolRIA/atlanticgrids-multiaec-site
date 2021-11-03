@@ -1,5 +1,14 @@
 <template>
-  <q-page>
+  <q-page padding>
+    <div class="row q-col-gutter-md">
+      <q-select label="País" outlined v-model="pais" dense :options="paises" class="col-xs-12 col-md-3" 
+        option-value="id" option-label="nome" emit-value map-options clearable/>
+      <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="col-xs-12 col-md-3" 
+        option-value="id" option-label="nome" emit-value map-options clearable/>
+      <q-select label="Tipo projeto" outlined v-model="tipo" dense :options="tipos" class="col-xs-12 col-md-3" 
+        option-value="id" option-label="nome" emit-value map-options clearable/>
+      <q-input label="Projeto" outlined dense class="col-xs-12 col-md-3"/>
+    </div>
     <q-table class="q-mt-sm" color="positive"
       title="Projetos"
       ref="tableRef"
@@ -7,7 +16,7 @@
       no-data-label="Não existem dados"
       no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
       row-key="id"
-      grid
+      :grid="showCards"
       :rows="projetos"
       :columns="columns"
       :rows-per-page-options="[5, 10, 15, 20, 50]"
@@ -16,14 +25,11 @@
       v-model:selected="projetoEscolhido"
       @request="onServerRequest">
       
-      <template v-slot:top>
-        <q-select label="País" outlined v-model="pais" dense :options="paises" class="q-mr-md" 
-          option-value="id" option-label="nome" emit-value map-options clearable style="min-width: 150px"/>
-        <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="q-mr-md" 
-          option-value="id" option-label="nome" emit-value map-options clearable style="min-width: 150px"/>
-        <q-input label="Projeto" outlined dense/>
-        <q-space/>
-        <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
+      <template v-slot:top-right>
+        <q-btn-group outline>
+          <q-btn label="Novo" @click="onNovo" :icon="mdiPlusBoxOutline" color="positive"/>
+          <q-btn @click="toogleShowCards" :icon="mdiGridLarge" outline color="positive"/>
+        </q-btn-group>
       </template>
 
       <template v-slot:item="props">
@@ -63,30 +69,40 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
-import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete, mdiAlertDecagram } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, onMounted, watch } from 'vue'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete, mdiAlertDecagram, mdiGridLarge } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
-import { postAuth, get } from 'boot/api'
+import { postAuth, get, post } from 'boot/api'
 import { config } from 'boot/config'
 import ProjectEditor from 'src/components/Registed/Project.vue'
 
 export default defineComponent({
   setup () {
     const $q = useQuasar()
+    const tableRef = ref(null)
     const loading = ref(false)
+    const showCards = ref(true)
 
     onMounted(async () => {
+      showCards.value = JSON.parse(localStorage.getItem('showCards'))
       try {
-        paises.value = await get('paises/read.php')
+        tipos.value = await get('tiposprojeto/read-ativo.php')
       } catch {
-          $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
+        $q.notify({ message: 'Não foi possível obter os tipos de projeto', type: 'warning' })
       }
 
       try {
-        bancos.value = await get('bancos/read.php')
+        paises.value = await get('paises/read-ativo.php')
       } catch {
-          $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
+        $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
       }
+
+      try {
+        bancos.value = await get('bancos/read-ativo.php')
+      } catch {
+        $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
+      }
+      tableRef.value.requestServerInteraction()
     })
 
     const paises = ref([])
@@ -94,6 +110,21 @@ export default defineComponent({
 
     const bancos = ref([])
     const banco = ref(null)
+
+    const tipos = ref([])
+    const tipo = ref(null)
+
+    const filtroProjeto = ref(null)
+
+    watch(pais, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
+    })
+    watch(banco, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
+    })
+    watch(tipo, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
+    })
 
     const projetos = ref([])
     const columns = [
@@ -108,17 +139,22 @@ export default defineComponent({
       descending: false,
       page: 1,
       rowsPerPage: 10,
-      rowsNumber: 10
+      rowsNumber: 10,
+      sortBy: null
     })
-    const tableRef = ref(null)
 
     const projetoEscolhido = ref([])
 
+    const toogleShowCards = () => {
+      showCards.value = !showCards.value
+      localStorage.setItem('showCards', JSON.stringify(showCards.value))
+    }
     const onNovo = () => {
       const p = {
-        id: projetos.value.length + 1,
+        id: 0,
         nome: '',
-        tipo: '',
+        tipo_id: null,
+        pais_id: null,
         data: date.formatDate(new Date(), 'YYYY-MM-DD'),
         descricao: ''
       }
@@ -126,7 +162,9 @@ export default defineComponent({
       $q.dialog({
         component: ProjectEditor,
         componentProps: {
-          p: p
+          p: p,
+          tipos: tipos.value,
+          paises: paises.value
         }
       }).onOk(async () => {
         try {
@@ -141,7 +179,9 @@ export default defineComponent({
       $q.dialog({
         component: ProjectEditor,
         componentProps: {
-          p: project
+          p: project,
+          tipos: tipos.value,
+          paises: paises.value
         }
       }).onOk(async () => {
         try {
@@ -152,13 +192,22 @@ export default defineComponent({
         }
       })
     }
-
     const onServerRequest = async (props) => {
       try {
-        // TODO: pagging and filter
-        projetos.value = await get('projetos/read.php')
-      } catch {
-          $q.notify({ message: 'Não foi possível obter os projetos', type: 'warning' })
+        const { page, rowsPerPage, sortBy, descending } = props.pagination
+
+        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, filter: filtroProjeto.value, pais: pais.value, banco: banco.value, tipo: tipo.value })
+
+        projetos.value = result.rows;
+
+        pagination.value.rowsNumber = result.count
+        pagination.value.page = page
+        pagination.value.rowsPerPage = rowsPerPage
+        pagination.value.sortBy = sortBy
+        pagination.value.descending = descending
+      } catch (e) {
+        console.log('Erro obter projetos', e)
+        $q.notify({ message: 'Não foi possível obter os projetos', type: 'warning' })
       }
     }
 
@@ -168,18 +217,24 @@ export default defineComponent({
       mdiRefreshCircle,
       mdiDelete,
       mdiAlertDecagram,
+      mdiGridLarge,
       theme_color: config.theme_color,
       bg_color: config.bg_color,
+      showCards,
       loading,
       pagination,
       tableRef,
+      tipos,
+      tipo,
       paises,
       pais,
       bancos,
       banco,
+      filtroProjeto,
       projetos,
       projetoEscolhido,
       columns,
+      toogleShowCards,
       onNovo,
       onEditProject,
       onServerRequest

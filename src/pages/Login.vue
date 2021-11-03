@@ -10,7 +10,7 @@
 
         <q-card-section>
           <q-form class="q-gutter-sm">
-            <q-input v-model="email" outlined type="email" label="email"
+            <q-input v-model="email" outlined label="utilizador"
                     :rules="[isEmailRule]" ref="inputName">
               <template v-if="email" v-slot:append>
                 <q-icon :name="mdiCloseCircle" @click.stop="email = null" class="cursor-pointer" />
