@@ -6,6 +6,9 @@ export function apiBaseUrl () {
 }
 
 export function apiPublicUrl (name) {
+  if(typeof name === 'undefined' || name === null) {
+    return null
+  }
   return process.env.DEV ? `http://localhost:8000/public/${name}` : `https://multiaecapi.idealkids.pt/public/${name}`
 }
 

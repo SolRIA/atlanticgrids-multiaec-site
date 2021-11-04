@@ -132,6 +132,7 @@ export default defineComponent({
 
       if (permissaoEdicao.value === false) {
         // get the base filter for this user: tipos_projeto to apply
+        tipo.value = await getAuth('empresas/read-tipos-projeto.php')
       }
       tableRef.value.requestServerInteraction()
     })

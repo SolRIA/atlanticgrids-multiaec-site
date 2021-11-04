@@ -104,7 +104,7 @@ export default {
       onLogout () {
         localStorage.removeItem('login')
         localStorage.removeItem('token')
-        $router.push('/');
+        $router.push('/login');
       }
     }
   }

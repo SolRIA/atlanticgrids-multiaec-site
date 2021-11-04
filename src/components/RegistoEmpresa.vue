@@ -67,22 +67,35 @@
               </template>
             </q-select>
 
-            <q-input v-model="empresa.website" outlined label="Web" class="col-xs-12 col-md-3">
+            <q-input v-model="empresa.telemovel" outlined label="Telemóvel" class="col-xs-12 col-md-4">
+              <template v-slot:append>
+                <q-icon :name="mdiCellphone" color="primary"/>
+              </template>
+            </q-input>
+
+            <q-input v-model="empresa.telefone" outlined label="Telefone" class="col-xs-12 col-md-4">
+              <template v-slot:append>
+                <q-icon :name="mdiPhoneClassic" color="primary"/>
+              </template>
+            </q-input>
+
+            <q-input v-model="empresa.website" outlined label="Web" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiWeb" color="primary"/>
               </template>
             </q-input>
-            <q-input v-model="empresa.facebook" outlined label="Facebook" class="col-xs-12 col-md-3">
+
+            <q-input v-model="empresa.facebook" outlined label="Facebook" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiFacebook" color="primary"/>
               </template>
             </q-input>
-            <q-input v-model="empresa.twitter" outlined label="Twitter" class="col-xs-12 col-md-3">
+            <q-input v-model="empresa.twitter" outlined label="Twitter" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiTwitter" color="primary"/>
               </template>
             </q-input>
-            <q-input v-model="empresa.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-3">
+            <q-input v-model="empresa.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiLinkedin" color="primary"/>
               </template>
@@ -195,7 +208,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiImageSearchOutline } from '@quasar/extras/mdi-v6'
+import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiImageSearchOutline, mdiCellphone, mdiPhoneClassic } from '@quasar/extras/mdi-v6'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
 
@@ -284,6 +297,8 @@ export default defineComponent({
       mdiBadgeAccountHorizontalOutline,
       mdiFileDocumentEditOutline,
       mdiImageSearchOutline,
+      mdiCellphone,
+      mdiPhoneClassic,
       inputName,
       inputPassword,
       tab,
