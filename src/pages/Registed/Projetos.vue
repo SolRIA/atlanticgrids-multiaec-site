@@ -1,12 +1,26 @@
 <template>
   <q-page padding>
     <div class="row q-col-gutter-md">
+      <q-select v-model="tipo" :options="tipos" label="Tipos de projetos" option-label="nome" option-value="id" class="col-xs-12 col-md-3"
+        multiple emit-value map-options outlined clearable dense>
+        <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
+          <q-item v-bind="itemProps">
+            <q-item-section>
+              <q-item-label>{{ opt.nome }}</q-item-label>
+            </q-item-section>
+            <q-item-section side>
+              <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+
       <q-select label="País" outlined v-model="pais" dense :options="paises" class="col-xs-12 col-md-3" 
         option-value="id" option-label="nome" emit-value map-options clearable/>
+      
       <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="col-xs-12 col-md-3" 
         option-value="id" option-label="nome" emit-value map-options clearable/>
-      <q-select label="Tipo projeto" outlined v-model="tipo" dense :options="tipos" class="col-xs-12 col-md-3" 
-        option-value="id" option-label="nome" emit-value map-options clearable/>
+
       <q-input label="Projeto" outlined dense class="col-xs-12 col-md-3"/>
     </div>
     <q-table class="q-mt-sm" color="positive"
@@ -16,6 +30,7 @@
       no-data-label="Não existem dados"
       no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
       row-key="id"
+      wrap-cells
       :grid="showCards"
       :rows="projetos"
       :columns="columns"
@@ -27,9 +42,16 @@
       
       <template v-slot:top-right>
         <q-btn-group outline>
-          <q-btn label="Novo" @click="onNovo" :icon="mdiPlusBoxOutline" color="positive"/>
+          <q-btn label="Novo" @click="onNovo" :icon="mdiPlusBoxOutline" color="positive" v-if="permissaoEdicao"/>
+          <q-btn @click="refresh" :icon="mdiRefreshCircle" outline color="positive"/>
           <q-btn @click="toogleShowCards" :icon="mdiGridLarge" outline color="positive"/>
         </q-btn-group>
+      </template>
+
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props" auto-width>
+          <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEditProject(props.row)"/>
+        </q-td>
       </template>
 
       <template v-slot:item="props">
@@ -72,9 +94,9 @@
 import { defineComponent, ref, onMounted, watch } from 'vue'
 import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete, mdiAlertDecagram, mdiGridLarge } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
-import { postAuth, get, post } from 'boot/api'
+import { get, post, getAuth } from 'boot/api'
 import { config } from 'boot/config'
-import ProjectEditor from 'src/components/Registed/Project.vue'
+import ProjectEditor from 'src/components/Registed/Projeto.vue'
 
 export default defineComponent({
   setup () {
@@ -82,9 +104,14 @@ export default defineComponent({
     const tableRef = ref(null)
     const loading = ref(false)
     const showCards = ref(true)
+    const permissaoEdicao = ref(false)
 
     onMounted(async () => {
       showCards.value = JSON.parse(localStorage.getItem('showCards'))
+      try {
+        const result = await getAuth('utilizadores/editor.php?m=2')
+        permissaoEdicao.value = result.editor
+      } catch { }
       try {
         tipos.value = await get('tiposprojeto/read-ativo.php')
       } catch {
@@ -101,6 +128,10 @@ export default defineComponent({
         bancos.value = await get('bancos/read-ativo.php')
       } catch {
         $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
+      }
+
+      if (permissaoEdicao.value === false) {
+        // get the base filter for this user: tipos_projeto to apply
       }
       tableRef.value.requestServerInteraction()
     })
@@ -129,10 +160,9 @@ export default defineComponent({
     const projetos = ref([])
     const columns = [
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
-      { name: 'tipo', label: 'Tipo', field: 'tipo', align: 'left' },
       { name: 'data', label: 'Data', field: 'data', align: 'left' },
-      { name: 'imagem', label: 'Imagem', field: 'imagem', align: 'left' },
-      { name: 'descricao', label: 'Descrição', field: 'descricao' }
+      { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'left' },
+      { name: 'actions', label: '', field: 'actions', align: 'center' }
     ]
 
     const pagination = ref({
@@ -149,12 +179,18 @@ export default defineComponent({
       showCards.value = !showCards.value
       localStorage.setItem('showCards', JSON.stringify(showCards.value))
     }
+    const refresh = () => {
+      localStorage.setItem('showCards', JSON.stringify(showCards.value))
+    }
     const onNovo = () => {
       const p = {
         id: 0,
         nome: '',
-        tipo_id: null,
+        tipos: [],
         pais_id: null,
+        banco_id: null,
+        ativo: true,
+        referencia: '',
         data: date.formatDate(new Date(), 'YYYY-MM-DD'),
         descricao: ''
       }
@@ -164,15 +200,11 @@ export default defineComponent({
         componentProps: {
           p: p,
           tipos: tipos.value,
-          paises: paises.value
+          paises: paises.value,
+          bancos: bancos.value
         }
       }).onOk(async () => {
-        try {
-          await postAuth('projetos/update.php', p)
-          tableRef.value.requestServerInteraction()
-        } catch {
-          $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
-        }
+        tableRef.value.requestServerInteraction()
       })
     }
     const onEditProject = (project) => {
@@ -181,22 +213,19 @@ export default defineComponent({
         componentProps: {
           p: project,
           tipos: tipos.value,
-          paises: paises.value
+          paises: paises.value,
+          bancos: bancos.value
         }
       }).onOk(async () => {
-        try {
-          await postAuth('projetos/update.php', project)
-          tableRef.value.requestServerInteraction()
-        } catch {
-          $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
-        }
+        tableRef.value.requestServerInteraction()
       })
     }
     const onServerRequest = async (props) => {
       try {
+        loading.value = true
         const { page, rowsPerPage, sortBy, descending } = props.pagination
 
-        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, filter: filtroProjeto.value, pais: pais.value, banco: banco.value, tipo: tipo.value })
+        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, filter: filtroProjeto.value, pais_id: pais.value, banco_id: banco.value, tipo_id: tipo.value })
 
         projetos.value = result.rows;
 
@@ -206,9 +235,9 @@ export default defineComponent({
         pagination.value.sortBy = sortBy
         pagination.value.descending = descending
       } catch (e) {
-        console.log('Erro obter projetos', e)
         $q.notify({ message: 'Não foi possível obter os projetos', type: 'warning' })
       }
+      loading.value = false
     }
 
     return {
@@ -222,6 +251,7 @@ export default defineComponent({
       bg_color: config.bg_color,
       showCards,
       loading,
+      permissaoEdicao,
       pagination,
       tableRef,
       tipos,
@@ -234,6 +264,7 @@ export default defineComponent({
       projetos,
       projetoEscolhido,
       columns,
+      refresh,
       toogleShowCards,
       onNovo,
       onEditProject,

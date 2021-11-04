@@ -42,12 +42,12 @@
       <q-scroll-area class="fit">
         <q-list>
           <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item clickable exact v-ripple active-class="text-white" :to="menuItem.link">
+            <q-item clickable exact v-ripple active-class="text-white" :to="menuItem.url">
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
               <q-item-section>
-                {{ menuItem.label }}
+                {{ menuItem.nome }}
               </q-item-section>
             </q-item>
           </template>
@@ -70,58 +70,26 @@
 </style>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { mdiMenu, mdiLogout, mdiCogs, mdiAccountHardHat, mdiAccountGroup, mdiBank, mdiFlag, mdiAccountCircle, mdiOfficeBuildingCogOutline, mdiArchiveCogOutline } from '@quasar/extras/mdi-v6'
+import { getAuth } from 'boot/api'
+import { mdiMenu, mdiLogout } from '@quasar/extras/mdi-v6'
 
 export default {
   setup () {
     const $router = useRouter()
 
     const leftDrawerOpen = ref(false)
+    const menuList = ref([])
 
-    const menuList = [
-      {
-        icon: mdiCogs,
-        label: 'Conta',
-        link: '/registed/conta'
-      },
-      {
-        icon: mdiAccountHardHat,
-        label: 'Projetos',
-        link: '/registed'
-      },
-      {
-        icon: mdiAccountGroup,
-        label: 'Empresas',
-        link: '/registed/empresas'
-      },
-      {
-        icon: mdiBank,
-        label: 'Bancos',
-        link: '/registed/bancos'
-      },
-      {
-        icon: mdiFlag,
-        label: 'Paises',
-        link: '/registed/paises'
-      },
-      {
-        icon: mdiAccountCircle,
-        label: 'Utilizadores',
-        link: '/registed/utilizadores'
-      },
-      {
-        icon: mdiOfficeBuildingCogOutline,
-        label: 'Tipos Empresa',
-        link: '/registed/tiposempresa'
-      },
-      {
-        icon: mdiArchiveCogOutline,
-        label: 'Tipos Projeto',
-        link: '/registed/tiposprojeto'
+    onMounted(async () => {
+      try {
+        menuList.value = await getAuth('menu/read.php')
+      } catch (e) {
+        console.log(e)
       }
-    ]
+    })
+
 
     return {
       mdiMenu,
@@ -134,6 +102,8 @@ export default {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
       onLogout () {
+        localStorage.removeItem('login')
+        localStorage.removeItem('token')
         $router.push('/');
       }
     }
