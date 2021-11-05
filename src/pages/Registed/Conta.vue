@@ -280,6 +280,7 @@ export default defineComponent({
         data.append('logo', logo.value)
         await postFormAuth('empresas/update-logo.php', data)
       }
+      $q.notify({ message: 'Os dados foram guardados', type: 'positive' })
     }
 
     return {
