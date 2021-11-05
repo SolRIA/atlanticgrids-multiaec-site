@@ -1,28 +1,32 @@
 <template>
   <q-page padding>
-    <div class="row q-col-gutter-md">
-      <q-select v-model="tipo" :options="tipos" label="Tipos de projetos" option-label="nome" option-value="id" class="col-xs-12 col-md-3"
-        multiple emit-value map-options outlined clearable dense>
-        <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
-          <q-item v-bind="itemProps">
-            <q-item-section>
-              <q-item-label>{{ opt.nome }}</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
-            </q-item-section>
-          </q-item>
-        </template>
-      </q-select>
+    <q-card v-if="mostrarFiltros">
+      <q-card-section>
+        <div class="row q-col-gutter-md">
+          <q-select v-model="tipo" :options="tipos" label="Tipos de projetos" option-label="nome" option-value="id" class="col-xs-12 col-md-3"
+            multiple emit-value map-options outlined clearable dense>
+            <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
+              <q-item v-bind="itemProps">
+                <q-item-section>
+                  <q-item-label>{{ opt.nome }}</q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
 
-      <q-select label="País" outlined v-model="pais" dense :options="paises" class="col-xs-12 col-md-3" 
-        option-value="id" option-label="nome" emit-value map-options clearable/>
-      
-      <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="col-xs-12 col-md-3" 
-        option-value="id" option-label="nome" emit-value map-options clearable/>
+          <q-select label="País" outlined v-model="pais" dense :options="paises" class="col-xs-12 col-md-3" 
+            option-value="id" option-label="nome" emit-value map-options clearable/>
+          
+          <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="col-xs-12 col-md-3" 
+            option-value="id" option-label="nome" emit-value map-options clearable/>
 
-      <q-input label="Projeto" outlined dense class="col-xs-12 col-md-3"/>
-    </div>
+          <q-input label="Projeto" outlined dense class="col-xs-12 col-md-3"/>
+        </div>
+      </q-card-section>
+    </q-card>
     <q-table class="q-mt-sm" color="positive"
       title="Projetos"
       ref="tableRef"
@@ -43,9 +47,16 @@
       <template v-slot:top-right>
         <q-btn-group outline>
           <q-btn label="Novo" @click="onNovo" :icon="mdiPlusBoxOutline" color="positive" v-if="permissaoEdicao"/>
-          <q-btn @click="refresh" :icon="mdiRefreshCircle" outline color="positive"/>
+          <q-btn @click="refresh" :icon="mdiRefresh" outline color="positive"/>
           <q-btn @click="toogleShowCards" :icon="mdiGridLarge" outline color="positive"/>
+          <q-btn @click="mostrarFiltros=!mostrarFiltros" :icon="mdiFilterOutline" outline color="positive"/>
         </q-btn-group>
+      </template>
+
+      <template v-slot:body-cell-pais_id="props">
+        <q-td :props="props" auto-width>
+          {{ getPais(props.row.pais_id) }}
+        </q-td>
       </template>
 
       <template v-slot:body-cell-actions="props">
@@ -67,7 +78,7 @@
 
             <q-card-actions align="right" class="vertical-bottom">
               <q-chip outline square color="positive" text-color="white">
-                {{ props.row.pais }}
+                {{ getPais(props.row.pais_id) }}
               </q-chip>
               <q-chip outline square color="primary" text-color="white">
                 {{ props.row.data }}
@@ -92,7 +103,7 @@
 
 <script>
 import { defineComponent, ref, onMounted, watch } from 'vue'
-import { mdiPencil, mdiPlusBoxOutline, mdiRefreshCircle, mdiDelete, mdiAlertDecagram, mdiGridLarge } from '@quasar/extras/mdi-v6'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiDelete, mdiAlertDecagram, mdiGridLarge, mdiFilterOutline } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
 import { get, post, getAuth } from 'boot/api'
 import { config } from 'boot/config'
@@ -105,6 +116,7 @@ export default defineComponent({
     const loading = ref(false)
     const showCards = ref(true)
     const permissaoEdicao = ref(false)
+    const mostrarFiltros = ref(false)
 
     onMounted(async () => {
       showCards.value = JSON.parse(localStorage.getItem('showCards'))
@@ -163,6 +175,7 @@ export default defineComponent({
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'data', label: 'Data', field: 'data', align: 'left' },
       { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'left' },
+      { name: 'pais_id', label: 'País', field: 'pais_id', align: 'left' },
       { name: 'actions', label: '', field: 'actions', align: 'center' }
     ]
 
@@ -240,19 +253,24 @@ export default defineComponent({
       }
       loading.value = false
     }
+    const getPais = (id) => {
+      return paises.value.find(p => p.id === id).nome
+    }
 
     return {
       mdiPencil,
       mdiPlusBoxOutline,
-      mdiRefreshCircle,
+      mdiRefresh,
       mdiDelete,
       mdiAlertDecagram,
       mdiGridLarge,
+      mdiFilterOutline,
       theme_color: config.theme_color,
       bg_color: config.bg_color,
       showCards,
       loading,
       permissaoEdicao,
+      mostrarFiltros,
       pagination,
       tableRef,
       tipos,
@@ -269,7 +287,8 @@ export default defineComponent({
       toogleShowCards,
       onNovo,
       onEditProject,
-      onServerRequest
+      onServerRequest,
+      getPais
     }
   }
 })
