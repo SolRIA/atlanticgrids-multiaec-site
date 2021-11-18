@@ -5,3 +5,71 @@
 .bg-brand {
     background: #00A352
 }
+
+.action-btn {
+    font-size: 14px;
+    width: 240px;
+    height: 55px;
+    padding: 0 37 0 37;
+}
+
+.toolbar-btn {
+    background-color: white !important;
+    background: white !important;
+    color: black;
+    height: 80px;
+    font-size: 18px;
+    text-decoration: underline 0.15em white;
+    transition: text-decoration 400ms linear, text-decoration-thickness 400ms linear;
+}
+.toolbar-btn:hover {
+    background-color: white !important;
+    background: white !important;
+    color: #05ae4c;
+    text-decoration: underline;
+    text-decoration-color: #ec1c23;
+    text-decoration-thickness: 2px;
+}
+
+.toolbar-btn .q-focus-helper {
+    visibility: hidden;
+}
+
+
+// header > div > a:before {
+//     content: "";
+//     position: absolute;
+//     width: 100%;
+//     height: 2px;
+//     bottom: 0;
+//     left: 0;
+//     background: #ec1c23;
+//     visibility: hidden;
+//     border-radius: 5px;
+//     transform: scaleX(0);
+//     transition: .25s linear;
+// }
+// header > div > a:hover:before,
+// header > div > a:focus:before {
+//     visibility: visible;
+//     transform: scaleX(1);
+// }
+
+
+// $typography-font-family         : 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif !default
+// $button-border-radius           : 3px !default
+// $button-padding                 : 4px 16px !default
+// $button-dense-padding           : .285em !default
+// $button-transition              : $generic-hover-transition !default
+// $button-font-size               : 14px !default
+// $button-line-height             : 1.715em !default
+// $button-font-weight             : 500 !default
+// $button-shadow                  : $shadow-2 !default
+// $button-shadow-active           : $shadow-5 !default
+// $button-rounded-border-radius   : 28px !default
+// $button-push-border-radius      : 7px !default
+
+// cores usadas no site
+// red: #ec1c23
+// yellow: #ffe400
+// green: #05ae4c

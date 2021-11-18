@@ -60,7 +60,6 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import { mdiAlertDecagram } from '@quasar/extras/mdi-v6'
 import { get } from 'boot/api'
-import { config } from 'boot/config'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -102,8 +101,6 @@ export default defineComponent({
 
     return {
       mdiAlertDecagram,
-      theme_color: config.theme_color,
-      bg_color: config.bg_color,
       loading,
       pagination,
       bancos,

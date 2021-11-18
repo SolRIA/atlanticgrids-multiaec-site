@@ -106,7 +106,6 @@ import { defineComponent, ref, onMounted, watch } from 'vue'
 import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiDelete, mdiAlertDecagram, mdiGridLarge, mdiFilterOutline } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
 import { get, post, getAuth } from 'boot/api'
-import { config } from 'boot/config'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
 
 export default defineComponent({
@@ -265,8 +264,6 @@ export default defineComponent({
       mdiAlertDecagram,
       mdiGridLarge,
       mdiFilterOutline,
-      theme_color: config.theme_color,
-      bg_color: config.bg_color,
       showCards,
       loading,
       permissaoEdicao,

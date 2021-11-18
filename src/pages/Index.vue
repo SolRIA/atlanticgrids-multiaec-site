@@ -21,15 +21,15 @@
           style="background-color: rgba(0, 0, 0, 0.60) !important">
           <div class="custom-caption">
             <h2 class="text-white animation_2">
-              PROJETO <span :style="'color:' + theme_color">MULTI AEC</span>
+              PROJETO <span class="text-secondary">MULTI AEC</span>
             </h2>
             <h4 class="animation_1 text-white">
               GESTÃO INTEGRADA DAS MULTILATERAIS
             </h4>
             <div class="animation_2">
-              <q-btn
-                size="xl"
-                :style="'background:' + theme_color + '; color: white'"
+              <q-btn rounded
+                class="text-white action-btn"
+                color="primary"
                 label="VER PROJETOS" 
                 to="/Projetos"/>
             </div>
@@ -47,13 +47,13 @@
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Mundial
-              <span :style="'color:' + theme_color">(BM)</span>
+              <span class="text-secondary">(BM)</span>
             </h2>
 
             <div class="animation_2">
-              <q-btn
-                size="xl"
-                :style="'background:' + theme_color + '; color: white'"
+              <q-btn rounded
+                class="text-white action-btn"
+                color="primary"
                 label="APRESENTAÇÃO" 
                 to="/Projetos"/>
             </div>
@@ -71,12 +71,12 @@
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Interamericano de Desenvolvimento
-              <span :style="'color:' + theme_color">(BID)</span>
+              <span class="text-secondary">(BID)</span>
             </h2>
             <div class="animation_2">
-              <q-btn
-                size="xl"
-                :style="'background:' + theme_color + '; color: white'"
+              <q-btn rounded
+                class="text-white action-btn"
+                color="primary"
                 label="APRESENTAÇÃO" 
                 to="/Projetos" />
             </div>
@@ -94,12 +94,12 @@
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Europeu para a Reconstrução e Desenvolvimento
-              <span :style="'color:' + theme_color">(BERD)</span>
+              <span class="text-secondary">(BERD)</span>
             </h2>
             <div class="animation_2">
-              <q-btn
-                size="xl"
-                :style="'background:' + theme_color + '; color: white'"
+              <q-btn rounded
+                class="text-white action-btn"
+                color="primary"
                 label="APRESENTAÇÃO" 
                 to="/Projetos" />
             </div>
@@ -117,12 +117,12 @@
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Europeu de Investimento
-              <span :style="'color:' + theme_color">(BEI)</span>
+              <span class="text-secondary">(BEI)</span>
             </h2>
             <div class="animation_2">
-              <q-btn
-                size="xl"
-                :style="'background:' + theme_color + '; color: white'"
+              <q-btn rounded
+                class="text-white action-btn"
+                color="primary"
                 label="APRESENTAÇÃO" 
                 to="/Projetos" />
             </div>
@@ -130,6 +130,14 @@
         </div>
       </q-carousel-slide>
     </q-carousel>
+
+    <div style="height: 5px;">
+      <div class="row">
+        <div style="height: 5px;" class="col-4 bg-primary"></div>
+        <div style="height: 5px;" class="col-4 bg-secondary"></div>
+        <div style="height: 5px;" class="col-4 bg-accent"></div>
+      </div>
+    </div>
 
     <div class="row justify-center">
       <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12">
@@ -140,7 +148,7 @@
             <q-icon
               size="110px"
               :name="mdiBallot"
-              :style="'color:' + theme_color"/>
+              color="accent"/>
             <div class="text-h6">Web &nbsp;Design</div>
           </q-card-section>
 
@@ -161,7 +169,7 @@
             <q-icon
               size="110px"
               :name="mdiViewComfy"
-              :style="'color:' + theme_color"/>
+              color="secondary"/>
             <div class="text-h6">Graphics Design</div>
           </q-card-section>
 
@@ -182,7 +190,7 @@
             <q-icon
               size="110px"
               :name="mdiVuejs"
-              :style="'color:' + theme_color"/>
+              color="primary"/>
             <div class="text-h6">Vue Theme</div>
           </q-card-section>
 
@@ -198,43 +206,31 @@
 
     <div class="quote">
       <div
-        class="q-pt-xl full-width full-height flex flex-center"
-        style="background-color: #000000ad !important">
-        <h3 class="text-white text-center">
+        class="q-pt-xl full-width full-height flex flex-center">
+        <h3 class="text-black text-center">
           Lorem ipsum dolor sit amet, consectetur <br />adipiscing elit, sed
           do eiusmod tempor incididunt ut <br />
           labore et dolore magna aliqua.
           <br />
           <br />
-          <q-btn
-            type="a"
+          <q-btn rounded
             href="https://www.solria.pt"
-            size="lg"
-            :style="'background:' + theme_color + '; color: white'"
+            class="text-white action-btn"
+            color="primary"
             label="Support Me"
           />
         </h3>
       </div>
     </div>
 
-    <div class="row" id="id_about_us">
-      <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-        <h5 class="text-center">
-          About Us
-          <br />
-          <span class="text-center text-grey text-h6">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-        </h5>
-      </div>
-    </div>
-
     <div class="contact_us" id="id_contact_us">
-      <div style="background-color: #000000ad !important">
+      <div style="background-color: #a6b3bf !important">
         <div class="row" id="id_news">
           <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
             <h5 class="text-center text-white">
               Contact Us
               <br />
-              <span class="text-center text-grey text-h6"
+              <span class="text-center text-white text-h6"
                 >Lorem ipsum dolor sit amet, consectetur adipiscing
                 elit.</span
               >
@@ -260,10 +256,10 @@
         </div>
         <div class="row flex flex-center text-center q-pb-xl q-mt-md">
           <div class="col-sm-12">
-            <q-btn
-              size="xl"
+            <q-btn rounded
               :icon="mdiSend"
-              :style="'background:' + theme_color + '; color: white'"
+              color="primary"
+              class="text-white action-btn"
               label="Enviar mensagem"/>
           </div>
         </div>
@@ -272,44 +268,49 @@
     
     <q-toolbar
       class="flex flex-center text-white"
-      style="background-color: #1c1b21"
-      :style="'border-top: 2px solid ' + theme_color">
+      style="background-color: #a6b3bf">
       <div class="q-pa-sm q-gutter-sm">
         <q-btn
           round
           type="a"
           href="https://twitter.com/"
-          :style="'background:' + theme_color + '; color: white !important;'"
+          class="text-white"
+          color="secondary"
           :icon="mdiTwitter"/>
         <q-btn
           round
           type="a"
           href="https://facebook.com/solriaerp"
-          :style="'background:' + theme_color + '; color: white !important;'"
+          class="text-white"
+          color="secondary"
           :icon="mdiFacebook"/>
         <q-btn
           round
           type="a"
           href="https://www.instagram.com/"
-          :style="'background:' + theme_color + '; color: white !important;'"
+          class="text-white"
+          color="secondary"
           :icon="mdiInstagram"/>
         <q-btn
           round
           type="a"
           href="https://www.youtube.com/"
-          :style="'background:' + theme_color + '; color: white !important;'"
+          class="text-white"
+          color="secondary"
           :icon="mdiYoutube"/>
         <q-btn
           round
           type="a"
           href="https://github.com/"
-          :style="'background:' + theme_color + '; color: white !important;'"
+          class="text-white"
+          color="secondary"
           :icon="mdiGithub"/>
         <q-btn
           round
           type="a"
           href="mailto:suporte@solria.pt"
-          :style="'background:' + theme_color + '; color: white !important;'"
+          class="text-white"
+          color="secondary"
           :icon="mdiEmail"/>
       </div>
     </q-toolbar>
@@ -319,7 +320,6 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { config } from 'boot/config.js'
 import { mdiBallot, mdiViewComfy, mdiVuejs, mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiGithub, mdiEmail } from '@quasar/extras/mdi-v6'
 
 export default defineComponent({
@@ -337,8 +337,6 @@ export default defineComponent({
       mdiYoutube,
       mdiGithub,
       mdiEmail,
-      theme_color: config.theme_color,
-      bg_color: config.bg_color,
       mainSlide
     }
   }

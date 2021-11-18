@@ -40,7 +40,7 @@
       @mouseout="miniState = true"
       class="bg-grey-2">
       <q-scroll-area class="fit">
-        <q-list>
+        <q-list class="menu-list">
           <template v-for="(menuItem, index) in menuList" :key="index">
             <q-item clickable exact v-ripple active-class="text-white" :to="menuItem.url">
               <q-item-section avatar>
@@ -66,7 +66,10 @@
 
 <style scoped lang="sass">
 .q-router-link--exact-active
-    background: $positive
+  background: $positive
+.menu-list .q-item
+  border-radius: 4px
+  margin: 3px
 </style>
 
 <script>

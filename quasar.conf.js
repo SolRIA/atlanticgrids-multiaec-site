@@ -83,9 +83,9 @@ module.exports = configure(function (ctx) {
     framework: {
       config: {
         brand: {
-          primary: '#027BE3',
-          secondary: '#26A69A',
-          accent: '#9C27B0',
+          primary: '#ec1c23',
+          secondary: '#ffe400',
+          accent: '#05ae4c',
 
           dark: '#333333',
 
@@ -93,11 +93,6 @@ module.exports = configure(function (ctx) {
           negative: '#f50000',
           info: '#31CCEC',
           warning: '#F2C037'
-          // cores usadas na apresentação
-          // red: #FF0000
-          // gold: #FFC300
-          // turquoise: #91C300
-          // green: #00B4F1
         },
         notify: {
           position: 'top-right',

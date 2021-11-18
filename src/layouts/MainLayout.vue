@@ -1,20 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header
-      class="q-py-sm"
-      style="background-color: #1c1b21"
-      :style="'border-bottom: 2px solid ' + theme_color">
+    <q-header style="background-color: #fff">
       <q-toolbar>
-        <q-btn flat to="/">MULTI AEC</q-btn>
+        <q-btn class="toolbar-btn" flat no-caps to="/">MULTI AEC</q-btn>
         <q-space></q-space>
-          <q-btn
-            :style="'background:' + theme_color + '; color: white'"
-            label="ver projetos"
-            to="/Projetos"/>
-          <q-btn class="q-mx-md"
-            :style="'background:' + theme_color + '; color: white'"
-            label="login"
-            to="/Login"/>
+        <q-btn class="toolbar-btn" flat no-caps label="Ver Projetos" to="/Projetos"/>
+        <q-btn class="toolbar-btn q-mx-md" flat no-caps label="Login" to="/Login"/>
       </q-toolbar>
     </q-header>
 
@@ -26,16 +17,8 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { config } from 'boot/config.js'
 
 export default defineComponent({
   name: 'MainLayout',
-
-  setup () {
-    return {
-      theme_color: config.theme_color,
-      bg_color: config.bg_color
-    }
-  }
 })
 </script>
