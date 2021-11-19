@@ -30,8 +30,8 @@
           </q-form>
         </q-card-section>
         
-        <q-card-actions>
-          <q-btn color="primary" size="lg" class="full-width" label="Login" :icon="mdiLogin"
+        <q-card-actions align="center">
+          <q-btn rounded color="primary" class="text-white action-btn" size="lg" label="Login" :icon="mdiLogin"
               @click="doLogin" :loading="onLogin"/>
         </q-card-actions>
         <q-card-section class="q-pa-none">

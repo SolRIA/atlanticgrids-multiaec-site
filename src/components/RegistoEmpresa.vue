@@ -199,8 +199,8 @@
     <q-separator inset />
     
     <q-card-actions align="right">
-      <q-btn label="Voltar" type="reset" flat @click="onCancel"/>
-      <q-btn color="primary" label="Criar conta" :icon="mdiLogin" size="lg"
+      <q-btn label="Voltar" type="reset" rounded flat @click="onCancel"/>
+      <q-btn color="primary" label="Criar conta" rounded class="text-white action-btn" :icon="mdiLogin" size="lg"
           @click="onRegister" :loading="onCreatingAcount"/>
     </q-card-actions>
   </q-card>

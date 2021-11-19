@@ -141,8 +141,8 @@
 
     <div class="row justify-center">
       <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12">
-        <q-card
-          class="q-pa-sm flex flex-center text-center box-shadow"
+        <q-card flat
+          class="q-pa-sm flex flex-center text-center"
           style="margin: 40px">
           <q-card-section>
             <q-icon
@@ -162,8 +162,8 @@
       <div class="col-lg-1"></div>
 
       <div class="col-lg-2 col-md-4 col-sm-12">
-        <q-card
-          class="q-pa-sm flex flex-center text-center box-shadow"
+        <q-card flat
+          class="q-pa-sm flex flex-center text-center"
           style="margin: 40px">
           <q-card-section>
             <q-icon
@@ -183,8 +183,8 @@
       <div class="col-lg-1"></div>
 
       <div class="col-lg-2 col-md-4 col-sm-12">
-        <q-card
-          class="q-pa-sm flex flex-center text-center box-shadow"
+        <q-card flat
+          class="q-pa-sm flex flex-center text-center "
           style="margin: 40px">
           <q-card-section>
             <q-icon
@@ -230,10 +230,9 @@
             <h5 class="text-center text-white">
               Contact Us
               <br />
-              <span class="text-center text-white text-h6"
-                >Lorem ipsum dolor sit amet, consectetur adipiscing
-                elit.</span
-              >
+              <span class="text-center text-white text-h6">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </span>
             </h5>
           </div>
         </div>
@@ -256,10 +255,9 @@
         </div>
         <div class="row flex flex-center text-center q-pb-xl q-mt-md">
           <div class="col-sm-12">
-            <q-btn rounded
+            <q-btn rounded outline 
               :icon="mdiSend"
-              color="primary"
-              class="text-white action-btn"
+              class="action-btn form-submit"
               label="Enviar mensagem"/>
           </div>
         </div>
@@ -317,6 +315,22 @@
 
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.form-submit {
+  background-color: white;
+  background: white !important;
+  color: #ec1c23;
+}
+.form-submit:hover {
+  background-color: #ec1c23;
+  background: #ec1c23 !important;
+  color: white;
+}
+.form-submit:hover:before {
+  border: 0 !important;
+}
+</style>
 
 <script>
 import { defineComponent, ref } from 'vue'
