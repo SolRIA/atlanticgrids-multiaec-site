@@ -3,13 +3,13 @@
     <q-header style="background-color: #fff">
       <q-toolbar>
         <router-link to="/">
-          <p class="hover-underline-animation">MULTI AEC</p>
+          <q-img src="/images/logo.jpg" style="width: 180px"/>
         </router-link>
         <q-space></q-space>
         <router-link to="/Projetos">
           <p class="hover-underline-animation">Projetos</p>
         </router-link>
-        <router-link to="/Login">
+        <router-link to="/Login" class="q-mr-lg">
           <p class="hover-underline-animation">Login</p>
         </router-link>
         <!-- <q-btn class="toolbar-btn" flat no-caps to="/">MULTI AEC</q-btn>
@@ -30,7 +30,7 @@
 	display: inline-block;
 	position: relative;
   color: black;
-  font-size: 18px;
+  font-size: 22px;
   margin-right: 20px;
   margin-top: 10px;
 }

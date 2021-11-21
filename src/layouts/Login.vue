@@ -11,6 +11,6 @@
 
 <style lang="sass" scoped>
 .image
-  background-image: url('/images/mainslide5_compressed.jpg')
+  background-image: url('/images/mainslide5_compressed.webp')
   background-size: cover
 </style>

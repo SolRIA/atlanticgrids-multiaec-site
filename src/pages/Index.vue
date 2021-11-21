@@ -10,12 +10,12 @@
       autoplay
       control-color="white"
       transition-prev="slide-right"
-      transition-next="slide-left" class="window-height">
+      transition-next="slide-left" style="height: 70vh">
       
       <q-carousel-slide
         class="q-pa-none"
         :name="1"
-        img-src="/images/mainslide3_compressed.jpg">
+        img-src="/images/mainslide6_compressed.jpg">
         <div
           class="full-height full-width flex flex-center"
           style="background-color: rgba(0, 0, 0, 0.60) !important">
@@ -245,7 +245,6 @@
           <div
             class="col-sm-6 col-xs-12 q-gutter-lg q-px-md q-pb-none q-ma-none">
             <q-input
-              class=""
               type="textarea"
               bg-color="white"
               outlined
@@ -254,7 +253,12 @@
           </div>
         </div>
         <div class="row flex flex-center text-center q-pb-xl q-mt-md">
-          <div class="col-sm-12">
+          <div>
+            <q-img src="/images/logo-ptpc.png" style="width: 160px"/>
+            <q-img src="/images/logo-aec.png" style="width: 160px"/>
+            <q-img src="/images/pt2020.svg" style="width: 180px" class="q-mx-md"/>
+          </div>
+          <div class="align-right">
             <q-btn rounded outline 
               :icon="mdiSend"
               class="action-btn form-submit"
