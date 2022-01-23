@@ -103,7 +103,7 @@
 
 <script>
 import { defineComponent, ref, onMounted, watch } from 'vue'
-import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiDelete, mdiAlertDecagram, mdiGridLarge, mdiFilterOutline } from '@quasar/extras/mdi-v6'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiAlertDecagram, mdiGridLarge, mdiFilterOutline } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
 import { get, post, getAuth } from 'boot/api'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
@@ -260,7 +260,6 @@ export default defineComponent({
       mdiPencil,
       mdiPlusBoxOutline,
       mdiRefresh,
-      mdiDelete,
       mdiAlertDecagram,
       mdiGridLarge,
       mdiFilterOutline,

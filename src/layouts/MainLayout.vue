@@ -7,6 +7,9 @@
         </router-link>
         <q-space></q-space>
         <router-link to="/Projetos">
+          <p class="hover-underline-animation">Bancos</p>
+        </router-link>
+        <router-link to="/Projetos">
           <p class="hover-underline-animation">Projetos</p>
         </router-link>
         <router-link to="/Login" class="q-mr-lg">
@@ -20,6 +23,13 @@
     </q-header>
 
     <q-page-container>
+      <div style="height: 5px;">
+        <div class="row">
+          <div style="height: 5px;" class="col-4 bg-primary"></div>
+          <div style="height: 5px;" class="col-4 bg-secondary"></div>
+          <div style="height: 5px;" class="col-4 bg-accent"></div>
+        </div>
+      </div>
       <router-view />
     </q-page-container>
   </q-layout>

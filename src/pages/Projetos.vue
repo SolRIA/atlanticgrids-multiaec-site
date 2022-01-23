@@ -1,29 +1,33 @@
 <template>
-  <q-page>
-    <div style="height: 5px;">
-      <div class="row">
-        <div style="height: 5px;" class="col-4 bg-primary"></div>
-        <div style="height: 5px;" class="col-4 bg-secondary"></div>
-        <div style="height: 5px;" class="col-4 bg-accent"></div>
-      </div>
-    </div>
+  <q-page padding>
+    <p>Instituições Financeiras do projeto</p>
+    <p>Este separador apresenta uma breve descrição de cada banco e qual o procurement atualmente disponível 
+no sector da construção por cada banco. ( até aqui esta informação é pública). Só os membros da PTPC podem ver informação adiciona</p>
+    
+    <q-select v-model="banco" :options="bancos" option-value="id" option-label="nome" map-options
+      label="Banco" outlined dense clearable />
+
+      <p>{{ banco?.descricao ?? '' }}</p>
+          
     <q-table class="q-mt-sm" color="positive"
       title="Projetos"
-      ref="docTable"
+      ref="tableRef"
       selection="single"
       no-data-label="Sem dados"
       row-key="id"
-      grid
+      :grid="$q.screen.xs"
       :rows="projetos"
       :columns="columns"
       :rows-per-page-options="[5, 10, 15, 20, 50]"
       :loading="loading"
       v-model:pagination="pagination"
-      v-model:selected="projetoEscolhido">
+      v-model:selected="projetoEscolhido"
+      @request="onServerRequest">
 
-      <template v-slot:top>
-        <q-select v-model="banco" :options="bancos" option-value="id" option-label="nome" emit-value map-options
-          label="Banco" outlined dense class="q-mr-md" style="min-width: 200px"/>
+      <template v-slot:body-cell-nome="props">
+        <q-td :props="props" auto-width>
+         <q-btn to="/login" :label="props.row.nome" flat rounded/>
+        </q-td>
       </template>
 
       <template v-slot:item="props">
@@ -31,20 +35,19 @@
             :style="props.selected ? 'transform: scale(0.98);' : ''">
           <q-card class="full-height">
             
-            <q-img :src="props.row.imagem" class="my-card-img">
-              <div class="absolute-bottom">
-                <div class="text-h6">{{ props.row.nome }}</div>
-                <div class="text-subtitle2">{{ props.row.descricao }}</div>
-              </div>
-            </q-img>
-
+            <q-card-section>
+              <div class="text-h6">{{ props.row.nome }}</div>
+              <div class="text-subtitle2">{{ props.row.descricao }}</div>
+            </q-card-section>
+            
             <q-card-actions>
               <q-chip outline square color="positive" text-color="white">
-                {{ props.row.pais }}
+                {{ getPais(props.row.pais_id) }}
               </q-chip>
-              <q-chip outline square color="primary" text-color="white">
+              <q-chip outline square color="positive" text-color="white">
                 {{ props.row.data }}
               </q-chip>
+              <q-btn label="Saber mais" outline dense color="primary"/>
             </q-card-actions>
 
           </q-card>
@@ -64,15 +67,16 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, watch } from 'vue'
 import { mdiAlertDecagram } from '@quasar/extras/mdi-v6'
-import { get } from 'boot/api'
+import { get, post } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
   setup () {
     const $q = useQuasar()
 
+    const tableRef = ref(null)
     const loading = ref(false)
 
     onMounted(async () => {
@@ -80,41 +84,86 @@ export default defineComponent({
       try {
         bancos.value = await get('bancos/read.php')
       } catch {
-          $q.notify({ message: 'Não foi possível efetuar obter os bancos', type: 'warning' })
+        $q.notify({ message: 'Não foi possível efetuar obter os bancos', type: 'warning' })
       }
+      
+      try {
+        paises.value = await get('paises/read-ativo.php')
+      } catch {
+        $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
+      }
+
+      tableRef.value.requestServerInteraction()
       loading.value = false
     })
 
     const bancos = ref([])
     const banco = ref()
+    const paises = ref([])
+    const pais = ref(null)
 
     const projetos = ref([])
     const columns = [
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'tipo', label: 'Tipo', field: 'tipo', align: 'left' },
       { name: 'data', label: 'Data', field: 'data', align: 'left' },
-      { name: 'imagem', label: 'Imagem', field: 'imagem', align: 'left' },
-      { name: 'descricao', label: 'Descrição', field: 'descricao' }
+      { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'left' }
     ]
 
-    const pagination = {
+    const pagination = ref({
       descending: false,
       page: 1,
       rowsPerPage: 10,
-      rowsNumber: 10
-    }
+      rowsNumber: 10,
+      sortBy: null
+    })
 
     const projetoEscolhido = ref([])
 
+    watch([banco], (_current, _previus) => {
+      tableRef.value.requestServerInteraction()
+    })
+
+    const getPais = (id) => {
+      return paises.value.find(p => p.id === id).nome
+    }
+
+    const onServerRequest = async (props) => {
+      try {
+        loading.value = true
+        const { page, rowsPerPage, sortBy, descending } = props.pagination
+        let banco_id = 0
+        if(typeof banco.value !== 'undefined' && banco.value !== null) {
+          banco_id = banco.value.id
+        }
+        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, banco_id: banco_id, filter: null, pais_id: null, tipo_id: null })
+
+        projetos.value = result.rows;
+
+        pagination.value.rowsNumber = result.count
+        pagination.value.page = page
+        pagination.value.rowsPerPage = rowsPerPage
+        pagination.value.sortBy = sortBy
+        pagination.value.descending = descending
+      } catch (e) {
+        console.log(e)
+        $q.notify({ message: 'Não foi possível obter os projetos', type: 'warning' })
+      }
+      loading.value = false
+    }
+
     return {
       mdiAlertDecagram,
+      tableRef,
       loading,
       pagination,
       bancos,
       banco,
       projetos,
       projetoEscolhido,
-      columns
+      columns,
+      onServerRequest,
+      getPais
     }
   }
 })

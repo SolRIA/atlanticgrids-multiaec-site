@@ -139,87 +139,95 @@
       </div>
     </div>
 
+    <div>
+      <div class="q-pa-md">
+        <p>Projeto</p>
+        <p>Descrição do projeto, dos seus objetivos e do que se pretende atingir com esta iniciativa</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="q-pa-md" style="background-color: #a6b3bf !important">
+        <p>Mercado das Multilaterais</p>
+        <p>Descrição do mercado das multilaterais financeiras, o seu potencial e o que as empresas portuguesas podem beneficiar em explorar estas oportunidades</p>
+      </div>
+    </div>
+
+    <!-- empresas -->
     <div class="row justify-center">
-      <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12">
+      <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12"
+        v-for="(empresa, index) in empresasSlider" :key="index">
         <q-card flat
           class="q-pa-sm flex flex-center text-center"
           style="margin: 40px">
           <q-card-section>
-            <q-icon
-              size="110px"
-              :name="mdiBallot"
-              color="accent"/>
-            <div class="text-h6">Web &nbsp;Design</div>
+            <q-img
+              width="40" fit="scale-down"
+              :src="logoEmpresa(empresa.logo)"
+            />
+            <div class="text-h6">{{ empresa.nome }}</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt.
+            <q-btn rounded outline
+                to="/tutoriais"
+                class="action-btn btn-white"
+                label="Ver mais"
+              />
           </q-card-section>
         </q-card>
       </div>
 
-      <div class="col-lg-1"></div>
-
-      <div class="col-lg-2 col-md-4 col-sm-12">
-        <q-card flat
-          class="q-pa-sm flex flex-center text-center"
-          style="margin: 40px">
-          <q-card-section>
-            <q-icon
-              size="110px"
-              :name="mdiViewComfy"
-              color="secondary"/>
-            <div class="text-h6">Graphics Design</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt.
-          </q-card-section>
-        </q-card>
-      </div>
-
-      <div class="col-lg-1"></div>
-
-      <div class="col-lg-2 col-md-4 col-sm-12">
-        <q-card flat
-          class="q-pa-sm flex flex-center text-center "
-          style="margin: 40px">
-          <q-card-section>
-            <q-icon
-              size="110px"
-              :name="mdiVuejs"
-              color="primary"/>
-            <div class="text-h6">Vue Theme</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt.
-          </q-card-section>
-        </q-card>
-      </div>
-
-      <div class="col-lg-1"></div>
     </div>
 
     <div class="quote">
       <div
         class="q-pt-xl full-width full-height flex flex-center">
         <h3 class="text-black text-center">
-          Lorem ipsum dolor sit amet, consectetur <br />adipiscing elit, sed
-          do eiusmod tempor incididunt ut <br />
-          labore et dolore magna aliqua.
+         Neste separador damos a informação de como empresas do sector da construção se podem propor como integrantes da Rede Operacional.
           <br />
           <br />
           <q-btn rounded
             href="https://www.solria.pt"
             class="text-white action-btn"
             color="primary"
-            label="Support Me"
+            label="Registar"
           />
         </h3>
+      </div>
+    </div>
+
+    <div>
+      <div class="q-pa-md" style="background-color: #a6b3bf !important">
+        <p>Noticias</p>
+        <p>Aqui apresentamos informações sobre as atividades gerais das Multilaterais financeiras, com enfase para as do projeto, nomeadamente (bibliografia, eventos, informações de novos apoios, videos etc</p>
+
+        <br />
+        <br />
+        <div class="row justify-center">
+          <q-btn rounded outline=""
+            to="/noticias"
+            class="action-btn btn-white"
+            label="Notícias"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="q-pa-md">
+        <p>Tutoriais</p>
+        <p>Este separador congrega tudo o que esteja disponível sobre Webinars, Vídeos promocionais dos bancos, passo a passo para abordar os mercados das multilaterais financeiras etc…</p>
+
+        <br />
+        <br />
+        <div class="row justify-center">
+          <q-btn rounded outline
+            to="/tutoriais"
+            class="action-btn btn-white"
+            label="Tutoriais"
+          />
+        </div>
       </div>
     </div>
 
@@ -261,7 +269,7 @@
           <div class="align-right">
             <q-btn rounded outline 
               :icon="mdiSend"
-              class="action-btn form-submit"
+              class="action-btn btn-white"
               label="Enviar mensagem"/>
           </div>
         </div>
@@ -321,33 +329,54 @@
 </template>
 
 <style lang="scss" scoped>
-.form-submit {
+.btn-white {
   background-color: white;
   background: white !important;
   color: #ec1c23;
 }
-.form-submit:hover {
+.btn-white:hover {
   background-color: #ec1c23;
   background: #ec1c23 !important;
   color: white;
 }
-.form-submit:hover:before {
+.btn-white:hover:before {
   border: 0 !important;
 }
 </style>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { mdiBallot, mdiViewComfy, mdiVuejs, mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiGithub, mdiEmail } from '@quasar/extras/mdi-v6'
+import { defineComponent, onMounted, ref } from 'vue'
+import { mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiGithub, mdiEmail } from '@quasar/extras/mdi-v6'
+import { get, apiPublicUrl } from 'boot/api'
 
 export default defineComponent({
   setup () {
+    onMounted(async () => {
+        empresas.value = await get('empresas/read-ativo.php')
+        atualizaEmpresas()
+        setInterval(() => {
+          atualizaEmpresas()
+        }, 3000)
+    })
+
     const mainSlide = ref(1)
+    const empresas = ref([])
+    const empresasSlider = ref([])
+    let page = 1
+    const numEmpresas = 3
+
+    const atualizaEmpresas = () => {
+      if(page > Math.ceil(empresas.value.length / numEmpresas)) {
+        page = 1
+      }
+      empresasSlider.value = empresas.value.slice((page - 1) * numEmpresas, page * numEmpresas)
+      page += 1
+    }
+    const logoEmpresa = (logo) => {
+      return apiPublicUrl(logo)
+    }
 
     return {
-      mdiBallot,
-      mdiViewComfy,
-      mdiVuejs,
       mdiSend,
       mdiTwitter,
       mdiFacebook,
@@ -355,7 +384,9 @@ export default defineComponent({
       mdiYoutube,
       mdiGithub,
       mdiEmail,
-      mainSlide
+      mainSlide,
+      empresasSlider,
+      logoEmpresa
     }
   }
 })

@@ -44,6 +44,7 @@
         <q-card-section class="q-pt-md">
           <div class="row q-col-gutter-sm">
             <q-input v-model="banco.nome" label="Nome" outlined class="col-xs-12" />
+            <q-input v-model="banco.descricao" label="Descrição" outlined class="col-xs-12" />
             <q-checkbox v-model="banco.ativo" label="Ativo" />
           </div>
         </q-card-section>
@@ -115,7 +116,7 @@ export default defineComponent({
       pagination,
       onServerRequest,
       onNovo: () => {
-        banco.value = { id: 0, nome: '', ativo: true }
+        banco.value = { id: 0, nome: '', decricao: null, ativo: true }
         mostraEditor.value = true
       },
       onEdit: (b) => {
