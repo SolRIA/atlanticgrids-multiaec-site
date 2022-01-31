@@ -30,7 +30,7 @@
     <q-table class="q-mt-sm" color="positive"
       title="Projetos"
       ref="tableRef"
-      selection="single"
+      selection="none"
       no-data-label="Não existem dados"
       no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
       row-key="id"
@@ -53,12 +53,17 @@
         </q-btn-group>
       </template>
 
-      <template v-slot:body-cell-pais_id="props">
+      <template v-slot:body-cell-banco_id="props">
         <q-td :props="props" auto-width>
-          {{ getPais(props.row.pais_id) }}
+          {{ getBanco(props.row.banco_id) }}
         </q-td>
       </template>
 
+      <template v-slot:body-cell-link="props">
+        <q-td :props="props" auto-width>
+          <q-btn dense flat color="positive" :icon="mdiOpenInNew" @click="openProjectLink(props.row)"/>
+        </q-td>
+      </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
           <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEditProject(props.row)"/>
@@ -78,7 +83,7 @@
 
             <q-card-actions align="right" class="vertical-bottom">
               <q-chip outline square color="positive" text-color="white">
-                {{ getPais(props.row.pais_id) }}
+                {{ props.row.pais }}
               </q-chip>
               <q-chip outline square color="primary" text-color="white">
                 {{ props.row.data }}
@@ -103,7 +108,7 @@
 
 <script>
 import { defineComponent, ref, onMounted, watch } from 'vue'
-import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiAlertDecagram, mdiGridLarge, mdiFilterOutline } from '@quasar/extras/mdi-v6'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiAlertDecagram, mdiGridLarge, mdiFilterOutline, mdiOpenInNew } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
 import { get, post, getAuth } from 'boot/api'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
@@ -149,7 +154,7 @@ export default defineComponent({
     })
 
     const paises = ref([])
-    const pais = ref(null)
+    // const pais = ref(null)
 
     const bancos = ref([])
     const banco = ref(null)
@@ -159,9 +164,9 @@ export default defineComponent({
 
     const filtroProjeto = ref(null)
 
-    watch(pais, (_current, _old) => {
-      tableRef.value.requestServerInteraction()
-    })
+    // watch(pais, (_current, _old) => {
+    //   tableRef.value.requestServerInteraction()
+    // })
     watch(banco, (_current, _old) => {
       tableRef.value.requestServerInteraction()
     })
@@ -171,10 +176,14 @@ export default defineComponent({
 
     const projetos = ref([])
     const columns = [
+      { name: 'referencia', label: 'Referência', field: 'referencia', align: 'left' },
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'data', label: 'Data', field: 'data', align: 'left' },
-      { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'left' },
-      { name: 'pais_id', label: 'País', field: 'pais_id', align: 'left' },
+      { name: 'cliente', label: 'Cliente', field: 'cliente', align: 'left' },
+      { name: 'setor', label: 'Setor', field: 'setor', align: 'left' },
+      { name: 'pais', label: 'País', field: 'pais', align: 'left' },
+      { name: 'banco_id', label: 'Banco', field: 'banco_id', align: 'center' },
+      { name: 'link', label: '', field: 'link', align: 'center' },
       { name: 'actions', label: '', field: 'actions', align: 'center' }
     ]
 
@@ -200,7 +209,7 @@ export default defineComponent({
         id: 0,
         nome: '',
         tipos: [],
-        pais_id: null,
+        pais: null,
         banco_id: null,
         ativo: true,
         referencia: '',
@@ -238,7 +247,7 @@ export default defineComponent({
         loading.value = true
         const { page, rowsPerPage, sortBy, descending } = props.pagination
 
-        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, filter: filtroProjeto.value, pais_id: pais.value, banco_id: banco.value, tipo_id: tipo.value })
+        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, filter: filtroProjeto.value, pais_id: null, banco_id: banco.value, tipo_id: tipo.value })
 
         projetos.value = result.rows;
 
@@ -252,8 +261,11 @@ export default defineComponent({
       }
       loading.value = false
     }
-    const getPais = (id) => {
-      return paises.value.find(p => p.id === id).nome
+    const openProjectLink = (row) => {
+       window.open(row.link, "_blank");
+    }
+    const getBanco = (id) => {
+      return bancos.value.find(p => p.id === id).nome
     }
 
     return {
@@ -263,6 +275,7 @@ export default defineComponent({
       mdiAlertDecagram,
       mdiGridLarge,
       mdiFilterOutline,
+      mdiOpenInNew,
       showCards,
       loading,
       permissaoEdicao,
@@ -272,7 +285,6 @@ export default defineComponent({
       tipos,
       tipo,
       paises,
-      pais,
       bancos,
       banco,
       filtroProjeto,
@@ -284,7 +296,8 @@ export default defineComponent({
       onNovo,
       onEditProject,
       onServerRequest,
-      getPais
+      openProjectLink,
+      getBanco
     }
   }
 })

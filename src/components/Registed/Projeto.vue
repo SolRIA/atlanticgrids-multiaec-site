@@ -38,13 +38,16 @@
             </template>
           </q-select>
 
-          <q-select label="País" outlined v-model="projeto.pais_id" :options="paises" class="col-xs-12 col-md-4" 
-            option-value="id" option-label="nome" emit-value map-options clearable/>
+          <q-select label="País" outlined v-model="projeto.pais" :options="paises" class="col-xs-12 col-md-4" 
+            option-value="nome" option-label="nome" emit-value map-options clearable/>
 
           <q-select label="Banco" outlined v-model="projeto.banco_id" :options="bancos" class="col-xs-12 col-md-4" 
             option-value="id" option-label="nome" emit-value map-options/>
 
-          <q-input v-model="projeto.descricao" label="Descrição" outlined type="textarea" class="col-xs-12"/>
+          <!-- <q-input v-model="projeto.descricao" label="Descrição" outlined type="textarea" class="col-xs-12"/> -->
+          <div v-html="projeto.descricao">
+
+          </div>
         </div>
       </q-card-section>
 

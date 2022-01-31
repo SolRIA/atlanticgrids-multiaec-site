@@ -12,7 +12,7 @@ no sector da construção por cada banco. ( até aqui esta informação é públ
     <q-table class="q-mt-sm" color="positive"
       title="Projetos"
       ref="tableRef"
-      selection="single"
+      selection="none"
       no-data-label="Sem dados"
       row-key="id"
       :grid="$q.screen.xs"
@@ -24,9 +24,14 @@ no sector da construção por cada banco. ( até aqui esta informação é públ
       v-model:selected="projetoEscolhido"
       @request="onServerRequest">
 
-      <template v-slot:body-cell-nome="props">
+      <template v-slot:body-cell-referencia="props">
         <q-td :props="props" auto-width>
-         <q-btn to="/login" :label="props.row.nome" flat rounded/>
+         <q-btn to="/login" :label="props.row.referencia" flat rounded/>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-banco_id="props">
+        <q-td :props="props" auto-width>
+          {{ getBanco(props.row.banco_id) }}
         </q-td>
       </template>
 
@@ -42,7 +47,7 @@ no sector da construção por cada banco. ( até aqui esta informação é públ
             
             <q-card-actions>
               <q-chip outline square color="positive" text-color="white">
-                {{ getPais(props.row.pais_id) }}
+                {{ props.row.pais }}
               </q-chip>
               <q-chip outline square color="positive" text-color="white">
                 {{ props.row.data }}
@@ -87,11 +92,11 @@ export default defineComponent({
         $q.notify({ message: 'Não foi possível efetuar obter os bancos', type: 'warning' })
       }
       
-      try {
-        paises.value = await get('paises/read-ativo.php')
-      } catch {
-        $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
-      }
+      // try {
+      //   paises.value = await get('paises/read-ativo.php')
+      // } catch {
+      //   $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
+      // }
 
       tableRef.value.requestServerInteraction()
       loading.value = false
@@ -99,15 +104,17 @@ export default defineComponent({
 
     const bancos = ref([])
     const banco = ref()
-    const paises = ref([])
-    const pais = ref(null)
+    // const paises = ref([])
+    // const pais = ref(null)
 
     const projetos = ref([])
     const columns = [
+      { name: 'referencia', label: 'Referência', field: 'referencia', align: 'left' },
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
-      { name: 'tipo', label: 'Tipo', field: 'tipo', align: 'left' },
       { name: 'data', label: 'Data', field: 'data', align: 'left' },
-      { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'left' }
+      { name: 'setor', label: 'Setor', field: 'setor', align: 'left' },
+      { name: 'pais', label: 'País', field: 'pais', align: 'left' },
+      { name: 'banco_id', label: 'Banco', field: 'banco_id', align: 'center' }
     ]
 
     const pagination = ref({
@@ -123,10 +130,6 @@ export default defineComponent({
     watch([banco], (_current, _previus) => {
       tableRef.value.requestServerInteraction()
     })
-
-    const getPais = (id) => {
-      return paises.value.find(p => p.id === id).nome
-    }
 
     const onServerRequest = async (props) => {
       try {
@@ -151,6 +154,9 @@ export default defineComponent({
       }
       loading.value = false
     }
+    const getBanco = (id) => {
+      return bancos.value.find(p => p.id === id).nome
+    }
 
     return {
       mdiAlertDecagram,
@@ -163,7 +169,7 @@ export default defineComponent({
       projetoEscolhido,
       columns,
       onServerRequest,
-      getPais
+      getBanco
     }
   }
 })
