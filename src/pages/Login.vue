@@ -36,12 +36,9 @@
         </q-card-actions>
         <q-card-section class="q-pa-none">
           <q-btn-group spread>
-            <q-btn label="Voltar" type="reset" flat
-                @click="returnPrevious"/>
-            <q-btn label="Criar conta" type="reset" flat
-                to="/login/registo"/>
-            <q-btn label="Recuperar senha" type="reset" flat
-                to="/login/recuperarPassword" />
+            <q-btn label="Voltar" type="reset" flat to="/"/>
+            <q-btn label="Criar conta" type="reset" flat to="/login/registo"/>
+            <q-btn label="Recuperar senha" type="reset" flat to="/login/recuperarPassword" />
           </q-btn-group>
         </q-card-section>
       </q-card>
@@ -98,9 +95,6 @@ export default defineComponent({
         onLogin = false
       }
     }
-    const returnPrevious = function () {
-      $router.go(-1)
-    }
 
     return {
       mdiEyeOff,
@@ -115,8 +109,7 @@ export default defineComponent({
       onLogin,
       isEmailRule,
       isPasswordValid,
-      doLogin,
-      returnPrevious
+      doLogin
     }
   }
 })

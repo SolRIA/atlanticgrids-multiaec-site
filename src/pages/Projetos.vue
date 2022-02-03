@@ -15,6 +15,7 @@ no sector da construção por cada banco. ( até aqui esta informação é públ
       selection="none"
       no-data-label="Sem dados"
       row-key="id"
+      wrap-cells
       :grid="$q.screen.xs"
       :rows="projetos"
       :columns="columns"
@@ -24,8 +25,13 @@ no sector da construção por cada banco. ( até aqui esta informação é públ
       v-model:selected="projetoEscolhido"
       @request="onServerRequest">
 
+      <template v-slot:body-cell-data="props">
+        <q-td :props="props">
+          {{ props.row.data.substring(0, 10) }}
+        </q-td>
+      </template>
       <template v-slot:body-cell-referencia="props">
-        <q-td :props="props" auto-width>
+        <q-td :props="props">
          <q-btn to="/login" :label="props.row.referencia" flat rounded/>
         </q-td>
       </template>
@@ -111,7 +117,7 @@ export default defineComponent({
     const columns = [
       { name: 'referencia', label: 'Referência', field: 'referencia', align: 'left' },
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
-      { name: 'data', label: 'Data', field: 'data', align: 'left' },
+      { name: 'data', label: 'Data', field: 'data', align: 'left', style: "width: 100px" },
       { name: 'setor', label: 'Setor', field: 'setor', align: 'left' },
       { name: 'pais', label: 'País', field: 'pais', align: 'left' },
       { name: 'banco_id', label: 'Banco', field: 'banco_id', align: 'center' }
@@ -155,7 +161,7 @@ export default defineComponent({
       loading.value = false
     }
     const getBanco = (id) => {
-      return bancos.value.find(p => p.id === id).nome
+      return bancos.value.find(p => p.id === id).codigo
     }
 
     return {

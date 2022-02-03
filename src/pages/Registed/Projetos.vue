@@ -53,6 +53,11 @@
         </q-btn-group>
       </template>
 
+      <template v-slot:body-cell-data="props">
+        <q-td :props="props">
+          {{ props.row.data.substring(0, 10) }}
+        </q-td>
+      </template>
       <template v-slot:body-cell-banco_id="props">
         <q-td :props="props" auto-width>
           {{ getBanco(props.row.banco_id) }}
@@ -178,7 +183,7 @@ export default defineComponent({
     const columns = [
       { name: 'referencia', label: 'Referência', field: 'referencia', align: 'left' },
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
-      { name: 'data', label: 'Data', field: 'data', align: 'left' },
+      { name: 'data', label: 'Data', field: 'data', align: 'left', style: "width: 100px" },
       { name: 'cliente', label: 'Cliente', field: 'cliente', align: 'left' },
       { name: 'setor', label: 'Setor', field: 'setor', align: 'left' },
       { name: 'pais', label: 'País', field: 'pais', align: 'left' },
@@ -265,7 +270,7 @@ export default defineComponent({
        window.open(row.link, "_blank");
     }
     const getBanco = (id) => {
-      return bancos.value.find(p => p.id === id).nome
+      return bancos.value.find(p => p.id === id).codigo
     }
 
     return {
