@@ -155,14 +155,14 @@
 
     <!-- empresas -->
     <div class="row justify-center">
-      <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12"
+      <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12 self-end"
         v-for="(empresa, index) in empresasSlider" :key="index">
         <q-card flat
           class="q-pa-sm flex flex-center text-center"
           style="margin: 40px">
           <q-card-section>
             <q-img
-              width="40" fit="scale-down"
+              width="40" fit="scale-down" height="40"
               :src="logoEmpresa(empresa.logo)"
             />
             <div class="text-h6">{{ empresa.nome }}</div>
@@ -177,7 +177,6 @@
           </q-card-section>
         </q-card>
       </div>
-
     </div>
 
     <div class="quote">

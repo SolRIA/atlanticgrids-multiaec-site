@@ -56,7 +56,7 @@
       </q-scroll-area>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="bg-blue-grey-2">
       <!-- This is where pages get injected -->
       <router-view />
     </q-page-container>

@@ -28,7 +28,6 @@ const routes = [
       { path: 'bancos', component: () => import('src/pages/Registed/Bancos.vue') },
       { path: 'conta', component: () => import('src/pages/Registed/Conta.vue') },
       { path: 'empresas', component: () => import('src/pages/Registed/Empresas.vue') },
-      { path: 'paises', component: () => import('src/pages/Registed/Paises.vue') },
       { path: 'utilizadores', component: () => import('src/pages/Registed/Utilizadores.vue') },
       { path: 'tiposempresa', component: () => import('src/pages/Registed/TiposEmpresa.vue') },
       { path: 'tiposprojeto', component: () => import('src/pages/Registed/TiposProjeto.vue') },

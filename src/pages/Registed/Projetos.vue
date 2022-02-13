@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-card v-if="mostrarFiltros">
+    <q-card>
       <q-card-section>
         <div class="row q-col-gutter-md">
           <q-select v-model="tipo" :options="tipos" label="Tipos de projetos" option-label="nome" option-value="id" class="col-xs-12 col-md-3"
@@ -17,16 +17,30 @@
             </template>
           </q-select>
 
-          <q-select label="País" outlined v-model="pais" dense :options="paises" class="col-xs-12 col-md-3" 
-            option-value="id" option-label="nome" emit-value map-options clearable/>
+          <q-select v-model="pais" :options="paises" label="País" outlined dense class="col-xs-12 col-md-3" 
+            option-value="nome" option-label="nome" emit-value map-options clearable/>
           
-          <q-select label="Banco" outlined v-model="banco" dense :options="bancos" class="col-xs-12 col-md-3" 
-            option-value="id" option-label="nome" emit-value map-options clearable/>
+          <q-select v-model="banco" :options="bancos" label="Banco" outlined dense class="col-xs-12 col-md-3" 
+            option-value="id" option-label="nome" emit-value map-options clearable>
+            <template v-slot:option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-item-section avatar>
+                  <img :src="logobanco(scope.opt.logo)">
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ scope.opt.nome }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
 
-          <q-input label="Projeto" outlined dense class="col-xs-12 col-md-3"/>
+          <q-input v-model="filtroProjeto" label="Projeto" debounce="500" outlined dense class="col-xs-12 col-md-3"/>
+          
+          <q-input v-model="filtro" label="Pesquisa livre" debounce="500" outlined dense class="col-xs-12"/>
         </div>
       </q-card-section>
     </q-card>
+
     <q-table class="q-mt-sm" color="positive"
       title="Projetos"
       ref="tableRef"
@@ -49,8 +63,15 @@
           <q-btn label="Novo" @click="onNovo" :icon="mdiPlusBoxOutline" color="positive" v-if="permissaoEdicao"/>
           <q-btn @click="refresh" :icon="mdiRefresh" outline color="positive"/>
           <q-btn @click="toogleShowCards" :icon="mdiGridLarge" outline color="positive"/>
-          <q-btn @click="mostrarFiltros=!mostrarFiltros" :icon="mdiFilterOutline" outline color="positive"/>
         </q-btn-group>
+      </template>
+
+      <template v-slot:body-cell-bancologo="props">
+        <q-td :props="props" auto-width>
+          <q-avatar rounded>
+            <img :src="logobanco(props.row.bancologo)">
+          </q-avatar>
+        </q-td>
       </template>
 
       <template v-slot:body-cell-data="props">
@@ -71,7 +92,8 @@
       </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
-          <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEditProject(props.row)"/>
+          <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEditProject(props.row)" v-if="permissaoEdicao"/>
+          <q-btn dense flat color="positive" :icon="mdiEye" @click="onViewProject(props.row)" v-if="!permissaoEdicao"/>
         </q-td>
       </template>
 
@@ -113,10 +135,11 @@
 
 <script>
 import { defineComponent, ref, onMounted, watch } from 'vue'
-import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiAlertDecagram, mdiGridLarge, mdiFilterOutline, mdiOpenInNew } from '@quasar/extras/mdi-v6'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiAlertDecagram, mdiGridLarge, mdiOpenInNew, mdiEye } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
-import { get, post, getAuth } from 'boot/api'
+import { get, post, getAuth, apiPublicUrl } from 'boot/api'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
+import ProjectView from 'src/components/Registed/ProjetoView.vue'
 
 export default defineComponent({
   setup () {
@@ -125,8 +148,6 @@ export default defineComponent({
     const loading = ref(false)
     const showCards = ref(true)
     const permissaoEdicao = ref(false)
-    const mostrarFiltros = ref(false)
-
     onMounted(async () => {
       showCards.value = JSON.parse(localStorage.getItem('showCards'))
       try {
@@ -140,8 +161,9 @@ export default defineComponent({
       }
 
       try {
-        paises.value = await get('paises/read-ativo.php')
-      } catch {
+        paises.value = await get('paises/read.php')
+      } catch (error) {
+        console.log(error)
         $q.notify({ message: 'Não foi possível obter os países', type: 'warning' })
       }
 
@@ -159,7 +181,7 @@ export default defineComponent({
     })
 
     const paises = ref([])
-    // const pais = ref(null)
+    const pais = ref(null)
 
     const bancos = ref([])
     const banco = ref(null)
@@ -168,14 +190,21 @@ export default defineComponent({
     const tipo = ref(null)
 
     const filtroProjeto = ref(null)
+    const filtro = ref(null)
 
-    // watch(pais, (_current, _old) => {
-    //   tableRef.value.requestServerInteraction()
-    // })
+    watch(pais, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
+    })
     watch(banco, (_current, _old) => {
       tableRef.value.requestServerInteraction()
     })
     watch(tipo, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
+    })
+    watch(filtroProjeto, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
+    })
+     watch(filtro, (_current, _old) => {
       tableRef.value.requestServerInteraction()
     })
 
@@ -188,6 +217,7 @@ export default defineComponent({
       { name: 'setor', label: 'Setor', field: 'setor', align: 'left' },
       { name: 'pais', label: 'País', field: 'pais', align: 'left' },
       { name: 'banco_id', label: 'Banco', field: 'banco_id', align: 'center' },
+      { name: 'bancologo', label: '', field: 'bancologo', align: 'center' },
       { name: 'link', label: '', field: 'link', align: 'center' },
       { name: 'actions', label: '', field: 'actions', align: 'center' }
     ]
@@ -202,6 +232,9 @@ export default defineComponent({
 
     const projetoEscolhido = ref([])
 
+    const logobanco = (logo) => {
+      return apiPublicUrl(logo)
+    }
     const toogleShowCards = () => {
       showCards.value = !showCards.value
       localStorage.setItem('showCards', JSON.stringify(showCards.value))
@@ -247,12 +280,25 @@ export default defineComponent({
         tableRef.value.requestServerInteraction()
       })
     }
+    const onViewProject = (project) => {
+      $q.dialog({
+        component: ProjectView,
+        componentProps: {
+          p: project,
+          tipos: tipos.value,
+          paises: paises.value,
+          bancos: bancos.value
+        }
+      }).onOk(async () => {
+        tableRef.value.requestServerInteraction()
+      })
+    }
     const onServerRequest = async (props) => {
       try {
         loading.value = true
         const { page, rowsPerPage, sortBy, descending } = props.pagination
 
-        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, filter: filtroProjeto.value, pais_id: null, banco_id: banco.value, tipo_id: tipo.value })
+        const result = await post('projetos/read.php', { page, rowsPerPage, sortBy, descending, filterProject: filtroProjeto.value, filter: filtro.value, pais: pais.value, banco_id: banco.value, tipo_id: tipo.value })
 
         projetos.value = result.rows;
 
@@ -279,27 +325,30 @@ export default defineComponent({
       mdiRefresh,
       mdiAlertDecagram,
       mdiGridLarge,
-      mdiFilterOutline,
+      mdiEye,
       mdiOpenInNew,
       showCards,
       loading,
       permissaoEdicao,
-      mostrarFiltros,
       pagination,
       tableRef,
       tipos,
       tipo,
       paises,
+      pais,
       bancos,
       banco,
       filtroProjeto,
+      filtro,
       projetos,
       projetoEscolhido,
       columns,
+      logobanco,
       refresh,
       toogleShowCards,
       onNovo,
       onEditProject,
+      onViewProject,
       onServerRequest,
       openProjectLink,
       getBanco

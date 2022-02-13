@@ -19,6 +19,14 @@
         <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
       </template>
 
+      <template v-slot:body-cell-logo="props">
+        <q-td :props="props" auto-width>
+          <q-avatar rounded>
+            <img :src="logobanco(props.row.logo)">
+          </q-avatar>
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-ativo="props">
         <q-td :props="props" auto-width>
           <q-checkbox v-model="props.row.ativo" disable/>
@@ -43,9 +51,11 @@
 
         <q-card-section class="q-pt-md">
           <div class="row q-col-gutter-sm">
-            <q-input v-model="banco.nome" label="Nome" outlined class="col-xs-12" />
+            <q-input v-model="banco.codigo" label="Código" outlined class="col-xs-4" />
+            <q-input v-model="banco.nome" label="Nome" outlined class="col-xs-8" />
             <q-input v-model="banco.descricao" label="Descrição" outlined class="col-xs-12" />
-            <q-checkbox v-model="banco.ativo" label="Ativo" />
+
+            <q-checkbox v-model="banco.ativo" label="Ativo" class="col-xs-12 col-md-4"/>
           </div>
         </q-card-section>
 
@@ -61,7 +71,7 @@
 <script>
 import { mdiBank, mdiWindowClose, mdiPlusBoxOutline, mdiPencil } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
-import { get, postAuth } from 'boot/api'
+import { get, postAuth, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -78,8 +88,10 @@ export default defineComponent({
 
     const bancos = ref([])
     const bancoEscolhido = ref([])
-    const banco = ref({ id: 0, nome: '', ativo: true })
+    const banco = ref({ id: 0, nome: '', codigo: '', ativo: true, descricao: null, website: null, logo: null })
     const colunas = [
+      { name: 'logo', label: '', field: 'logo', align: 'center' },
+      { name: 'codigo', label: 'Código', field: 'codigo', align: 'left' },
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
       { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
       { name: 'actions', label: '', field: 'actions' }
@@ -96,9 +108,12 @@ export default defineComponent({
       try {
         bancos.value = await get('bancos/read.php')
       } catch {
-          $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
+        $q.notify({ message: 'Não foi possível obter os bancos', type: 'warning' })
       }
       loading.value = false
+    }
+    const logobanco = (logo) => {
+      return apiPublicUrl(logo)
     }
 
     return {
@@ -115,8 +130,9 @@ export default defineComponent({
       colunas,
       pagination,
       onServerRequest,
+      logobanco,
       onNovo: () => {
-        banco.value = { id: 0, nome: '', decricao: null, ativo: true }
+        banco.value = { id: 0, nome: '', decricao: null, ativo: true, website: null, logo: null }
         mostraEditor.value = true
       },
       onEdit: (b) => {
