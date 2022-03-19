@@ -191,6 +191,7 @@
               times_new_roman: 'Times New Roman',
               verdana: 'Verdana'
             }"/>
+            <p>{{ empresa.descricao.length }}</p>
         </q-tab-panel>
 
       </q-tab-panels>

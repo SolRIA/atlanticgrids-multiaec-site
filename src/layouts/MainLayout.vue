@@ -6,9 +6,9 @@
           <q-img src="/images/logo.jpg" style="width: 180px"/>
         </router-link>
         <q-space></q-space>
-        <router-link to="/Projetos">
+        <!-- <router-link to="/Projetos">
           <p class="hover-underline-animation">Bancos</p>
-        </router-link>
+        </router-link> -->
         <router-link to="/Projetos">
           <p class="hover-underline-animation">Projetos</p>
         </router-link>
