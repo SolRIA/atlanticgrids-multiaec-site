@@ -157,24 +157,24 @@
     <div class="row justify-center">
       <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12 self-end"
         v-for="(empresa, index) in empresasSlider" :key="index">
-        <q-card flat
-          class="q-pa-sm flex flex-center text-center"
-          style="margin: 40px">
+        <q-card flat class="q-pa-sm q-ma-sm">
           <q-card-section>
-            <q-img
-              width="40" fit="scale-down" height="40"
-              :src="logoEmpresa(empresa.logo)"
-            />
-            <div class="text-h6">{{ empresa.nome }}</div>
+            <div class="flex flex-center text-center">
+              <q-img
+                height="70px" fit="scale-down"
+                :src="logoEmpresa(empresa.logo)"
+                :alt="empresa.nome"
+              />
+            </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-actions align="center">
             <q-btn rounded outline
                 to="/tutoriais"
                 class="action-btn btn-white"
                 label="Ver mais"
               />
-          </q-card-section>
+          </q-card-actions>
         </q-card>
       </div>
     </div>
@@ -187,7 +187,7 @@
           <br />
           <br />
           <q-btn rounded
-            href="https://www.solria.pt"
+            href="/login/registo"
             class="text-white action-btn"
             color="primary"
             label="Registar"
@@ -355,7 +355,7 @@ export default defineComponent({
         atualizaEmpresas()
         setInterval(() => {
           atualizaEmpresas()
-        }, 3000)
+        }, 4000)
     })
 
     const mainSlide = ref(1)
