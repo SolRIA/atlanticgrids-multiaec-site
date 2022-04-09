@@ -10,15 +10,18 @@
       autoplay
       control-color="white"
       transition-prev="slide-right"
-      transition-next="slide-left" style="height: 70vh">
-      
+      transition-next="slide-left"
+      style="height: 70vh"
+    >
       <q-carousel-slide
         class="q-pa-none"
         :name="1"
-        img-src="/images/mainslide6_compressed.jpg">
+        img-src="/images/mainslide6_compressed.jpg"
+      >
         <div
           class="full-height full-width flex flex-center"
-          style="background-color: rgba(0, 0, 0, 0.60) !important">
+          style="background-color: rgba(0, 0, 0, 0.6) !important"
+        >
           <div class="custom-caption">
             <h2 class="text-white animation_2">
               PROJETO <span class="text-secondary">MULTI AEC</span>
@@ -27,23 +30,27 @@
               GESTÃO INTEGRADA DAS MULTILATERAIS
             </h4>
             <div class="animation_2">
-              <q-btn rounded
+              <q-btn
+                rounded
                 class="text-white action-btn"
                 color="primary"
-                label="VER PROJETOS" 
-                to="/Projetos"/>
+                label="VER PROJETOS"
+                to="/Projetos"
+              />
             </div>
           </div>
         </div>
       </q-carousel-slide>
-      
+
       <q-carousel-slide
         class="q-pa-none"
         :name="2"
-        img-src="/images/mainslide6_compressed.jpg">
+        img-src="/images/mainslide6_compressed.jpg"
+      >
         <div
           class="full-height full-width flex flex-center"
-          style="background-color: rgba(0, 0, 0, 0.68) !important">
+          style="background-color: rgba(0, 0, 0, 0.68) !important"
+        >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Mundial
@@ -51,34 +58,40 @@
             </h2>
 
             <div class="animation_2">
-              <q-btn rounded
+              <q-btn
+                rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO" 
-                to="/Projetos"/>
+                label="APRESENTAÇÃO"
+                to="/Projetos"
+              />
             </div>
           </div>
         </div>
       </q-carousel-slide>
-      
+
       <q-carousel-slide
         class="q-pa-none"
         :name="3"
-        img-src="/images/mainslide2_compressed.jpg">
+        img-src="/images/mainslide2_compressed.jpg"
+      >
         <div
           class="full-height full-width flex flex-center"
-          style="background-color: rgba(0, 0, 0, 0.68) !important">
+          style="background-color: rgba(0, 0, 0, 0.68) !important"
+        >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Interamericano de Desenvolvimento
               <span class="text-secondary">(BID)</span>
             </h2>
             <div class="animation_2">
-              <q-btn rounded
+              <q-btn
+                rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO" 
-                to="/Projetos" />
+                label="APRESENTAÇÃO"
+                to="/Projetos"
+              />
             </div>
           </div>
         </div>
@@ -87,21 +100,25 @@
       <q-carousel-slide
         class="q-pa-none"
         :name="4"
-        img-src="/images/mainslide2_compressed.jpg">
+        img-src="/images/mainslide2_compressed.jpg"
+      >
         <div
           class="full-height full-width flex flex-center"
-          style="background-color: rgba(0, 0, 0, 0.68) !important">
+          style="background-color: rgba(0, 0, 0, 0.68) !important"
+        >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Europeu para a Reconstrução e Desenvolvimento
               <span class="text-secondary">(BERD)</span>
             </h2>
             <div class="animation_2">
-              <q-btn rounded
+              <q-btn
+                rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO" 
-                to="/Projetos" />
+                label="APRESENTAÇÃO"
+                to="/Projetos"
+              />
             </div>
           </div>
         </div>
@@ -110,58 +127,73 @@
       <q-carousel-slide
         class="q-pa-none"
         :name="5"
-        img-src="/images/mainslide2_compressed.jpg">
+        img-src="/images/mainslide2_compressed.jpg"
+      >
         <div
           class="full-height full-width flex flex-center"
-          style="background-color: rgba(0, 0, 0, 0.68) !important">
+          style="background-color: rgba(0, 0, 0, 0.68) !important"
+        >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
               Banco Europeu de Investimento
               <span class="text-secondary">(BEI)</span>
             </h2>
             <div class="animation_2">
-              <q-btn rounded
+              <q-btn
+                rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO" 
-                to="/Projetos" />
+                label="APRESENTAÇÃO"
+                to="/Projetos"
+              />
             </div>
           </div>
         </div>
       </q-carousel-slide>
     </q-carousel>
 
-    <div style="height: 5px;">
+    <div style="height: 5px">
       <div class="row">
-        <div style="height: 5px;" class="col-4 bg-primary"></div>
-        <div style="height: 5px;" class="col-4 bg-secondary"></div>
-        <div style="height: 5px;" class="col-4 bg-accent"></div>
+        <div style="height: 5px" class="col-4 bg-primary"></div>
+        <div style="height: 5px" class="col-4 bg-secondary"></div>
+        <div style="height: 5px" class="col-4 bg-accent"></div>
       </div>
     </div>
 
     <div>
       <div class="q-pa-md">
         <p>Projeto</p>
-        <p>Descrição do projeto, dos seus objetivos e do que se pretende atingir com esta iniciativa</p>
+        <p>
+          Descrição do projeto, dos seus objetivos e do que se pretende atingir
+          com esta iniciativa
+        </p>
       </div>
     </div>
 
     <div>
       <div class="q-pa-md" style="background-color: #a6b3bf !important">
         <p>Mercado das Multilaterais</p>
-        <p>Descrição do mercado das multilaterais financeiras, o seu potencial e o que as empresas portuguesas podem beneficiar em explorar estas oportunidades</p>
+        <p>
+          Descrição do mercado das multilaterais financeiras, o seu potencial e
+          o que as empresas portuguesas podem beneficiar em explorar estas
+          oportunidades
+        </p>
       </div>
     </div>
 
     <!-- empresas -->
     <div class="row justify-center">
-      <div class="col-lg-2 offset-lg-1 col-md-4 col-sm-12 self-end"
-        v-for="(empresa, index) in empresasSlider" :key="index">
+      <div
+        class="col-lg-2 offset-lg-1 col-md-4 col-sm-12 self-end"
+        v-for="(empresa, index) in empresasSlider"
+        :key="index"
+      >
         <q-card flat class="q-pa-sm q-ma-sm">
           <q-card-section>
             <div class="flex flex-center text-center">
               <q-img
-                height="70px" fit="scale-down"
+                height="70px"
+                fit="scale-down"
                 :src="logoEmpresa(empresa.logo)"
                 :alt="empresa.nome"
               />
@@ -169,24 +201,27 @@
           </q-card-section>
 
           <q-card-actions align="center">
-            <q-btn rounded outline
-                to="/tutoriais"
-                class="action-btn btn-white"
-                label="Ver mais"
-              />
+            <q-btn
+              rounded
+              outline
+              @click="abreEmpresa(empresa)"
+              class="action-btn btn-white"
+              label="Ver mais"
+            />
           </q-card-actions>
         </q-card>
       </div>
     </div>
 
     <div class="quote">
-      <div
-        class="q-pt-xl full-width full-height flex flex-center">
+      <div class="q-pt-xl full-width full-height flex flex-center">
         <h3 class="text-black text-center">
-         Neste separador damos a informação de como empresas do sector da construção se podem propor como integrantes da Rede Operacional.
+          Neste separador damos a informação de como empresas do sector da
+          construção se podem propor como integrantes da Rede Operacional.
           <br />
           <br />
-          <q-btn rounded
+          <q-btn
+            rounded
             href="/login/registo"
             class="text-white action-btn"
             color="primary"
@@ -199,12 +234,18 @@
     <div>
       <div class="q-pa-md" style="background-color: #a6b3bf !important">
         <p>Noticias</p>
-        <p>Aqui apresentamos informações sobre as atividades gerais das Multilaterais financeiras, com enfase para as do projeto, nomeadamente (bibliografia, eventos, informações de novos apoios, videos etc</p>
+        <p>
+          Aqui apresentamos informações sobre as atividades gerais das
+          Multilaterais financeiras, com enfase para as do projeto, nomeadamente
+          (bibliografia, eventos, informações de novos apoios, videos etc
+        </p>
 
         <br />
         <br />
         <div class="row justify-center">
-          <q-btn rounded outline=""
+          <q-btn
+            rounded
+            outline=""
             to="/noticias"
             class="action-btn btn-white"
             label="Notícias"
@@ -216,12 +257,18 @@
     <div>
       <div class="q-pa-md">
         <p>Tutoriais</p>
-        <p>Este separador congrega tudo o que esteja disponível sobre Webinars, Vídeos promocionais dos bancos, passo a passo para abordar os mercados das multilaterais financeiras etc…</p>
+        <p>
+          Este separador congrega tudo o que esteja disponível sobre Webinars,
+          Vídeos promocionais dos bancos, passo a passo para abordar os mercados
+          das multilaterais financeiras etc…
+        </p>
 
         <br />
         <br />
         <div class="row justify-center">
-          <q-btn rounded outline
+          <q-btn
+            rounded
+            outline
             to="/tutoriais"
             class="action-btn btn-white"
             label="Tutoriais"
@@ -244,40 +291,52 @@
           </div>
         </div>
         <div class="row flex q-pb-md">
-          <div class="col-sm-6 col-xs-12 q-gutter-lg q-px-md q-pb-none q-ma-none">
-            <q-input bg-color="white" outlined label="Nome *"/>
-            <q-input bg-color="white" outlined label="Email *"/>
-            <q-input bg-color="white" outlined label="Contato *"/>
+          <div
+            class="col-sm-6 col-xs-12 q-gutter-lg q-px-md q-pb-none q-ma-none"
+          >
+            <q-input bg-color="white" outlined label="Nome *" />
+            <q-input bg-color="white" outlined label="Email *" />
+            <q-input bg-color="white" outlined label="Contato *" />
           </div>
           <div
-            class="col-sm-6 col-xs-12 q-gutter-lg q-px-md q-pb-none q-ma-none">
+            class="col-sm-6 col-xs-12 q-gutter-lg q-px-md q-pb-none q-ma-none"
+          >
             <q-input
               type="textarea"
               bg-color="white"
               outlined
-              label="Mensagem *">
+              label="Mensagem *"
+            >
             </q-input>
           </div>
         </div>
         <div class="row flex flex-center text-center q-pb-xl q-mt-md">
           <div>
-            <q-img src="/images/logo-ptpc.png" style="width: 160px"/>
-            <q-img src="/images/logo-aec.png" style="width: 160px"/>
-            <q-img src="/images/pt2020.svg" style="width: 180px" class="q-mx-md"/>
+            <q-img src="/images/logo-ptpc.png" style="width: 160px" />
+            <q-img src="/images/logo-aec.png" style="width: 160px" />
+            <q-img
+              src="/images/pt2020.svg"
+              style="width: 180px"
+              class="q-mx-md"
+            />
           </div>
           <div class="align-right">
-            <q-btn rounded outline 
+            <q-btn
+              rounded
+              outline
               :icon="mdiSend"
               class="action-btn btn-white"
-              label="Enviar mensagem"/>
+              label="Enviar mensagem"
+            />
           </div>
         </div>
       </div>
     </div>
-    
+
     <q-toolbar
       class="flex flex-center text-white"
-      style="background-color: #a6b3bf">
+      style="background-color: #a6b3bf"
+    >
       <div class="q-pa-sm q-gutter-sm">
         <q-btn
           round
@@ -285,45 +344,50 @@
           href="https://twitter.com/"
           class="text-white"
           color="secondary"
-          :icon="mdiTwitter"/>
+          :icon="mdiTwitter"
+        />
         <q-btn
           round
           type="a"
           href="https://facebook.com/solriaerp"
           class="text-white"
           color="secondary"
-          :icon="mdiFacebook"/>
+          :icon="mdiFacebook"
+        />
         <q-btn
           round
           type="a"
           href="https://www.instagram.com/"
           class="text-white"
           color="secondary"
-          :icon="mdiInstagram"/>
+          :icon="mdiInstagram"
+        />
         <q-btn
           round
           type="a"
           href="https://www.youtube.com/"
           class="text-white"
           color="secondary"
-          :icon="mdiYoutube"/>
+          :icon="mdiYoutube"
+        />
         <q-btn
           round
           type="a"
           href="https://github.com/"
           class="text-white"
           color="secondary"
-          :icon="mdiGithub"/>
+          :icon="mdiGithub"
+        />
         <q-btn
           round
           type="a"
           href="mailto:suporte@solria.pt"
           class="text-white"
           color="secondary"
-          :icon="mdiEmail"/>
+          :icon="mdiEmail"
+        />
       </div>
     </q-toolbar>
-
   </q-page>
 </template>
 
@@ -344,36 +408,60 @@
 </style>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue'
-import { mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiGithub, mdiEmail } from '@quasar/extras/mdi-v6'
-import { get, apiPublicUrl } from 'boot/api'
+import { defineComponent, onMounted, ref } from "vue";
+import { useQuasar } from "quasar";
+import {
+  mdiSend,
+  mdiTwitter,
+  mdiFacebook,
+  mdiInstagram,
+  mdiYoutube,
+  mdiGithub,
+  mdiEmail,
+} from "@quasar/extras/mdi-v6";
+import { get, apiPublicUrl } from "boot/api";
+import Empresa from "src/components/Empresa.vue";
 
 export default defineComponent({
-  setup () {
+  setup() {
+    const $q = useQuasar();
     onMounted(async () => {
-        empresas.value = await get('empresas/read-ativo.php')
-        atualizaEmpresas()
-        setInterval(() => {
-          atualizaEmpresas()
-        }, 4000)
-    })
+      empresas.value = await get("empresas/read-ativo.php");
+      atualizaEmpresas();
+      setInterval(() => {
+        atualizaEmpresas();
+      }, 4000);
+    });
 
-    const mainSlide = ref(1)
-    const empresas = ref([])
-    const empresasSlider = ref([])
-    let page = 1
-    const numEmpresas = 3
+    const mainSlide = ref(1);
+    const empresas = ref([]);
+    const empresasSlider = ref([]);
+    let page = 1;
+    const numEmpresas = 3;
 
     const atualizaEmpresas = () => {
-      if(page > Math.ceil(empresas.value.length / numEmpresas)) {
-        page = 1
+      if (page > Math.ceil(empresas.value.length / numEmpresas)) {
+        page = 1;
       }
-      empresasSlider.value = empresas.value.slice((page - 1) * numEmpresas, page * numEmpresas)
-      page += 1
-    }
+      empresasSlider.value = empresas.value.slice(
+        (page - 1) * numEmpresas,
+        page * numEmpresas
+      );
+      page += 1;
+    };
     const logoEmpresa = (logo) => {
-      return apiPublicUrl(logo)
-    }
+      return apiPublicUrl(logo);
+    };
+    const abreEmpresa = (e) => {
+      console.log(e);
+      $q.dialog({
+        component: Empresa,
+        componentProps: {
+          e: e,
+          logo: logoEmpresa(e.logo),
+        },
+      });
+    };
 
     return {
       mdiSend,
@@ -385,10 +473,11 @@ export default defineComponent({
       mdiEmail,
       mainSlide,
       empresasSlider,
-      logoEmpresa
-    }
-  }
-})
+      logoEmpresa,
+      abreEmpresa,
+    };
+  },
+});
 </script>
 
 <style lang="sass" scoped>
