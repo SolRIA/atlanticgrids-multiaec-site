@@ -1,16 +1,30 @@
 // app global css in SCSS form
 .text-brand {
-    color: #00A352
+  color: #00a352;
 }
 .bg-brand {
-    background: #00A352
+  background: #00a352;
 }
 
 .action-btn {
-    font-size: 14px;
-    width: 240px;
-    height: 55px;
-    padding: 0 37 0 37;
+  font-size: 14px;
+  width: 240px;
+  height: 55px;
+  padding: 0 37 0 37;
+}
+
+.btn-white {
+  background-color: white;
+  background: white !important;
+  color: #ec1c23;
+}
+.btn-white:hover {
+  background-color: #ec1c23;
+  background: #ec1c23 !important;
+  color: white;
+}
+.btn-white:hover:before {
+  border: 0 !important;
 }
 
 // $typography-font-family         : 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif !default

@@ -1,46 +1,70 @@
-
 const routes = [
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: 'projetos', component: () => import('src/pages/Projetos.vue') },
-      { path: 'perfil', component: () => import('src/pages/PerfilEmpresa.vue') },
-      { path: 'noticias', component: () => import('src/pages/Noticias.vue') },
-      { path: 'tutoriais', component: () => import('src/pages/Tutoriais.vue') }
-    ]
+      { path: "", component: () => import("pages/Index.vue") },
+      { path: "projetos", component: () => import("src/pages/Projetos.vue") },
+      { path: "associados", component: () => import("src/pages/Socios.vue") },
+      { path: "associado", component: () => import("src/pages/Socio.vue") },
+      { path: "noticias", component: () => import("src/pages/Noticias.vue") },
+      { path: "tutoriais", component: () => import("src/pages/Tutoriais.vue") },
+    ],
   },
   {
-    path: '/login',
-    component: () => import('layouts/Login.vue'),
+    path: "/login",
+    component: () => import("layouts/Login.vue"),
     children: [
-      { path: '', component: () => import('pages/Login.vue') },
-      { path: 'registo', component: () => import('pages/Register.vue') },
-      { path: 'recuperarPassword', component: () => import('pages/RecoverPassword.vue') }
-    ]
+      { path: "", component: () => import("pages/Login.vue") },
+      { path: "registo", component: () => import("pages/Register.vue") },
+      {
+        path: "recuperarPassword",
+        component: () => import("pages/RecoverPassword.vue"),
+      },
+    ],
   },
   {
-    path: '/registed',
-    component: () => import('layouts/Registed.vue'),
+    path: "/registed",
+    component: () => import("layouts/Registed.vue"),
     children: [
-      { path: '', component: () => import('src/pages/Registed/Projetos.vue') },
-      { path: 'bancos', component: () => import('src/pages/Registed/Bancos.vue') },
-      { path: 'conta', component: () => import('src/pages/Registed/Conta.vue') },
-      { path: 'empresas', component: () => import('src/pages/Registed/Empresas.vue') },
-      { path: 'utilizadores', component: () => import('src/pages/Registed/Utilizadores.vue') },
-      { path: 'tiposempresa', component: () => import('src/pages/Registed/TiposEmpresa.vue') },
-      { path: 'tiposprojeto', component: () => import('src/pages/Registed/TiposProjeto.vue') },
-      { path: 'emails', component: () => import('src/pages/Registed/Emails.vue') }
-    ]
+      { path: "", component: () => import("src/pages/Registed/Projetos.vue") },
+      {
+        path: "bancos",
+        component: () => import("src/pages/Registed/Bancos.vue"),
+      },
+      {
+        path: "conta",
+        component: () => import("src/pages/Registed/Conta.vue"),
+      },
+      {
+        path: "empresas",
+        component: () => import("src/pages/Registed/Empresas.vue"),
+      },
+      {
+        path: "utilizadores",
+        component: () => import("src/pages/Registed/Utilizadores.vue"),
+      },
+      {
+        path: "tiposempresa",
+        component: () => import("src/pages/Registed/TiposEmpresa.vue"),
+      },
+      {
+        path: "tiposprojeto",
+        component: () => import("src/pages/Registed/TiposProjeto.vue"),
+      },
+      {
+        path: "emails",
+        component: () => import("src/pages/Registed/Emails.vue"),
+      },
+    ],
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue')
-  }
-]
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/Error404.vue"),
+  },
+];
 
-export default routes
+export default routes;

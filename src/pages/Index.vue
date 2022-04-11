@@ -183,7 +183,7 @@
 
     <!-- empresas -->
     <div class="row justify-center">
-      <div
+      <!-- <div
         class="col-lg-2 offset-lg-1 col-md-4 col-sm-12 self-end"
         v-for="(empresa, index) in empresasSlider"
         :key="index"
@@ -210,7 +210,7 @@
             />
           </q-card-actions>
         </q-card>
-      </div>
+      </div> -->
     </div>
 
     <div class="quote">
@@ -391,24 +391,8 @@
   </q-page>
 </template>
 
-<style lang="scss" scoped>
-.btn-white {
-  background-color: white;
-  background: white !important;
-  color: #ec1c23;
-}
-.btn-white:hover {
-  background-color: #ec1c23;
-  background: #ec1c23 !important;
-  color: white;
-}
-.btn-white:hover:before {
-  border: 0 !important;
-}
-</style>
-
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useQuasar } from "quasar";
 import {
   mdiSend,
@@ -419,49 +403,49 @@ import {
   mdiGithub,
   mdiEmail,
 } from "@quasar/extras/mdi-v6";
-import { get, apiPublicUrl } from "boot/api";
-import Empresa from "src/components/Empresa.vue";
+// import { get, apiPublicUrl } from "boot/api";
+// import Empresa from "src/components/Empresa.vue";
 
 export default defineComponent({
   setup() {
     const $q = useQuasar();
-    onMounted(async () => {
-      empresas.value = await get("empresas/read-ativo.php");
-      atualizaEmpresas();
-      setInterval(() => {
-        atualizaEmpresas();
-      }, 4000);
-    });
+    // onMounted(async () => {
+    //   empresas.value = await get("empresas/read-ativo.php");
+    //   atualizaEmpresas();
+    //   setInterval(() => {
+    //     atualizaEmpresas();
+    //   }, 4000);
+    // });
 
     const mainSlide = ref(1);
     const empresas = ref([]);
-    const empresasSlider = ref([]);
+    // const empresasSlider = ref([]);
     let page = 1;
     const numEmpresas = 3;
 
-    const atualizaEmpresas = () => {
-      if (page > Math.ceil(empresas.value.length / numEmpresas)) {
-        page = 1;
-      }
-      empresasSlider.value = empresas.value.slice(
-        (page - 1) * numEmpresas,
-        page * numEmpresas
-      );
-      page += 1;
-    };
-    const logoEmpresa = (logo) => {
-      return apiPublicUrl(logo);
-    };
-    const abreEmpresa = (e) => {
-      console.log(e);
-      $q.dialog({
-        component: Empresa,
-        componentProps: {
-          e: e,
-          logo: logoEmpresa(e.logo),
-        },
-      });
-    };
+    // const atualizaEmpresas = () => {
+    //   if (page > Math.ceil(empresas.value.length / numEmpresas)) {
+    //     page = 1;
+    //   }
+    //   empresasSlider.value = empresas.value.slice(
+    //     (page - 1) * numEmpresas,
+    //     page * numEmpresas
+    //   );
+    //   page += 1;
+    // };
+    // const logoEmpresa = (logo) => {
+    //   return apiPublicUrl(logo);
+    // };
+    // const abreEmpresa = (e) => {
+    //   console.log(e);
+    //   $q.dialog({
+    //     component: Empresa,
+    //     componentProps: {
+    //       e: e,
+    //       logo: logoEmpresa(e.logo),
+    //     },
+    //   });
+    // };
 
     return {
       mdiSend,
@@ -472,9 +456,9 @@ export default defineComponent({
       mdiGithub,
       mdiEmail,
       mainSlide,
-      empresasSlider,
-      logoEmpresa,
-      abreEmpresa,
+      // empresasSlider,
+      // logoEmpresa,
+      // abreEmpresa,
     };
   },
 });
