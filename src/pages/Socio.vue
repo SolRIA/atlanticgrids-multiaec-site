@@ -45,7 +45,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { get, apiPublicUrl } from "boot/api";
 import { mdiOpenInNew } from "@quasar/extras/mdi-v6";
 

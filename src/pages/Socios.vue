@@ -11,8 +11,6 @@
           :key="empresa.nome"
         >
           <q-card
-            flat
-            bordered
             class="bg-grey-1 col-xs-12 col-sm-6 col-md-4 col-lg-2 q-pa-lg"
             style="width: 250px"
           >
@@ -48,50 +46,50 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
-import { useQuasar } from "quasar";
-import { useRouter } from "vue-router";
-import { get, apiPublicUrl } from "boot/api";
+import { defineComponent, ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
+import { get, apiPublicUrl } from 'boot/api'
 
 export default defineComponent({
   setup() {
-    const $q = useQuasar();
-    const $router = useRouter();
+    const $q = useQuasar()
+    const $router = useRouter()
 
-    const loading = ref(false);
-    const empresas = ref([]);
+    const loading = ref(false)
+    const empresas = ref([])
 
     onMounted(async () => {
       try {
-        empresas.value = await get("empresas/read-ativo.php");
+        empresas.value = await get('empresas/read-ativo.php')
       } catch {
         $q.notify({
-          message: "Não foi possível obter as empresa",
-          type: "warning",
-        });
+          message: 'Não foi possível obter as empresa',
+          type: 'warning'
+        })
       }
-    });
+    })
 
     const logoEmpresa = (logo) => {
-      return apiPublicUrl(logo);
-    };
+      return apiPublicUrl(logo)
+    }
     const abreEmpresa = (id) => {
-      $router.push({ path: "/associado", query: { id: id } });
-    };
+      $router.push({ path: '/associado', query: { id: id } })
+    }
 
     return {
       loading,
       empresas,
       grupos: [
-        "Grandes empresas",
-        "Entidades SCTN",
-        "PME",
-        "Entidades administração pública",
-        "Associações",
+        'Grandes empresas',
+        'Entidades SCTN',
+        'PME',
+        'Entidades administração pública',
+        'Associações'
       ],
       logoEmpresa,
-      abreEmpresa,
-    };
-  },
-});
+      abreEmpresa
+    }
+  }
+})
 </script>
