@@ -160,28 +160,7 @@
       </div>
     </div>
 
-    <div>
-      <div class="q-pa-md">
-        <p>Projeto</p>
-        <p>
-          Descrição do projeto, dos seus objetivos e do que se pretende atingir
-          com esta iniciativa
-        </p>
-      </div>
-    </div>
-
-    <div>
-      <div class="q-pa-md" style="background-color: #a6b3bf !important">
-        <p>Mercado das Multilaterais</p>
-        <p>
-          Descrição do mercado das multilaterais financeiras, o seu potencial e
-          o que as empresas portuguesas podem beneficiar em explorar estas
-          oportunidades
-        </p>
-      </div>
-    </div>
-
-    <div class="quote">
+    <div class="quote q-mb-lg">
       <div class="q-pt-xl full-width full-height flex flex-center">
         <h3 class="text-black text-center">
           Neste separador damos a informação de como empresas do sector da
@@ -199,47 +178,52 @@
       </div>
     </div>
 
-    <div>
-      <div class="q-pa-md" style="background-color: #a6b3bf !important">
-        <p>Noticias</p>
-        <p>
-          Aqui apresentamos informações sobre as atividades gerais das
-          Multilaterais financeiras, com enfase para as do projeto, nomeadamente
-          (bibliografia, eventos, informações de novos apoios, videos etc
-        </p>
-
-        <br />
-        <br />
-        <div class="row justify-center">
-          <q-btn
-            rounded
-            outline=""
-            to="/noticias"
-            class="action-btn btn-white"
-            label="Notícias"
+    <div class="q-ma-lg" style="margin-top: 80px">
+      <div class="row items-stretch justify-center q-col-gutter-lg">
+        <div>
+          <Section
+            :icon="mdiAlphaMCircleOutline"
+            link="/mercado"
+            title="Mercado das Multilaterais"
+            btnText="Ver mais"
+            description="Descrição do mercado das multilaterais financeiras, o seu
+            potencial e o que as empresas portuguesas podem beneficiar em
+            explorar estas oportunidades"
           />
         </div>
-      </div>
-    </div>
 
-    <div>
-      <div class="q-pa-md">
-        <p>Tutoriais</p>
-        <p>
-          Este separador congrega tudo o que esteja disponível sobre Webinars,
-          Vídeos promocionais dos bancos, passo a passo para abordar os mercados
-          das multilaterais financeiras etc…
-        </p>
+        <div>
+          <Section
+            :icon="mdiInformationOutline"
+            link="/projeto"
+            title="Projeto"
+            btnText="Ver mais"
+            description="Descrição do projeto, dos seus objetivos e do que se pretende atingir com esta iniciativa"
+          />
+        </div>
 
-        <br />
-        <br />
-        <div class="row justify-center">
-          <q-btn
-            rounded
-            outline
-            to="/tutoriais"
-            class="action-btn btn-white"
-            label="Tutoriais"
+        <div>
+          <Section
+            :icon="mdiNewspaperVariantOutline"
+            link="/noticias"
+            title="Noticias"
+            btnText="Ver mais"
+            description="Aqui apresentamos informações sobre as atividades gerais das
+                  Multilaterais financeiras, com enfase para as do projeto,
+                  nomeadamente (bibliografia, eventos, informações de novos
+                  apoios, videos etc"
+          />
+        </div>
+
+        <div>
+          <Section
+            :icon="mdiSchoolOutline"
+            link="/tutoriais"
+            title="Tutoriais"
+            btnText="Ver mais"
+            description="Este separador congrega tudo o que esteja disponível sobre
+                  Webinars, Vídeos promocionais dos bancos, passo a passo para
+                  abordar os mercados das multilaterais financeiras etc…"
           />
         </div>
       </div>
@@ -360,7 +344,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 import {
   mdiSend,
   mdiTwitter,
@@ -369,11 +353,17 @@ import {
   mdiYoutube,
   mdiGithub,
   mdiEmail,
-} from "@quasar/extras/mdi-v6";
+  mdiInformationOutline,
+  mdiNewspaperVariantOutline,
+  mdiSchoolOutline,
+  mdiAlphaMCircleOutline
+} from '@quasar/extras/mdi-v6'
+import Section from 'src/components/Section.vue'
 
 export default defineComponent({
+  components: { Section },
   setup() {
-    const mainSlide = ref(1);
+    const mainSlide = ref(1)
 
     return {
       mdiSend,
@@ -383,10 +373,14 @@ export default defineComponent({
       mdiYoutube,
       mdiGithub,
       mdiEmail,
-      mainSlide,
-    };
-  },
-});
+      mdiInformationOutline,
+      mdiNewspaperVariantOutline,
+      mdiSchoolOutline,
+      mdiAlphaMCircleOutline,
+      mainSlide
+    }
+  }
+})
 </script>
 
 <style lang="sass" scoped>
