@@ -14,10 +14,6 @@
             class="bg-grey-1 col-xs-12 col-sm-6 col-md-4 col-lg-2 q-pa-lg"
             style="width: 250px"
           >
-            <!-- <q-card-section>
-              <div class="text-h6">{{ empresa.titulo }}</div>
-            </q-card-section> -->
-
             <q-card-section>
               <div class="flex flex-center text-center">
                 <q-img
@@ -32,7 +28,7 @@
             <q-card-actions>
               <q-btn
                 rounded
-                outline=""
+                outline
                 class="action-btn btn-white"
                 :label="empresa.titulo"
                 @click="abreEmpresa(empresa.id)"

@@ -9,6 +9,8 @@ const routes = [
       { path: 'associado', component: () => import('src/pages/Socio.vue') },
       { path: 'noticias', component: () => import('src/pages/Noticias.vue') },
       { path: 'tutoriais', component: () => import('src/pages/Tutoriais.vue') },
+      { path: 'projeto', component: () => import('src/pages/Projeto.vue') },
+      { path: 'mercado', component: () => import('src/pages/Mercado.vue') },
       {
         path: 'accao',
         component: () => import('src/pages/RegistarAccaoProjeto.vue')
