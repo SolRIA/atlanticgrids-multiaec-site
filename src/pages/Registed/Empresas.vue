@@ -263,9 +263,9 @@
                       label: $q.lang.editor.align,
                       icon: $q.iconSet.editor.align,
                       fixedLabel: true,
-                      options: ['left', 'center', 'right', 'justify'],
+                      options: ['left', 'center', 'right', 'justify']
                     },
-                    'fullscreen',
+                    'fullscreen'
                   ],
                   [
                     'bold',
@@ -273,7 +273,7 @@
                     'strike',
                     'underline',
                     'subscript',
-                    'superscript',
+                    'superscript'
                   ],
                   ['token', 'hr', 'link', 'custom_btn'],
                   [
@@ -281,16 +281,7 @@
                       label: $q.lang.editor.formatting,
                       icon: $q.iconSet.editor.formatting,
                       list: 'no-icons',
-                      options: [
-                        'p',
-                        'h1',
-                        'h2',
-                        'h3',
-                        'h4',
-                        'h5',
-                        'h6',
-                        'code',
-                      ],
+                      options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code']
                     },
                     {
                       label: $q.lang.editor.fontSize,
@@ -305,8 +296,8 @@
                         'size-4',
                         'size-5',
                         'size-6',
-                        'size-7',
-                      ],
+                        'size-7'
+                      ]
                     },
                     {
                       label: $q.lang.editor.defaultFont,
@@ -322,15 +313,15 @@
                         'impact',
                         'lucida_grande',
                         'times_new_roman',
-                        'verdana',
-                      ],
+                        'verdana'
+                      ]
                     },
-                    'removeFormat',
+                    'removeFormat'
                   ],
                   ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
 
                   ['undo', 'redo'],
-                  ['viewsource'],
+                  ['viewsource']
                 ]"
                 :fonts="{
                   arial: 'Arial',
@@ -340,7 +331,7 @@
                   impact: 'Impact',
                   lucida_grande: 'Lucida Grande',
                   times_new_roman: 'Times New Roman',
-                  verdana: 'Verdana',
+                  verdana: 'Verdana'
                 }"
               />
             </q-tab-panel>
@@ -370,50 +361,50 @@ import {
   mdiImageSearchOutline,
   mdiBadgeAccountHorizontalOutline,
   mdiFileDocumentEditOutline,
-  mdiFilterOutline,
-} from "@quasar/extras/mdi-v6";
-import { defineComponent, ref, onMounted } from "vue";
-import { get, postFormAuth, apiPublicUrl, postAuth } from "boot/api";
-import { useQuasar } from "quasar";
+  mdiFilterOutline
+} from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, onMounted } from 'vue'
+import { get, postFormAuth, apiPublicUrl, postAuth } from 'boot/api'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   setup() {
-    const $q = useQuasar();
+    const $q = useQuasar()
 
-    const loading = ref(false);
-    const mostraEditor = ref(false);
-    const tableRef = ref(null);
-    const tab = ref("geral");
+    const loading = ref(false)
+    const mostraEditor = ref(false)
+    const tableRef = ref(null)
+    const tab = ref('geral')
 
     onMounted(async () => {
       try {
-        tiposEmpresa.value = await get("tiposempresa/read-ativo.php");
+        tiposEmpresa.value = await get('tiposempresa/read-ativo.php')
       } catch {
         $q.notify({
-          message: "Não foi possível obter os tipos de empresa",
-          type: "warning",
-        });
+          message: 'Não foi possível obter os tipos de empresa',
+          type: 'warning'
+        })
       }
       try {
-        tiposProjeto.value = await get("tiposprojeto/read-ativo.php");
+        tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
       } catch {
         $q.notify({
-          message: "Não foi possível obter os tipos de projeto",
-          type: "warning",
-        });
+          message: 'Não foi possível obter os tipos de projeto',
+          type: 'warning'
+        })
       }
-      tableRef.value.requestServerInteraction();
-    });
+      tableRef.value.requestServerInteraction()
+    })
 
-    const tiposEmpresa = ref([]);
-    const tiposProjeto = ref([]);
-    const empresas = ref([]);
-    const empresaEscolhida = ref([]);
+    const tiposEmpresa = ref([])
+    const tiposProjeto = ref([])
+    const empresas = ref([])
+    const empresaEscolhida = ref([])
     const empresa = ref({
       id: 0,
-      nome: "",
-      titulo: "",
-      grupo: "",
+      nome: '',
+      titulo: '',
+      grupo: '',
       ativo: true,
       pendente: true,
       tipos_empresa: [],
@@ -426,47 +417,47 @@ export default defineComponent({
       facebook: null,
       twitter: null,
       linkedin: null,
-      logo: null,
-    });
-    const logo = ref(null);
+      logo: null
+    })
+    const logo = ref(null)
 
     const pagination = ref({
       descending: false,
       page: 1,
       rowsPerPage: 10,
       rowsNumber: 10,
-      sortBy: null,
-    });
-    const filter = ref(null);
+      sortBy: null
+    })
+    const filter = ref(null)
     const onServerRequest = async (props) => {
-      const { page, rowsPerPage, sortBy, descending } = props.pagination;
-      const filter = props.filter;
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      const filter = props.filter
 
-      loading.value = true;
+      loading.value = true
       try {
-        const result = await postAuth("empresas/read.php", {
+        const result = await postAuth('empresas/read.php', {
           page,
           rowsPerPage,
           sortBy,
           descending,
-          filter,
-        });
+          filter
+        })
 
-        empresas.value = result.rows;
+        empresas.value = result.rows
 
-        pagination.value.rowsNumber = result.count;
-        pagination.value.page = page;
-        pagination.value.rowsPerPage = rowsPerPage;
-        pagination.value.sortBy = sortBy;
-        pagination.value.descending = descending;
+        pagination.value.rowsNumber = result.count
+        pagination.value.page = page
+        pagination.value.rowsPerPage = rowsPerPage
+        pagination.value.sortBy = sortBy
+        pagination.value.descending = descending
       } catch {
         $q.notify({
-          message: "Não foi possível obter as empresas",
-          type: "warning",
-        });
+          message: 'Não foi possível obter as empresas',
+          type: 'warning'
+        })
       }
-      loading.value = false;
-    };
+      loading.value = false
+    }
 
     return {
       mdiAccountTie,
@@ -495,37 +486,37 @@ export default defineComponent({
       logo,
       pagination,
       grupos: [
-        "Grandes empresas",
-        "Entidades SCTN",
-        "PME",
-        "Entidades administração pública",
-        "Associações",
+        'Grandes empresas',
+        'Entidades SCTN',
+        'PME',
+        'Entidades administração pública',
+        'Associações'
       ],
       colunas: [
         {
-          name: "logo",
-          label: "",
-          field: "logo",
-          align: "center",
-          style: "width: 100px",
+          name: 'logo',
+          label: '',
+          field: 'logo',
+          align: 'center',
+          style: 'width: 100px'
         },
-        { name: "nome", label: "Nome", field: "nome", align: "left" },
-        { name: "ativo", label: "Ativo", field: "ativo", align: "left" },
+        { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
+        { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
         {
-          name: "pendente",
-          label: "Pendente",
-          field: "pendente",
-          align: "left",
+          name: 'pendente',
+          label: 'Pendente',
+          field: 'pendente',
+          align: 'left'
         },
-        { name: "actions", label: "", field: "actions" },
+        { name: 'actions', label: '', field: 'actions' }
       ],
       onServerRequest,
       apiPublicUrl,
       onNovo: () => {
-        logo.value = null;
+        logo.value = null
         empresa.value = {
           id: 0,
-          nome: "",
+          nome: '',
           ativo: true,
           pendente: true,
           tipos_empresa: [],
@@ -538,43 +529,44 @@ export default defineComponent({
           facebook: null,
           twitter: null,
           linkedin: null,
-          logo: null,
-        };
-        mostraEditor.value = true;
+          logo: null
+        }
+        mostraEditor.value = true
       },
       onEdit: async (b) => {
-        empresa.value = await get("empresas/read-single.php?id=" + b.id);
-        empresaEscolhida.value = [b];
-        mostraEditor.value = true;
+        empresa.value = await get('empresas/read-single.php?id=' + b.id)
+        logo.value = null
+        empresaEscolhida.value = [b]
+        mostraEditor.value = true
       },
       onOk: async () => {
         try {
-          const data = new FormData();
-          data.append("logo", logo.value);
-          data.append("id", empresa.value.id);
-          data.append("nome", empresa.value.nome);
-          data.append("titulo", empresa.value.titulo);
-          data.append("grupo", empresa.value.grupo);
-          data.append("ativo", empresa.value.ativo);
-          data.append("pendente", empresa.value.pendente);
-          data.append("tipos_empresa", empresa.value.tipos_empresa);
-          data.append("tipos_projeto", empresa.value.tipos_projeto);
-          data.append("descricao", empresa.value.descricao);
-          data.append("telefone", empresa.value.telefone);
-          data.append("telemovel", empresa.value.telemovel);
-          data.append("email", empresa.value.email);
-          data.append("website", empresa.value.website);
-          data.append("facebook", empresa.value.facebook);
-          data.append("twitter", empresa.value.twitter);
-          data.append("linkedin", empresa.value.linkedin);
-          await postFormAuth("empresas/update.php", data);
-          mostraEditor.value = false;
-          tableRef.value.requestServerInteraction();
+          const data = new FormData()
+          data.append('logo', logo.value)
+          data.append('id', empresa.value.id)
+          data.append('nome', empresa.value.nome)
+          data.append('titulo', empresa.value.titulo)
+          data.append('grupo', empresa.value.grupo)
+          data.append('ativo', empresa.value.ativo)
+          data.append('pendente', empresa.value.pendente)
+          data.append('tipos_empresa', empresa.value.tipos_empresa)
+          data.append('tipos_projeto', empresa.value.tipos_projeto)
+          data.append('descricao', empresa.value.descricao)
+          data.append('telefone', empresa.value.telefone)
+          data.append('telemovel', empresa.value.telemovel)
+          data.append('email', empresa.value.email)
+          data.append('website', empresa.value.website)
+          data.append('facebook', empresa.value.facebook)
+          data.append('twitter', empresa.value.twitter)
+          data.append('linkedin', empresa.value.linkedin)
+          await postFormAuth('empresas/update.php', data)
+          mostraEditor.value = false
+          tableRef.value.requestServerInteraction()
         } catch {
-          $q.notify({ message: "Não foi possível guardar", type: "warning" });
+          $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
-      },
-    };
-  },
-});
+      }
+    }
+  }
+})
 </script>
