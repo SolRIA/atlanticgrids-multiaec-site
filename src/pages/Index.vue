@@ -152,13 +152,7 @@
       </q-carousel-slide>
     </q-carousel>
 
-    <div style="height: 5px">
-      <div class="row">
-        <div style="height: 5px" class="col-4 bg-primary"></div>
-        <div style="height: 5px" class="col-4 bg-secondary"></div>
-        <div style="height: 5px" class="col-4 bg-accent"></div>
-      </div>
-    </div>
+    <SimpleSeparator />
 
     <div class="quote q-mb-lg">
       <div class="q-pt-xl full-width full-height flex flex-center">
@@ -359,9 +353,10 @@ import {
   mdiAlphaMCircleOutline
 } from '@quasar/extras/mdi-v6'
 import Section from 'src/components/Section.vue'
+import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
-  components: { Section },
+  components: { Section, SimpleSeparator },
   setup() {
     const mainSlide = ref(1)
 
