@@ -54,13 +54,7 @@
     </q-drawer>
 
     <q-page-container>
-      <div style="height: 5px">
-        <div class="row">
-          <div style="height: 5px" class="col-4 bg-primary"></div>
-          <div style="height: 5px" class="col-4 bg-secondary"></div>
-          <div style="height: 5px" class="col-4 bg-accent"></div>
-        </div>
-      </div>
+      <SimpleSeparator />
       <router-view />
     </q-page-container>
   </q-layout>
@@ -77,7 +71,7 @@
 }
 
 .hover-underline-animation:after {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   transform: scaleX(0);
@@ -96,24 +90,25 @@
 </style>
 
 <script>
-import { defineComponent, ref } from "vue";
-import { mdiMenu } from "@quasar/extras/mdi-v6";
+import { defineComponent, ref } from 'vue'
+import { mdiMenu } from '@quasar/extras/mdi-v6'
+import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
-  name: "MainLayout",
+  name: 'MainLayout',
   setup() {
-    const leftDrawerOpen = ref(false);
+    const leftDrawerOpen = ref(false)
     const menuList = ref([
-      { url: "/associados", nome: "Associados" },
-      { url: "/projetos", nome: "Projetos" },
-      { url: "/login", nome: "Login" },
-    ]);
-
+      { url: '/associados', nome: 'Associados' },
+      { url: '/projetos', nome: 'Projetos' },
+      { url: '/login', nome: 'Login' }
+    ])
     return {
       mdiMenu,
       leftDrawerOpen,
-      menuList,
-    };
+      menuList
+    }
   },
-});
+  components: { SimpleSeparator }
+})
 </script>
