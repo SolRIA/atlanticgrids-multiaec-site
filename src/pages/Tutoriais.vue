@@ -8,6 +8,14 @@
       </q-card-section>
     </q-card>
 
+    <q-btn-toggle
+      v-model="banco"
+      push
+      rounded
+      :options="bancos"
+      class="q-mb-lg"
+    />
+
     <q-list bordered padding>
       <q-item
         v-for="s in studies"
@@ -49,12 +57,34 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { mdiFilePdfBox, mdiDownload } from '@quasar/extras/mdi-v6'
+import { get } from 'boot/api'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   setup() {
-    // https://openknowledge.worldbank.org/bitstream/handle/10986/36289/9781464818004.pdf
+    const $q = useQuasar()
+    onMounted(async () => {
+      try {
+        const banks = await get('bancos/read.php')
+
+        bancos.value = banks.map(function (b) {
+          return { label: b.nome, value: b.id }
+        })
+        banco.value = bancos.value[0].value
+      } catch (e) {
+        console.error(e)
+        $q.notify({
+          message: 'Não foi possível efetuar obter os bancos',
+          type: 'warning'
+        })
+      }
+    })
+
+    const bancos = ref([])
+    const banco = ref({})
+
     const studies = [
       {
         link: 'https://openknowledge.worldbank.org/bitstream/handle/10986/36289/9781464818004.pdf',
@@ -93,6 +123,8 @@ export default defineComponent({
     return {
       mdiFilePdfBox,
       mdiDownload,
+      bancos,
+      banco,
       studies,
       videos
     }

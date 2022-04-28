@@ -176,6 +176,20 @@
       <div class="row items-stretch justify-center q-col-gutter-lg">
         <div>
           <Section
+            :icon="mdiInformationOutline"
+            link="/projeto"
+            title="Projeto"
+            btnText="Ver mais"
+            description="Descrição do projeto, dos seus objetivos e do que se pretende atingir com esta iniciativa"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="q-ma-lg" style="margin-top: 80px">
+      <div class="row items-stretch justify-center q-col-gutter-lg">
+        <div>
+          <Section
             :icon="mdiAlphaMCircleOutline"
             link="/mercado"
             title="Mercado das Multilaterais"
@@ -183,16 +197,6 @@
             description="Descrição do mercado das multilaterais financeiras, o seu
             potencial e o que as empresas portuguesas podem beneficiar em
             explorar estas oportunidades"
-          />
-        </div>
-
-        <div>
-          <Section
-            :icon="mdiInformationOutline"
-            link="/projeto"
-            title="Projeto"
-            btnText="Ver mais"
-            description="Descrição do projeto, dos seus objetivos e do que se pretende atingir com esta iniciativa"
           />
         </div>
 
