@@ -41,10 +41,6 @@
             outlined
             dense
             class="col-xs-12 col-md-3"
-            option-value="nome"
-            option-label="nome"
-            emit-value
-            map-options
             clearable
           />
 
@@ -362,7 +358,6 @@ export default defineComponent({
       try {
         paises.value = await get('paises/read.php')
       } catch (error) {
-        console.log(error)
         $q.notify({
           message: 'Não foi possível obter os países',
           type: 'warning'
@@ -385,7 +380,7 @@ export default defineComponent({
       tableRef.value.requestServerInteraction()
     })
 
-    const paises = ref([])
+    let paises = ref([])
     const pais = ref(null)
 
     const bancos = ref([])

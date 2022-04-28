@@ -73,7 +73,6 @@
             v-model="projeto.pais"
             :options="paises"
             clearable
-            map-options
             class="col-xs-12 col-md-4"
           />
 
@@ -219,7 +218,7 @@ export default defineComponent({
           id: 0,
           nome: '',
           tipos: [],
-          pais_id: null,
+          pais: null,
           banco_id: null,
           ativo: true,
           referencia: '',
