@@ -256,7 +256,9 @@
       <q-card style="min-width: 60vw">
         <q-card-section class="row items-center q-pb-md bg-primary text-white">
           <div class="text-h6">
-            <q-chip color="positive">{{ projeto.referencia }}</q-chip>
+            <q-chip color="positive" text-color="white">{{
+              projeto.referencia
+            }}</q-chip>
             {{ projeto.nome }}
           </div>
           <q-space />
@@ -522,7 +524,9 @@ export default defineComponent({
       return bancos.value.find((p) => p.id === id).codigo
     }
     const getSentEmails = async (p) => {
-      projeto.value = p
+      if (typeof p !== 'undefined') {
+        projeto.value = p
+      }
       mostraEmailsEnviados.value = true
 
       try {
