@@ -3,7 +3,12 @@
     <q-card style="min-width: 60vw">
       <q-card-section class="row items-center q-pb-md bg-primary text-white">
         <q-icon :name="mdiAccountHardHat" left size="2rem" />
-        <div class="text-h6">{{ projeto.nome }} ({{ projeto.id }})</div>
+        <div class="text-h6">
+          <q-chip color="positive" text-color="white">
+            {{ projeto.referencia }}
+          </q-chip>
+          {{ projeto.nome }}
+        </div>
         <q-space />
         <q-btn :icon="mdiWindowClose" flat dense v-close-popup />
       </q-card-section>
