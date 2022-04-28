@@ -109,13 +109,21 @@
       @request="onServerRequest"
     >
       <template v-slot:top-right>
-        <q-btn-group outline>
+        <q-btn-toggle
+          v-model="actionFilterMain"
+          no-caps
+          rounded
+          clearable
+          toggle-color="positive"
+          :options="accoesCliente"
+          v-if="!permissaoEdicao"
+        />
+        <q-btn-group outline v-if="permissaoEdicao">
           <q-btn
             label="Novo"
             @click="onNovo"
             :icon="mdiPlusBoxOutline"
             color="positive"
-            v-if="permissaoEdicao"
           />
           <q-btn @click="refresh" :icon="mdiRefresh" outline color="positive" />
         </q-btn-group>
@@ -172,7 +180,6 @@
                   clickable
                   v-close-popup
                   @click="onViewProject(props.row)"
-                  v-if="!permissaoEdicao"
                 >
                   <q-item-section avatar>
                     <q-icon :name="mdiEye" />
@@ -191,55 +198,10 @@
                   </q-item-section>
                   <q-item-section>Emails Enviados</q-item-section>
                 </q-item>
-
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="getAction(props.row)"
-                  v-if="!permissaoEdicao"
-                >
-                  <q-item-section avatar>
-                    <q-icon :name="mdiEmail" />
-                  </q-item-section>
-                  <q-item-section>Emails Enviados</q-item-section>
-                </q-item>
               </q-list>
             </q-menu>
           </q-btn>
         </q-td>
-      </template>
-
-      <template v-slot:item="props">
-        <div
-          class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
-          :style="props.selected ? 'transform: scale(0.98);' : ''"
-        >
-          <q-card class="full-height">
-            <q-img :src="props.row.imagem" class="my-card-img">
-              <div class="absolute-bottom">
-                <div class="text-h6">
-                  {{ props.row.nome }} ({{ props.row.id }})
-                </div>
-                <div class="text-subtitle2">{{ props.row.descricao }}</div>
-              </div>
-            </q-img>
-
-            <q-card-actions align="right" class="vertical-bottom">
-              <q-chip outline square color="positive" text-color="white">
-                {{ props.row.pais }}
-              </q-chip>
-              <q-chip outline square color="primary" text-color="white">
-                {{ props.row.data }}
-              </q-chip>
-              <q-btn
-                :icon="mdiPencil"
-                flat
-                color="positive"
-                @click="onEditProject(props.row)"
-              />
-            </q-card-actions>
-          </q-card>
-        </div>
       </template>
 
       <template v-slot:no-data="{ message }">
@@ -256,9 +218,9 @@
       <q-card style="min-width: 60vw">
         <q-card-section class="row items-center q-pb-md bg-primary text-white">
           <div class="text-h6">
-            <q-chip color="positive" text-color="white">{{
-              projeto.referencia
-            }}</q-chip>
+            <q-chip color="positive" text-color="white">
+              {{ projeto.referencia }}
+            </q-chip>
             {{ projeto.nome }}
           </div>
           <q-space />
@@ -289,18 +251,13 @@
                 no-caps
                 rounded
                 toggle-color="positive"
-                :options="[
-                  { label: 'Com interesse', value: 1 },
-                  { label: 'Sem interesse', value: 2 },
-                  { label: 'Precisa apoio', value: 3 },
-                  { label: 'Não respondeu', value: 4 }
-                ]"
+                :options="accoes"
               />
             </template>
             <template v-slot:body-cell-accao="props">
               <q-td :props="props" auto-width>
                 <q-chip color="positive" text-color="white">
-                  {{ getActionName(props.row.accao) }}
+                  {{ nomeAccao(props.row.accao) }}
                 </q-chip>
               </q-td>
             </template>
@@ -331,6 +288,7 @@ import {
 } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
 import { get, post, getAuth, apiPublicUrl } from 'boot/api'
+import { accoes, nomeAccao, accoesCliente } from 'src/models/accoes-projetos'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
 import ProjectView from 'src/components/Registed/ProjetoView.vue'
 
@@ -395,12 +353,16 @@ export default defineComponent({
     const filtro = ref(null)
 
     const actionFilter = ref(1)
+    const actionFilterMain = ref(null)
 
     watch(pais, (_current, _old) => {
       tableRef.value.requestServerInteraction()
     })
     watch(actionFilter, (_current, _old) => {
       getSentEmails()
+    })
+    watch(actionFilterMain, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
     })
     watch(banco, (_current, _old) => {
       tableRef.value.requestServerInteraction()
@@ -499,7 +461,8 @@ export default defineComponent({
           filter: filtro.value,
           pais: pais.value,
           banco_id: banco.value,
-          tipo_id: tipo.value
+          tipo_id: tipo.value,
+          accao: actionFilterMain.value
         })
 
         projetos.value = result.rows
@@ -548,19 +511,6 @@ export default defineComponent({
 
       loadingSentEmails.value = false
     }
-    const getAction = (project) => {}
-    const getActionName = (id) => {
-      switch (id) {
-        case 1:
-          return 'Com interesse'
-        case 2:
-          return 'Sem interesse'
-        case 3:
-          return 'Precisa apoio'
-        default:
-          return 'Não respondeu'
-      }
-    }
 
     return {
       mdiPencil,
@@ -593,6 +543,9 @@ export default defineComponent({
       emailsEnviados,
       projetoEscolhido,
       actionFilter,
+      actionFilterMain,
+      accoes,
+      accoesCliente,
       columns: [
         {
           name: 'referencia',
@@ -640,14 +593,8 @@ export default defineComponent({
       openProjectLink,
       getBanco,
       getSentEmails,
-      getAction,
-      getActionName
+      nomeAccao
     }
   }
 })
 </script>
-
-<style lang="sass" scoped>
-.my-card-img
-  height: 235px
-</style>
