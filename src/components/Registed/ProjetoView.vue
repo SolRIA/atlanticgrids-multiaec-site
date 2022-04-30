@@ -92,7 +92,7 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section v-if="mostraAccoes">
         <h6>Indique o seu interesse neste projeto</h6>
         <div class="flex flex-center">
           <q-btn-toggle
@@ -135,7 +135,8 @@ export default defineComponent({
     p: { type: Object, required: true },
     tipos: { type: Array, required: true },
     paises: { type: Array, required: true },
-    bancos: { type: Array, required: true }
+    bancos: { type: Array, required: true },
+    mostraAccoes: { type: Boolean, required: true }
   },
   emits: [
     // REQUIRED; need to specify some events that your
