@@ -289,12 +289,15 @@ import {
 import { date, useQuasar } from 'quasar'
 import { get, post, getAuth, apiPublicUrl } from 'boot/api'
 import { accoes, nomeAccao, accoesCliente } from 'src/models/accoes-projetos'
+import { useRoute } from 'vue-router'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
 import ProjectView from 'src/components/Registed/ProjetoView.vue'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
+    const $route = useRoute()
+
     const tableRef = ref(null)
     const tableActionsRef = ref(null)
     const loading = ref(false)
@@ -338,6 +341,12 @@ export default defineComponent({
         tipo.value = await getAuth('empresas/read-tipos-projeto.php')
       }
       tableRef.value.requestServerInteraction()
+
+      const projetoId = parseInt($route.query.id)
+      if (projetoId > 0) {
+        // abrir o projeto
+        onViewProject({ id: projetoId })
+      }
     })
 
     let paises = ref([])
@@ -441,7 +450,8 @@ export default defineComponent({
           p: project,
           tipos: tipos.value,
           paises: paises.value,
-          bancos: bancos.value
+          bancos: bancos.value,
+          mostraAccoes: !permissaoEdicao.value
         }
       }).onOk(async () => {
         tableRef.value.requestServerInteraction()
