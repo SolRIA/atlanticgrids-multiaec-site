@@ -1,16 +1,11 @@
 <template>
-  <q-layout view="hHh Lpr fFf"> <!-- Be sure to play with the Layout demo on docs -->
+  <q-layout view="hHh Lpr fFf">
+    <!-- Be sure to play with the Layout demo on docs -->
 
     <!-- (Optional) The Header -->
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          round
-          dense
-          :icon="mdiMenu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat round dense :icon="mdiMenu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
           {{ username }}
@@ -18,15 +13,8 @@
 
         <q-space />
 
-        <q-btn
-          flat
-          round
-          dense
-          :icon="mdiLogout"
-          @click="onLogout"
-        />
+        <q-btn flat round dense :icon="mdiLogout" @click="onLogout" />
       </q-toolbar>
-
     </q-header>
 
     <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
@@ -38,11 +26,18 @@
       mini-to-overlay
       @mouseover="miniState = false"
       @mouseout="miniState = true"
-      class="bg-grey-2">
+      class="bg-grey-2"
+    >
       <q-scroll-area class="fit">
         <q-list class="menu-list">
           <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item clickable exact v-ripple active-class="text-white" :to="menuItem.url">
+            <q-item
+              clickable
+              exact
+              v-ripple
+              active-class="text-white"
+              :to="menuItem.url"
+            >
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
@@ -51,7 +46,6 @@
               </q-item-section>
             </q-item>
           </template>
-
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -60,7 +54,6 @@
       <!-- This is where pages get injected -->
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
@@ -79,7 +72,7 @@ import { getAuth } from 'boot/api'
 import { mdiMenu, mdiLogout } from '@quasar/extras/mdi-v6'
 
 export default {
-  setup () {
+  setup() {
     const $router = useRouter()
 
     const leftDrawerOpen = ref(false)
@@ -89,10 +82,9 @@ export default {
       try {
         menuList.value = await getAuth('menu/read.php')
       } catch (e) {
-        console.log(e)
+        console.error(e)
       }
     })
-
 
     return {
       mdiMenu,
@@ -101,13 +93,13 @@ export default {
       miniState: ref(true),
       menuList,
       username: localStorage.getItem('login'),
-      toggleLeftDrawer () {
+      toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
-      onLogout () {
+      onLogout() {
         localStorage.removeItem('login')
         localStorage.removeItem('token')
-        $router.push('/login');
+        $router.push('/login')
       }
     }
   }

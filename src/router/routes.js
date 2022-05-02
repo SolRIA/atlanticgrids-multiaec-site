@@ -65,6 +65,14 @@ const routes = [
       {
         path: 'emails',
         component: () => import('src/pages/Registed/Emails.vue')
+      },
+      {
+        path: 'noticias',
+        component: () => import('src/pages/Registed/Noticias.vue')
+      },
+      {
+        path: 'tutoriais',
+        component: () => import('src/pages/Registed/Tutoriais.vue')
       }
     ]
   },
