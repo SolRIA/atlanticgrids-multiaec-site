@@ -215,7 +215,7 @@
 
         <div>
           <Section
-            :icon="mdiSchoolOutline"
+            :icon="mdiAccountSchoolOutline"
             link="/tutoriais"
             title="Tutoriais"
             btnText="Ver mais"
@@ -353,7 +353,7 @@ import {
   mdiEmail,
   mdiInformationOutline,
   mdiNewspaperVariantOutline,
-  mdiSchoolOutline,
+  mdiAccountSchoolOutline,
   mdiAlphaMCircleOutline
 } from '@quasar/extras/mdi-v6'
 import Section from 'src/components/Section.vue'
@@ -374,7 +374,7 @@ export default defineComponent({
       mdiEmail,
       mdiInformationOutline,
       mdiNewspaperVariantOutline,
-      mdiSchoolOutline,
+      mdiAccountSchoolOutline,
       mdiAlphaMCircleOutline,
       mainSlide
     }
