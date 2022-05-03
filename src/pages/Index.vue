@@ -180,7 +180,7 @@
             link="/projeto"
             title="Projeto"
             btnText="Ver mais"
-            description="Descrição do projeto, dos seus objetivos e do que se pretende atingir com esta iniciativa"
+            description="O Projeto MULTI AEC é um projeto promovido pelo Cluster AEC, que visa o reforço das atividades de cooperação e parceria no sector da Arquitetura Engenharia e Construção, nos mercados das Multilaterais Financeiras."
           />
         </div>
       </div>
@@ -194,9 +194,7 @@
             link="/mercado"
             title="Mercado das Multilaterais"
             btnText="Ver mais"
-            description="Descrição do mercado das multilaterais financeiras, o seu
-            potencial e o que as empresas portuguesas podem beneficiar em
-            explorar estas oportunidades"
+            description="As Multilaterais Financeiras são Instituições Financeiras Internacionais (IFI), que promovem o desenvolvimento económico e social, em países em desenvolvimento, tendo como objetivo a redução dos níveis de pobreza nos países de operação."
           />
         </div>
 
