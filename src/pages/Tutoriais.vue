@@ -8,58 +8,87 @@
       </q-card-section>
     </q-card>
 
-    <q-btn-toggle
-      v-model="banco"
-      push
-      rounded
-      :options="bancos"
-      class="q-mb-lg"
-    />
+    <div class="q-pa-lg flex flex-center">
+      <q-btn-toggle v-model="banco" push rounded :options="bancos" />
+    </div>
 
-    <q-list bordered padding>
-      <q-item
-        v-for="s in estudos"
-        :key="s.link"
-        clickable
-        v-ripple
-        target="_blank"
-        :href="s.link"
-      >
-        <q-item-section avatar>
-          <q-avatar rounded size="100px">
-            <img :src="s.imagem" />
-          </q-avatar>
-        </q-item-section>
+    <h3>Estudos</h3>
+    <q-card flat bordered>
+      <q-list>
+        <q-item
+          v-for="s in estudos"
+          :key="s.link"
+          clickable
+          v-ripple
+          target="_blank"
+          :href="s.link"
+        >
+          <q-item-section avatar>
+            <q-avatar rounded size="100px">
+              <img :src="s.imagem" />
+            </q-avatar>
+          </q-item-section>
 
-        <q-item-section>
-          <q-item-label>{{ s.titulo }}</q-item-label>
-          <q-item-label caption lines="2">{{ s.descricao }}</q-item-label>
-        </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ s.titulo }}</q-item-label>
+            <q-item-label caption lines="2">{{ s.descricao }}</q-item-label>
+          </q-item-section>
 
-        <q-item-section side>
-          <q-btn
-            :icon="mdiDownload"
-            flat
-            text-color="primary"
-            target="_blank"
-            :href="s.link"
-          />
-        </q-item-section>
-      </q-item>
-    </q-list>
+          <q-item-section side>
+            <q-btn
+              :icon="mdiDownload"
+              flat
+              text-color="primary"
+              target="_blank"
+              :href="s.link"
+            />
+          </q-item-section>
+        </q-item>
+      </q-list>
+      <q-inner-loading :showing="loadEstudos">
+        <q-spinner-gears size="50px" color="primary" />
+      </q-inner-loading>
+    </q-card>
 
-    <div class="row justify-center q-col-gutter-md q-pt-lg">
-      <div v-for="v in videos" :key="v.url">
-        <q-video :src="v.url" class="col-xs-12 col-sm-4 col-md-2" />
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination
+        v-model="paginacaoEstudos.pagina"
+        :max="paginacaoEstudos.total"
+        :max-pages="6"
+        boundary-numbers
+        direction-links
+      />
+    </div>
+
+    <h3>Webinars</h3>
+
+    <q-card flat>
+      <div class="row justify-center q-col-gutter-md q-pt-lg">
+        <div v-for="v in videos" :key="v.url">
+          <q-video :src="v.url" class="col-xs-12 col-sm-4 col-md-2" />
+        </div>
       </div>
+      <q-inner-loading :showing="loadVideos">
+        <q-spinner-gears size="50px" color="primary" />
+      </q-inner-loading>
+    </q-card>
+
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination
+        v-model="paginacaoVideos.pagina"
+        :max="paginacaoVideos.total"
+        :max-pages="6"
+        boundary-numbers
+        direction-links
+      />
     </div>
   </q-page>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { mdiFilePdfBox, mdiDownload } from '@quasar/extras/mdi-v6'
-import { get } from 'boot/api'
+import { post, get } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -80,9 +109,58 @@ export default defineComponent({
           type: 'warning'
         })
       }
+    })
 
+    const bancos = ref([])
+    const banco = ref({})
+
+    const estudos = ref([])
+    const videos = ref([])
+
+    const loadEstudos = ref(false)
+    const loadVideos = ref(false)
+
+    const paginacaoEstudos = ref({
+      total: 0,
+      pagina: 1
+    })
+    const paginacaoVideos = ref({
+      total: 0,
+      pagina: 1
+    })
+
+    watch(banco, async (_current, _old) => {
+      paginacaoEstudos.value.pagina = 1
+      paginacaoVideos.value.pagina = 1
+      await obterEstudos()
+      await obterVideos()
+    })
+
+    watch(
+      () => paginacaoEstudos.value.pagina,
+      async (_current, _old) => {
+        await obterEstudos()
+      }
+    )
+    watch(
+      () => paginacaoVideos.value.pagina,
+      async (_current, _old) => {
+        await obterVideos()
+      }
+    )
+
+    const obterEstudos = async () => {
+      loadEstudos.value = true
       try {
-        estudos.value = await get('tutoriais/read-estudos.php')
+        const data = await post('tutoriais/read-estudos.php', {
+          pagina: paginacaoEstudos.value.pagina,
+          total: paginacaoEstudos.value.total,
+          banco_id: banco.value,
+          filtro: null
+        })
+
+        estudos.value = data.rows
+        paginacaoEstudos.value.total = data.count
       } catch (e) {
         console.error(e)
         $q.notify({
@@ -90,9 +168,21 @@ export default defineComponent({
           type: 'warning'
         })
       }
+      loadEstudos.value = false
+    }
 
+    const obterVideos = async () => {
+      loadVideos.value = true
       try {
-        videos.value = await get('tutoriais/read-videos.php')
+        const data = await post('tutoriais/read-videos.php', {
+          pagina: paginacaoVideos.value.pagina,
+          total: paginacaoVideos.value.total,
+          banco_id: banco.value,
+          filtro: null
+        })
+
+        videos.value = data.rows
+        paginacaoVideos.value.total = data.count
       } catch (e) {
         console.error(e)
         $q.notify({
@@ -100,22 +190,20 @@ export default defineComponent({
           type: 'warning'
         })
       }
-    })
-
-    const bancos = ref([])
-    const banco = ref({})
-
-    const estudos = ref([])
-
-    const videos = ref([])
+      loadVideos.value = false
+    }
 
     return {
       mdiFilePdfBox,
       mdiDownload,
+      loadEstudos,
+      loadVideos,
       bancos,
       banco,
       estudos,
-      videos
+      videos,
+      paginacaoEstudos,
+      paginacaoVideos
     }
   }
 })

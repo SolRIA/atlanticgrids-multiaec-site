@@ -229,54 +229,14 @@
 
     <div class="contact_us" id="id_contact_us">
       <div style="background-color: #a6b3bf !important">
-        <div class="row" id="id_news">
-          <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-            <h5 class="text-center text-white">
-              Contact Us
-              <br />
-              <span class="text-center text-white text-h6">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </span>
-            </h5>
-          </div>
-        </div>
-        <div class="row flex q-pb-md">
-          <div
-            class="col-sm-6 col-xs-12 q-gutter-lg q-px-md q-pb-none q-ma-none"
-          >
-            <q-input bg-color="white" outlined label="Nome *" />
-            <q-input bg-color="white" outlined label="Email *" />
-            <q-input bg-color="white" outlined label="Contato *" />
-          </div>
-          <div
-            class="col-sm-6 col-xs-12 q-gutter-lg q-px-md q-pb-none q-ma-none"
-          >
-            <q-input
-              type="textarea"
-              bg-color="white"
-              outlined
-              label="Mensagem *"
-            >
-            </q-input>
-          </div>
-        </div>
-        <div class="row flex flex-center text-center q-pb-xl q-mt-md">
-          <div>
+        <div class="row flex flex-center text-center q-pb-xl q-mt-xl">
+          <div class="q-pt-xl">
             <q-img src="/images/logo-ptpc.png" style="width: 160px" />
             <q-img src="/images/logo-aec.png" style="width: 160px" />
             <q-img
               src="/images/pt2020.svg"
               style="width: 180px"
               class="q-mx-md"
-            />
-          </div>
-          <div class="align-right">
-            <q-btn
-              rounded
-              outline
-              :icon="mdiSend"
-              class="action-btn btn-white"
-              label="Enviar mensagem"
             />
           </div>
         </div>

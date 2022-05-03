@@ -65,6 +65,7 @@
             debounce="500"
             outlined
             dense
+            clearable
             class="col-xs-12 col-md-3"
           />
 
@@ -74,6 +75,7 @@
             debounce="500"
             outlined
             dense
+            clearable
             class="col-xs-12 col-md-3"
           />
         </div>
@@ -104,20 +106,67 @@
           v-model="actionFilter"
           no-caps
           rounded
-          toggle-color="positive"
-          :options="[
-            { label: 'Com interesse', value: 1 },
-            { label: 'Sem interesse', value: 2 },
-            { label: 'Precisa apoio', value: 3 },
-            { label: 'Não respondeu', value: 4 }
-          ]"
-        />
+          clearable
+          toggle-color="grey-8"
+          :options="accoes"
+        >
+          <template v-slot:one>
+            <div class="row items-center">
+              <div class="col-12 text-center">Com interesse</div>
+              <div style="height: 4px" class="col-12 bg-accent"></div>
+            </div>
+          </template>
+          <template v-slot:two>
+            <div class="row items-center">
+              <div class="col-12 text-center">Sem interesse</div>
+              <div style="height: 4px" class="col-12 bg-primary"></div>
+            </div>
+          </template>
+          <template v-slot:three>
+            <div class="row items-center">
+              <div class="col-12 text-center">Precisa apoio</div>
+              <div style="height: 4px" class="col-12 bg-warning"></div>
+            </div>
+          </template>
+          <template v-slot:four>
+            <div class="row items-center">
+              <div class="col-12 text-center">Não respondeu</div>
+              <div style="height: 4px" class="col-12 bg-blue-grey-2"></div>
+            </div>
+          </template>
+          <template v-slot:five>
+            <div class="row items-center">
+              <div class="col-12 text-center">Abriu link</div>
+              <div style="height: 4px" class="col-12 bg-info"></div>
+            </div>
+          </template>
+        </q-btn-toggle>
+      </template>
+      <template v-slot:body-cell-referencia="props">
+        <q-td :props="props">
+          <q-btn
+            :label="props.row.referencia"
+            @click="filtraReferenciaProjeto(props.row.referencia)"
+            flat
+          />
+        </q-td>
+      </template>
+      <template v-slot:body-cell-abriu_link_banco="props">
+        <q-td :props="props">
+          <q-checkbox
+            v-model="props.row.abriu_link_banco"
+            color="info"
+            disable
+          />
+        </q-td>
       </template>
       <template v-slot:body-cell-accao="props">
         <q-td :props="props" auto-width>
-          <q-chip color="positive" text-color="white">
-            {{ getActionName(props.row.accao) }}
-          </q-chip>
+          <q-btn
+            round
+            :color="corAccao(props.row.accao)"
+            @click="filtraAccao(props.row.accao)"
+          />
         </q-td>
       </template>
     </q-table>
@@ -128,6 +177,7 @@
 import { defineComponent, ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { get, post } from 'boot/api'
+import { accoes, corAccao } from 'src/models/accoes-projetos'
 
 export default defineComponent({
   setup() {
@@ -175,7 +225,7 @@ export default defineComponent({
     const filtroProjeto = ref(null)
     const filtro = ref(null)
 
-    const actionFilter = ref(1)
+    const actionFilter = ref(0)
 
     watch(actionFilter, (_current, _old) => {
       tableActionsRef.value.requestServerInteraction()
@@ -192,6 +242,16 @@ export default defineComponent({
     watch(filtro, (_current, _old) => {
       tableActionsRef.value.requestServerInteraction()
     })
+
+    const filtraReferenciaProjeto = (referencia) => {
+      if (filtroProjeto.value === null) filtroProjeto.value = referencia
+      else filtroProjeto.value = null
+    }
+    const filtraAccao = (accao) => {
+      if (actionFilter.value === null || actionFilter.value === 0)
+        actionFilter.value = accao
+      else actionFilter.value = null
+    }
 
     const onServerRequest = async (props) => {
       try {
@@ -225,22 +285,11 @@ export default defineComponent({
       }
       loading.value = false
     }
-    const getActionName = (id) => {
-      switch (id) {
-        case 1:
-          return 'Com interesse'
-        case 2:
-          return 'Sem interesse'
-        case 3:
-          return 'Precisa apoio'
-        default:
-          return 'Não respondeu'
-      }
-    }
 
     return {
       tableActionsRef,
       pagination,
+      accoes,
       bancos,
       banco,
       tipos,
@@ -260,14 +309,22 @@ export default defineComponent({
         },
         { name: 'accao', label: 'Açcão', field: 'accao', align: 'center' },
         {
+          name: 'abriu_link_banco',
+          label: 'Abriu link',
+          field: 'abriu_link_banco',
+          align: 'center'
+        },
+        {
           name: 'emails_enviados',
           label: 'Emails enviados',
           field: 'emails_enviados',
           align: 'right'
         }
       ],
+      corAccao,
       onServerRequest,
-      getActionName
+      filtraReferenciaProjeto,
+      filtraAccao
     }
   }
 })

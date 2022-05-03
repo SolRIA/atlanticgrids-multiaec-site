@@ -75,6 +75,7 @@
             debounce="500"
             outlined
             dense
+            clearable
             class="col-xs-12 col-md-3"
           />
 
@@ -117,7 +118,33 @@
           toggle-color="positive"
           :options="accoesCliente"
           v-if="!permissaoEdicao"
-        />
+        >
+          <template v-slot:one>
+            <div class="row items-center">
+              <div class="col-12 text-center">Com interesse</div>
+              <div style="height: 4px" class="col-12 bg-accent"></div>
+            </div>
+          </template>
+          <template v-slot:two>
+            <div class="row items-center">
+              <div class="col-12 text-center">Sem interesse</div>
+              <div style="height: 4px" class="col-12 bg-primary"></div>
+            </div>
+          </template>
+          <template v-slot:three>
+            <div class="row items-center">
+              <div class="col-12 text-center">Preciso apoio</div>
+              <div style="height: 4px" class="col-12 bg-warning"></div>
+            </div>
+          </template>
+          <template v-slot:four>
+            <div class="row items-center">
+              <div class="col-12 text-center">Não respondi</div>
+              <div style="height: 4px" class="col-12 bg-blue-grey-2"></div>
+            </div>
+          </template>
+        </q-btn-toggle>
+
         <q-btn-group outline v-if="permissaoEdicao">
           <q-btn
             label="Novo"
@@ -250,15 +277,61 @@
                 v-model="actionFilter"
                 no-caps
                 rounded
-                toggle-color="positive"
+                clearable
+                toggle-color="grey-8"
                 :options="accoes"
-              />
+              >
+                <template v-slot:one>
+                  <div class="row items-center">
+                    <div class="col-12 text-center">Com interesse</div>
+                    <div style="height: 4px" class="col-12 bg-accent"></div>
+                  </div>
+                </template>
+                <template v-slot:two>
+                  <div class="row items-center">
+                    <div class="col-12 text-center">Sem interesse</div>
+                    <div style="height: 4px" class="col-12 bg-primary"></div>
+                  </div>
+                </template>
+                <template v-slot:three>
+                  <div class="row items-center">
+                    <div class="col-12 text-center">Precisa apoio</div>
+                    <div style="height: 4px" class="col-12 bg-warning"></div>
+                  </div>
+                </template>
+                <template v-slot:four>
+                  <div class="row items-center">
+                    <div class="col-12 text-center">Não respondeu</div>
+                    <div
+                      style="height: 4px"
+                      class="col-12 bg-blue-grey-2"
+                    ></div>
+                  </div>
+                </template>
+                <template v-slot:five>
+                  <div class="row items-center">
+                    <div class="col-12 text-center">Abriu link</div>
+                    <div style="height: 4px" class="col-12 bg-info"></div>
+                  </div>
+                </template>
+              </q-btn-toggle>
             </template>
             <template v-slot:body-cell-accao="props">
               <q-td :props="props" auto-width>
-                <q-chip color="positive" text-color="white">
-                  {{ nomeAccao(props.row.accao) }}
-                </q-chip>
+                <q-btn
+                  round
+                  :color="corAccao(props.row.accao)"
+                  @click="filtraAccao(props.row.accao)"
+                />
+              </q-td>
+            </template>
+            <template v-slot:body-cell-abriu_link_banco="props">
+              <q-td :props="props">
+                <q-checkbox
+                  v-model="props.row.abriu_link_banco"
+                  color="info"
+                  disable
+                />
               </q-td>
             </template>
           </q-table>
@@ -287,8 +360,8 @@ import {
   mdiWindowClose
 } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
-import { get, post, getAuth, apiPublicUrl } from 'boot/api'
-import { accoes, nomeAccao, accoesCliente } from 'src/models/accoes-projetos'
+import { get, post, postAuth, getAuth, apiPublicUrl } from 'boot/api'
+import { accoes, accoesCliente, corAccao } from 'src/models/accoes-projetos'
 import { useRoute } from 'vue-router'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
 import ProjectView from 'src/components/Registed/ProjetoView.vue'
@@ -361,7 +434,7 @@ export default defineComponent({
     const filtroProjeto = ref(null)
     const filtro = ref(null)
 
-    const actionFilter = ref(1)
+    const actionFilter = ref(0)
     const actionFilterMain = ref(null)
 
     watch(pais, (_current, _old) => {
@@ -490,7 +563,8 @@ export default defineComponent({
       }
       loading.value = false
     }
-    const openProjectLink = (row) => {
+    const openProjectLink = async (row) => {
+      await postAuth('projetos/update-link-opened.php', { projeto_id: row.id })
       window.open(row.link, '_blank')
     }
     const getBanco = (id) => {
@@ -520,6 +594,11 @@ export default defineComponent({
       }
 
       loadingSentEmails.value = false
+    }
+    const filtraAccao = (accao) => {
+      if (actionFilter.value === null || actionFilter.value === 0)
+        actionFilter.value = accao
+      else actionFilter.value = null
     }
 
     return {
@@ -588,6 +667,12 @@ export default defineComponent({
         { name: 'nome', label: 'Empresa', field: 'nome', align: 'left' },
         { name: 'accao', label: 'Açcão', field: 'accao', align: 'center' },
         {
+          name: 'abriu_link_banco',
+          label: 'Abriu link',
+          field: 'abriu_link_banco',
+          align: 'center'
+        },
+        {
           name: 'emails_enviados',
           label: 'Emails enviados',
           field: 'emails_enviados',
@@ -603,7 +688,8 @@ export default defineComponent({
       openProjectLink,
       getBanco,
       getSentEmails,
-      nomeAccao
+      corAccao,
+      filtraAccao
     }
   }
 })

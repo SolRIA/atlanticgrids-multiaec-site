@@ -100,10 +100,29 @@
             no-caps
             rounded
             size="lg"
-            toggle-color="positive"
+            toggle-color="grey-8"
             :options="accoesCliente"
             @update:model-value="atualizaAccao"
-          />
+          >
+            <template v-slot:one>
+              <div class="row items-center">
+                <div class="col-12 text-center">Com interesse</div>
+                <div style="height: 4px" class="col-12 bg-accent"></div>
+              </div>
+            </template>
+            <template v-slot:two>
+              <div class="row items-center">
+                <div class="col-12 text-center">Sem interesse</div>
+                <div style="height: 4px" class="col-12 bg-primary"></div>
+              </div>
+            </template>
+            <template v-slot:three>
+              <div class="row items-center">
+                <div class="col-12 text-center">Preciso apoio</div>
+                <div style="height: 4px" class="col-12 bg-warning"></div>
+              </div>
+            </template>
+          </q-btn-toggle>
         </div>
       </q-card-section>
 
@@ -198,8 +217,8 @@ export default defineComponent({
       mdiCalendarMonth,
       loading,
       projeto,
-      accoesCliente,
       accao,
+      accoesCliente,
 
       dialogRef,
 

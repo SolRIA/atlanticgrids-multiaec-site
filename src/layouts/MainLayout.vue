@@ -101,7 +101,10 @@ export default defineComponent({
     const menuList = ref([
       { url: '/associados', nome: 'Associados' },
       { url: '/projetos', nome: 'Projetos' },
-      { url: '/login', nome: 'Login' }
+      { url: '/projeto', nome: 'Projeto' },
+      { url: '/mercado', nome: 'Mercado das Multilaterais' },
+      { url: '/noticias', nome: 'Noticias' },
+      { url: '/tutoriais', nome: 'Tutoriais' }
     ])
     return {
       mdiMenu,

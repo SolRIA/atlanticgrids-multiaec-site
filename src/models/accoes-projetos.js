@@ -10,17 +10,29 @@ export const nomeAccao = (id) => {
       return 'Não respondeu'
   }
 }
+export const corAccao = (id) => {
+  switch (id) {
+    case 1:
+      return 'accent'
+    case 2:
+      return 'primary'
+    case 3:
+      return 'warning'
+    case 4:
+      return 'blue-grey-2'
+    default:
+      return 'white'
+  }
+}
 
-export const accoes = [
-  { label: 'Com interesse', value: 1 },
-  { label: 'Sem interesse', value: 2 },
-  { label: 'Precisa apoio', value: 3 },
-  { label: 'Não respondeu', value: 4 },
-  { label: 'Abriu link', value: 5 }
-]
 export const accoesCliente = [
-  { label: 'Com interesse', value: 1 },
-  { label: 'Sem interesse', value: 2 },
-  { label: 'Preciso apoio', value: 3 }
+  { value: 1, slot: 'one' },
+  { value: 2, slot: 'two' },
+  { value: 3, slot: 'three' }
+]
+export const accoes = [
+  ...accoesCliente,
+  { value: 4, slot: 'four' },
+  { value: 5, slot: 'five' }
 ]
 export const accoesIds = [1, 2, 3]
