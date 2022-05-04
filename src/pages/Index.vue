@@ -156,7 +156,7 @@
 
     <div class="quote q-mb-lg">
       <div class="q-pt-xl full-width full-height flex flex-center">
-        <h3 class="text-black text-center">
+        <h6 class="text-black text-center">
           Neste separador damos a informação de como empresas do sector da
           construção se podem propor como integrantes da Rede Operacional.
           <br />
@@ -168,7 +168,7 @@
             color="primary"
             label="Registar"
           />
-        </h3>
+        </h6>
       </div>
     </div>
 

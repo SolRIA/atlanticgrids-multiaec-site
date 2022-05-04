@@ -1,10 +1,15 @@
 <template>
   <q-page padding>
-    <h2>Associados</h2>
+    <q-card class="card-title">
+      <q-card-section>
+        <h3>ASSOCIADOS</h3>
+      </q-card-section>
+      <SimpleSeparator />
+    </q-card>
 
     <!-- grupos -->
     <div v-for="(grupo, index) in grupos" :key="index">
-      <h4>{{ grupo }}</h4>
+      <h6>{{ grupo }}</h6>
       <div class="row items-center justify-center q-col-gutter-md">
         <div
           v-for="empresa in empresas.filter((e) => e.grupo === grupo)"
@@ -37,24 +42,29 @@
           </q-card>
         </div>
       </div>
+      <SimpleSeparator class="q-mt-lg" />
     </div>
+
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn fab :icon="mdiHome" color="accent" to="/" />
+    </q-page-sticky>
   </q-page>
 </template>
 
 <script>
+import { mdiHome } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { get, apiPublicUrl } from 'boot/api'
+import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
     const $router = useRouter()
-
     const loading = ref(false)
     const empresas = ref([])
-
     onMounted(async () => {
       try {
         empresas.value = await get('empresas/read-ativo.php')
@@ -65,15 +75,14 @@ export default defineComponent({
         })
       }
     })
-
     const logoEmpresa = (logo) => {
       return apiPublicUrl(logo)
     }
     const abreEmpresa = (id) => {
       $router.push({ path: '/associado', query: { id: id } })
     }
-
     return {
+      mdiHome,
       loading,
       empresas,
       grupos: [
@@ -86,6 +95,7 @@ export default defineComponent({
       logoEmpresa,
       abreEmpresa
     }
-  }
+  },
+  components: { SimpleSeparator }
 })
 </script>

@@ -1,11 +1,10 @@
 <template>
   <q-page padding>
-    <q-card flat class="bg-primary text-white q-mb-lg">
+    <q-card class="card-title">
       <q-card-section>
-        <div class="flex flex-center items-center">
-          <h3>Noticias</h3>
-        </div>
+        <h3>NOTICIAS</h3>
       </q-card-section>
+      <SimpleSeparator />
     </q-card>
 
     <div class="row items-stretch justify-center q-col-gutter-md q-pt-lg">
@@ -35,11 +34,17 @@
         </q-card>
       </div>
     </div>
+
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn fab :icon="mdiHome" color="accent" to="/" />
+    </q-page-sticky>
   </q-page>
 </template>
 
 <script>
+import { mdiHome } from '@quasar/extras/mdi-v6'
 import { defineComponent } from 'vue'
+import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
   setup() {
@@ -49,7 +54,7 @@ export default defineComponent({
         country: 'COLOMBIA',
         title: 'Financiera de Desarrollo Nacional Climate Finance Facility',
         image:
-          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-04/FDN%20SPG%20IMG.jpg',
+          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-04/FDN SPG IMG.jpg',
         description:
           'Project Description: This summary covers a proposed senior unsecured loan facility to be provided to Financiera de Desarrollo Nacional S.A (FDN) by Banco Bilbao Vizcaya Argentaria, S.A. (BBVA) and other potential commercial...'
       },
@@ -58,7 +63,7 @@ export default defineComponent({
         country: 'SERBIA',
         title: 'Zrenjanin Wastewater Treatment Plant',
         image:
-          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-03/iStock-628811958%20-1_0.jpg',
+          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-03/iStock-628811958 -1_0.jpg',
         description:
           'Environmental and Social Review Summary  Zrenjanin Wastewater Treatment Plant  This Environmental and Social Review Summary (ESRS) is prepared by MIGA staff and disclosed prior to the date on which MIGA’s...'
       },
@@ -67,7 +72,7 @@ export default defineComponent({
         country: 'SOUTH AFRICA',
         title: 'Sonnedix South Africa',
         image:
-          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-02/Solar%20Panel%20Home%20System_0.jpg',
+          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-02/Solar Panel Home System_0.jpg',
         description:
           'Environmental and Social Review Summary  Mulilo Sonnedix Prieska Solar Photovoltaic Project  This Environmental and Social Review Summary (ESRS) is prepared by MIGA staff and disclosed prior to the date...'
       },
@@ -81,10 +86,11 @@ export default defineComponent({
           'Environmental and Social Review Summary  Scatec Bond Project. This Environmental and Social Review Summary (ESRS) is prepared by MIGA staff and disclosed prior to the date on which MIGA’s Board of Directors...'
       }
     ]
-
     return {
+      mdiHome,
       projects
     }
-  }
+  },
+  components: { SimpleSeparator }
 })
 </script>

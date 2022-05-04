@@ -156,6 +156,18 @@
         </q-btn-group>
       </template>
 
+      <template v-slot:body-cell-referencia="props">
+        <q-td :props="props">
+          <q-btn
+            :label="props.row.referencia"
+            @click="openProjectLink(props.row)"
+            flat
+            rounded
+            style="min-width: 150px"
+          />
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-bancologo="props">
         <q-td :props="props" auto-width>
           <q-avatar rounded>
@@ -207,6 +219,7 @@
                   clickable
                   v-close-popup
                   @click="onViewProject(props.row)"
+                  v-if="!permissaoEdicao"
                 >
                   <q-item-section avatar>
                     <q-icon :name="mdiEye" />
@@ -296,7 +309,7 @@
                 <template v-slot:three>
                   <div class="row items-center">
                     <div class="col-12 text-center">Precisa apoio</div>
-                    <div style="height: 4px" class="col-12 bg-warning"></div>
+                    <div style="height: 4px" class="col-12 bg-yellow"></div>
                   </div>
                 </template>
                 <template v-slot:four>
@@ -311,7 +324,13 @@
                 <template v-slot:five>
                   <div class="row items-center">
                     <div class="col-12 text-center">Abriu link</div>
-                    <div style="height: 4px" class="col-12 bg-info"></div>
+                    <div style="height: 4px" class="col-12 bg-blue"></div>
+                  </div>
+                </template>
+                <template v-slot:six>
+                  <div class="row items-center">
+                    <div class="col-12 text-center">Empresa contatada</div>
+                    <div style="height: 4px" class="col-12 bg-blue"></div>
                   </div>
                 </template>
               </q-btn-toggle>
@@ -320,8 +339,19 @@
               <q-td :props="props" auto-width>
                 <q-btn
                   round
+                  size="xs"
+                  class="shadow-10"
                   :color="corAccao(props.row.accao)"
                   @click="filtraAccao(props.row.accao)"
+                />
+              </q-td>
+            </template>
+            <template v-slot:body-cell-empresa_contatada="props">
+              <q-td :props="props">
+                <q-checkbox
+                  v-model="props.row.empresa_contatada"
+                  color="blue"
+                  disable
                 />
               </q-td>
             </template>
@@ -329,7 +359,7 @@
               <q-td :props="props">
                 <q-checkbox
                   v-model="props.row.abriu_link_banco"
-                  color="info"
+                  color="blue"
                   disable
                 />
               </q-td>
@@ -579,7 +609,7 @@ export default defineComponent({
       try {
         loadingSentEmails.value = true
 
-        const result = await post('projetos/read-sent-emails-project.php', {
+        const result = await postAuth('projetos/read-sent-emails-project.php', {
           projeto_id: projeto.value.id,
           accao: actionFilter.value,
           nome: ''
@@ -670,6 +700,12 @@ export default defineComponent({
           name: 'abriu_link_banco',
           label: 'Abriu link',
           field: 'abriu_link_banco',
+          align: 'center'
+        },
+        {
+          name: 'empresa_contatada',
+          label: 'Empresa contatada',
+          field: 'empresa_contatada',
           align: 'center'
         },
         {

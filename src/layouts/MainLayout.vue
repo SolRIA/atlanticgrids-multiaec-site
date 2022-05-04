@@ -11,7 +11,11 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
         <router-link to="/">
-          <q-img src="/images/logo.jpg" style="width: 180px" />
+          <q-img
+            src="/images/ptpc_logo_2022.png"
+            style="width: 181px"
+            class="q-ma-sm"
+          />
         </router-link>
         <q-space></q-space>
         <!-- <router-link to="/Projetos">
@@ -54,7 +58,6 @@
     </q-drawer>
 
     <q-page-container>
-      <SimpleSeparator />
       <router-view />
     </q-page-container>
   </q-layout>
@@ -92,7 +95,6 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { mdiMenu } from '@quasar/extras/mdi-v6'
-import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -111,7 +113,6 @@ export default defineComponent({
       leftDrawerOpen,
       menuList
     }
-  },
-  components: { SimpleSeparator }
+  }
 })
 </script>

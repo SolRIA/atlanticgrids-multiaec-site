@@ -93,6 +93,7 @@
             @click="abreProjeto(props.row.id)"
             flat
             rounded
+            style="min-width: 150px"
           />
         </q-td>
       </template>

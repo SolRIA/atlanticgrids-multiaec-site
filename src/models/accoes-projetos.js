@@ -13,11 +13,11 @@ export const nomeAccao = (id) => {
 export const corAccao = (id) => {
   switch (id) {
     case 1:
-      return 'accent'
+      return 'green'
     case 2:
       return 'primary'
     case 3:
-      return 'warning'
+      return 'yellow'
     case 4:
       return 'blue-grey-2'
     default:
@@ -33,6 +33,7 @@ export const accoesCliente = [
 export const accoes = [
   ...accoesCliente,
   { value: 4, slot: 'four' },
-  { value: 5, slot: 'five' }
+  { value: 5, slot: 'five' },
+  { value: 6, slot: 'six' }
 ]
 export const accoesIds = [1, 2, 3]

@@ -1,14 +1,13 @@
 <template>
   <q-page padding>
-    <q-card flat class="bg-primary text-white q-mb-lg">
+    <q-card class="card-title">
       <q-card-section>
-        <div class="flex flex-center items-center">
-          <h3>Mercado Multilaterais</h3>
-        </div>
+        <h3>MERCADO MULTILATERAIS</h3>
       </q-card-section>
+      <SimpleSeparator />
     </q-card>
 
-    <q-card>
+    <q-card class="q-mt-lg">
       <q-card-section>
         <p>
           As Multilaterais Financeiras são Instituições Financeiras
@@ -46,11 +45,22 @@
         </p>
       </q-card-section>
     </q-card>
+
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn fab :icon="mdiHome" color="accent" to="/" />
+    </q-page-sticky>
   </q-page>
 </template>
 
 <script>
+import { mdiHome } from '@quasar/extras/mdi-v6'
+import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 export default {
-  // name: 'PageName',
+  components: { SimpleSeparator },
+  setup() {
+    return {
+      mdiHome
+    }
+  }
 }
 </script>

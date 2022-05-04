@@ -1,11 +1,10 @@
 <template>
   <q-page padding>
-    <q-card flat class="bg-primary text-white q-mb-lg">
+    <q-card class="card-title">
       <q-card-section>
-        <div class="flex flex-center items-center">
-          <h3>Tutoriais</h3>
-        </div>
+        <h3>TUTORIAIS</h3>
       </q-card-section>
+      <SimpleSeparator />
     </q-card>
 
     <div class="q-pa-lg flex flex-center">
@@ -82,14 +81,19 @@
         direction-links
       />
     </div>
+
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn fab :icon="mdiHome" color="accent" to="/" />
+    </q-page-sticky>
   </q-page>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref, watch } from 'vue'
-import { mdiFilePdfBox, mdiDownload } from '@quasar/extras/mdi-v6'
+import { mdiFilePdfBox, mdiDownload, mdiHome } from '@quasar/extras/mdi-v6'
 import { post, get } from 'boot/api'
 import { useQuasar } from 'quasar'
+import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
   setup() {
@@ -97,7 +101,6 @@ export default defineComponent({
     onMounted(async () => {
       try {
         const banks = await get('bancos/read.php')
-
         bancos.value = banks.map(function (b) {
           return { label: b.nome, value: b.id }
         })
@@ -110,16 +113,12 @@ export default defineComponent({
         })
       }
     })
-
     const bancos = ref([])
     const banco = ref({})
-
     const estudos = ref([])
     const videos = ref([])
-
     const loadEstudos = ref(false)
     const loadVideos = ref(false)
-
     const paginacaoEstudos = ref({
       total: 0,
       pagina: 1
@@ -128,14 +127,12 @@ export default defineComponent({
       total: 0,
       pagina: 1
     })
-
     watch(banco, async (_current, _old) => {
       paginacaoEstudos.value.pagina = 1
       paginacaoVideos.value.pagina = 1
       await obterEstudos()
       await obterVideos()
     })
-
     watch(
       () => paginacaoEstudos.value.pagina,
       async (_current, _old) => {
@@ -148,7 +145,6 @@ export default defineComponent({
         await obterVideos()
       }
     )
-
     const obterEstudos = async () => {
       loadEstudos.value = true
       try {
@@ -158,7 +154,6 @@ export default defineComponent({
           banco_id: banco.value,
           filtro: null
         })
-
         estudos.value = data.rows
         paginacaoEstudos.value.total = data.count
       } catch (e) {
@@ -170,7 +165,6 @@ export default defineComponent({
       }
       loadEstudos.value = false
     }
-
     const obterVideos = async () => {
       loadVideos.value = true
       try {
@@ -180,7 +174,6 @@ export default defineComponent({
           banco_id: banco.value,
           filtro: null
         })
-
         videos.value = data.rows
         paginacaoVideos.value.total = data.count
       } catch (e) {
@@ -192,10 +185,10 @@ export default defineComponent({
       }
       loadVideos.value = false
     }
-
     return {
       mdiFilePdfBox,
       mdiDownload,
+      mdiHome,
       loadEstudos,
       loadVideos,
       bancos,
@@ -205,6 +198,7 @@ export default defineComponent({
       paginacaoEstudos,
       paginacaoVideos
     }
-  }
+  },
+  components: { SimpleSeparator }
 })
 </script>

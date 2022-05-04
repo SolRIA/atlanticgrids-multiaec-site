@@ -1,5 +1,9 @@
 <template>
   <q-page padding>
+    <div class="q-pa-lg flex flex-center">
+      <q-btn-toggle v-model="banco" push rounded :options="bancos" />
+    </div>
+
     <q-table
       class="q-mt-sm"
       color="positive"
@@ -187,8 +191,8 @@ import {
   mdiPlusBoxOutline,
   mdiPencil
 } from '@quasar/extras/mdi-v6'
-import { defineComponent, ref, onMounted } from 'vue'
-import { get, postAuth } from 'boot/api'
+import { defineComponent, ref, onMounted, watch } from 'vue'
+import { get, post, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -203,18 +207,21 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        bancos.value = await get('bancos/read-ativo.php')
+        const banks = await get('bancos/read-ativo.php')
+        bancos.value = banks.map(function (b) {
+          return { label: b.nome, value: b.id }
+        })
+        banco.value = bancos.value[0].value
       } catch {
         $q.notify({
           message: 'Não foi possível obter os bancos',
           type: 'warning'
         })
       }
-      tableEstudosRef.value.requestServerInteraction()
-      tableVideosRef.value.requestServerInteraction()
     })
 
     const bancos = ref([])
+    const banco = ref({})
     const estudos = ref([])
     const videos = ref([])
     const estudoEscolhido = ref([])
@@ -269,10 +276,33 @@ export default defineComponent({
       rowsPerPage: 10,
       rowsNumber: 10
     })
-    const onServerRequestEstudos = async (_props) => {
+
+    watch(banco, (_current, _old) => {
+      tableEstudosRef.value.requestServerInteraction()
+      tableVideosRef.value.requestServerInteraction()
+    })
+
+    const onServerRequestEstudos = async (props) => {
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      const filter = props.filter
       loading.value = true
       try {
-        estudos.value = await get('tutoriais/read-estudos.php')
+        const result = await post('tutoriais/read-estudos.php', {
+          page,
+          rowsPerPage,
+          sortBy,
+          descending,
+          filter,
+          banco_id: banco.value
+        })
+
+        estudos.value = result.rows
+
+        paginationEstudos.value.rowsNumber = result.total
+        paginationEstudos.value.page = page
+        paginationEstudos.value.rowsPerPage = rowsPerPage
+        paginationEstudos.value.sortBy = sortBy
+        paginationEstudos.value.descending = descending
       } catch {
         $q.notify({
           message: 'Não foi possível obter os estudos',
@@ -281,10 +311,27 @@ export default defineComponent({
       }
       loading.value = false
     }
-    const onServerRequestVideos = async (_props) => {
+    const onServerRequestVideos = async (props) => {
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      const filter = props.filter
       loading.value = true
       try {
-        videos.value = await get('tutoriais/read-videos.php')
+        const result = await post('tutoriais/read-videos.php', {
+          page,
+          rowsPerPage,
+          sortBy,
+          descending,
+          filter,
+          banco_id: banco.value
+        })
+
+        videos.value = result.rows
+
+        paginationVideos.value.rowsNumber = result.total
+        paginationVideos.value.page = page
+        paginationVideos.value.rowsPerPage = rowsPerPage
+        paginationVideos.value.sortBy = sortBy
+        paginationVideos.value.descending = descending
       } catch {
         $q.notify({
           message: 'Não foi possível obter os videos',
@@ -304,6 +351,7 @@ export default defineComponent({
       mostraEditorEstudo,
       mostraEditorVideo,
       bancos,
+      banco,
       estudos,
       videos,
       estudoEscolhido,

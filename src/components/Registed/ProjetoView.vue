@@ -205,7 +205,7 @@ export default defineComponent({
     })
 
     const atualizaAccao = async (value) => {
-      await postAuth('projetos/update-accao.php', {
+      await postAuth('projetos/update-accao-project.php', {
         projeto_id: projeto.value.id,
         accao: value
       })
