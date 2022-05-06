@@ -32,36 +32,41 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { post } from "boot/api";
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { post } from 'boot/api'
+import { nomeAccao } from 'models/accoes-projetos.js'
 import {
   mdiAlertDecagramOutline,
-  mdiCheckDecagramOutline,
-} from "@quasar/extras/mdi-v6";
+  mdiCheckDecagramOutline
+} from '@quasar/extras/mdi-v6'
 
 export default defineComponent({
   setup() {
-    const $route = useRoute();
+    const $route = useRoute()
 
-    const message = ref("");
-    const loading = ref(false);
-    const showSuccess = ref(false);
-    const showError = ref(false);
+    const message = ref('')
+    const loading = ref(false)
+    const showSuccess = ref(false)
+    const showError = ref(false)
 
     onMounted(async () => {
       try {
-        loading.value = true;
-        await post("projetos/accoes.php?", { codigo: $route.query.codigo });
+        loading.value = true
+        const response = await post('projetos/accoes.php?', {
+          codigo: $route.query.codigo
+        })
 
-        message.value = "O pedido foi guardado com sucesso";
-        showSuccess.value = true;
+        message.value =
+          'O pedido foi guardado com sucesso. Acção registada: ' +
+          nomeAccao(response.accao)
+        showSuccess.value = true
       } catch {
-        message.value = "Não foi possível terminar o pedido";
-        showError.value = true;
+        message.value = 'Não foi possível terminar o pedido'
+        showError.value = true
       }
-      loading.value = false;
-    });
+      loading.value = false
+    })
 
     return {
       message,
@@ -69,8 +74,8 @@ export default defineComponent({
       showSuccess,
       showError,
       mdiCheckDecagramOutline,
-      mdiAlertDecagramOutline,
-    };
-  },
-});
+      mdiAlertDecagramOutline
+    }
+  }
+})
 </script>

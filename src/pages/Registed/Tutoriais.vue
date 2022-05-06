@@ -105,8 +105,6 @@
               v-model="estudo.banco_id"
               :options="bancos"
               class="col-xs-6"
-              option-value="id"
-              option-label="nome"
               emit-value
               map-options
             />
@@ -168,8 +166,6 @@
               v-model="video.banco_id"
               :options="bancos"
               class="col-xs-12"
-              option-value="id"
-              option-label="nome"
               emit-value
               map-options
             />
