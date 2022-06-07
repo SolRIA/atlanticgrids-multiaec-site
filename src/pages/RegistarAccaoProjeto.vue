@@ -35,7 +35,7 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { post } from 'boot/api'
-import { nomeAccao } from 'models/accoes-projetos.js'
+import { nomeAccao } from 'src/models/accoes-projetos.js'
 import {
   mdiAlertDecagramOutline,
   mdiCheckDecagramOutline

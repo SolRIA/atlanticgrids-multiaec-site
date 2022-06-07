@@ -11,7 +11,8 @@
       <q-btn-toggle v-model="banco" push rounded :options="bancos" />
     </div>
 
-    <h3>Estudos</h3>
+    <h5>Estudos</h5>
+
     <q-card flat bordered>
       <q-list>
         <q-item
@@ -59,7 +60,7 @@
       />
     </div>
 
-    <h3>Webinars</h3>
+    <h5>Webinars</h5>
 
     <q-card flat>
       <div class="row justify-center q-col-gutter-md q-pt-lg">

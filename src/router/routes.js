@@ -7,6 +7,22 @@ const routes = [
       { path: 'projetos', component: () => import('src/pages/Projetos.vue') },
       { path: 'associados', component: () => import('src/pages/Socios.vue') },
       { path: 'associado', component: () => import('src/pages/Socio.vue') },
+      {
+        path: 'banco-bm',
+        component: () => import('src/pages/BancoBM.vue')
+      },
+      {
+        path: 'banco-bid',
+        component: () => import('src/pages/BancoBID.vue')
+      },
+      {
+        path: 'banco-berd',
+        component: () => import('src/pages/BancoBERD.vue')
+      },
+      {
+        path: 'banco-bei',
+        component: () => import('src/pages/BancoBEI.vue')
+      },
       { path: 'noticias', component: () => import('src/pages/Noticias.vue') },
       { path: 'tutoriais', component: () => import('src/pages/Tutoriais.vue') },
       { path: 'projeto', component: () => import('src/pages/Projeto.vue') },

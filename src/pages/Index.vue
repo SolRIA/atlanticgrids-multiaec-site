@@ -29,15 +29,6 @@
             <h4 class="animation_1 text-white">
               GESTÃO INTEGRADA DAS MULTILATERAIS
             </h4>
-            <div class="animation_2">
-              <q-btn
-                rounded
-                class="text-white action-btn"
-                color="primary"
-                label="VER PROJETOS"
-                to="/Projetos"
-              />
-            </div>
           </div>
         </div>
       </q-carousel-slide>
@@ -63,7 +54,7 @@
                 class="text-white action-btn"
                 color="primary"
                 label="APRESENTAÇÃO"
-                to="/Projetos"
+                to="/banco-bm"
               />
             </div>
           </div>
@@ -90,7 +81,7 @@
                 class="text-white action-btn"
                 color="primary"
                 label="APRESENTAÇÃO"
-                to="/Projetos"
+                to="/banco-bid"
               />
             </div>
           </div>
@@ -117,7 +108,7 @@
                 class="text-white action-btn"
                 color="primary"
                 label="APRESENTAÇÃO"
-                to="/Projetos"
+                to="/banco-berd"
               />
             </div>
           </div>
@@ -144,7 +135,7 @@
                 class="text-white action-btn"
                 color="primary"
                 label="APRESENTAÇÃO"
-                to="/Projetos"
+                to="/banco-bei"
               />
             </div>
           </div>
@@ -153,24 +144,6 @@
     </q-carousel>
 
     <SimpleSeparator />
-
-    <div class="quote q-mb-lg">
-      <div class="q-pt-xl full-width full-height flex flex-center">
-        <h6 class="text-black text-center">
-          Neste separador damos a informação de como empresas do sector da
-          construção se podem propor como integrantes da Rede Operacional.
-          <br />
-          <br />
-          <q-btn
-            rounded
-            href="/login/registo"
-            class="text-white action-btn"
-            color="primary"
-            label="Registar"
-          />
-        </h6>
-      </div>
-    </div>
 
     <div class="q-ma-lg" style="margin-top: 80px">
       <div class="row items-stretch justify-center q-col-gutter-lg">
@@ -204,10 +177,7 @@
             link="/noticias"
             title="Noticias"
             btnText="Ver mais"
-            description="Aqui apresentamos informações sobre as atividades gerais das
-                  Multilaterais financeiras, com enfase para as do projeto,
-                  nomeadamente (bibliografia, eventos, informações de novos
-                  apoios, videos etc"
+            description="Veja aqui informações e notícias sobre as atividades mais recentes dos bancos multilaterais que fazem parte  deste projeto"
           />
         </div>
 
@@ -217,9 +187,7 @@
             link="/tutoriais"
             title="Tutoriais"
             btnText="Ver mais"
-            description="Este separador congrega tudo o que esteja disponível sobre
-                  Webinars, Vídeos promocionais dos bancos, passo a passo para
-                  abordar os mercados das multilaterais financeiras etc…"
+            description="Aqui pode encontrar informação sobre Webinars, Videos promocionais, relatórios anuais dos bancos e documentos estratégicos, etc…"
           />
         </div>
       </div>

@@ -29,8 +29,8 @@
           e know-how do setor AEC sejam reconhecidas.
         </p>
         <p>
-          O Projeto MULTI AEC, é concretizado ao nível de quatro objetivos
-          operacionais, que se materializam em cinco grande grupo de atividades:
+          O projeto MULTI AEC é concretizado ao nível de cinco objetivo
+          operacionais, a saber:
         </p>
         <ul>
           <li>Objetivos:</li>
@@ -47,23 +47,6 @@
               Capacitação Estratégica, preparação de concursos e demonstração;
             </li>
             <li>Promoção Coletiva do setor AEC.</li>
-          </ul>
-
-          <li>Atividades:</li>
-          <ul>
-            <li>
-              Criação da Rede Operacional de mobilização para as Multilaterais;
-            </li>
-            <li>Realização de Visitas de Trabalho às Multilaterais;</li>
-            <li>Elaboração de plano de Internacionalização;</li>
-            <li>
-              Ações de Capacitação Estratégica, preparação de concursos e
-              demonstração;
-            </li>
-            <li>
-              Promoção coletiva, Disseminação e Avaliação dos Resultados do
-              Projeto.
-            </li>
           </ul>
         </ul>
       </q-card-section>
