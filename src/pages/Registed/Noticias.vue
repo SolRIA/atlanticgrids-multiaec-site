@@ -38,6 +38,13 @@
           />
         </q-td>
       </template>
+      <template v-slot:body-cell-banco_id="props">
+        <q-td :props="props" auto-width>
+          <q-avatar rounded>
+            <img :src="logobanco(props.row.banco_id)" />
+          </q-avatar>
+        </q-td>
+      </template>
     </q-table>
 
     <q-dialog persistent v-model="mostraEditor">
@@ -74,6 +81,17 @@
               type="textarea"
               class="col-xs-12"
             />
+            <q-select
+              label="Banco"
+              outlined
+              v-model="noticia.banco_id"
+              :options="bancos"
+              class="col-xs-12"
+              option-value="id"
+              option-label="nome"
+              emit-value
+              map-options
+            />
           </div>
         </q-card-section>
 
@@ -93,7 +111,7 @@ import {
   mdiPencil
 } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
-import { get, postAuth } from 'boot/api'
+import { get, postAuth, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -104,10 +122,20 @@ export default defineComponent({
     const mostraEditor = ref(false)
     const tableRef = ref(null)
 
-    onMounted(() => {
+    onMounted(async () => {
+      try {
+        bancos.value = await get('bancos/read-ativo.php')
+      } catch {
+        $q.notify({
+          message: 'Não foi possível obter os bancos',
+          type: 'warning'
+        })
+      }
+
       tableRef.value.requestServerInteraction()
     })
 
+    const bancos = ref([])
     const noticias = ref([])
     const noticiaEscolhida = ref([])
     const noticia = ref({
@@ -116,7 +144,8 @@ export default defineComponent({
       link: '',
       ativo: true,
       descricao: null,
-      imagem: null
+      imagem: null,
+      banco_id: 1
     })
     const colunas = [
       { name: 'titulo', label: 'titulo', field: 'titulo', align: 'left' },
@@ -126,6 +155,7 @@ export default defineComponent({
         field: 'created_at',
         align: 'left'
       },
+      { name: 'banco_id', label: 'Banco', field: 'banco_id', align: 'left' },
       { name: 'actions', label: '', field: 'actions' }
     ]
 
@@ -147,6 +177,10 @@ export default defineComponent({
       }
       loading.value = false
     }
+    const logobanco = (banco_id) => {
+      const logo = bancos.value.find((b) => b.id === banco_id).logo
+      return apiPublicUrl(logo)
+    }
 
     return {
       mdiWindowClose,
@@ -158,6 +192,7 @@ export default defineComponent({
       noticias,
       noticiaEscolhida,
       noticia,
+      bancos,
       colunas,
       pagination,
       onServerRequest,
@@ -168,7 +203,8 @@ export default defineComponent({
           link: '',
           ativo: true,
           descricao: null,
-          imagem: null
+          imagem: null,
+          banco_id: 1
         }
         mostraEditor.value = true
       },
@@ -185,7 +221,8 @@ export default defineComponent({
         } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
-      }
+      },
+      logobanco
     }
   }
 })

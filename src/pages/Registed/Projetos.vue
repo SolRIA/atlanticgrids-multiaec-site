@@ -20,11 +20,11 @@
             <template
               v-slot:option="{ itemProps, opt, selected, toggleOption }"
             >
-              <q-item v-bind="itemProps">
+              <q-item v-bind="itemProps" :disable="opt.pai_id === 0">
                 <q-item-section>
                   <q-item-label>{{ opt.nome }}</q-item-label>
                 </q-item-section>
-                <q-item-section side>
+                <q-item-section side v-if="opt.pai_id > 0">
                   <q-checkbox
                     :model-value="selected"
                     @update:model-value="toggleOption(opt)"
@@ -238,6 +238,18 @@
                   </q-item-section>
                   <q-item-section>Emails Enviados</q-item-section>
                 </q-item>
+
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="getInteresses(props.row)"
+                  v-if="!permissaoEdicao"
+                >
+                  <q-item-section avatar>
+                    <q-icon :name="mdiCheckAll" />
+                  </q-item-section>
+                  <q-item-section>Empresas interessadas</q-item-section>
+                </q-item>
               </q-list>
             </q-menu>
           </q-btn>
@@ -372,6 +384,63 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog persistent v-model="mostraInteresse">
+      <q-card style="min-width: 60vw">
+        <q-card-section class="row items-center q-pb-md bg-primary text-white">
+          <div class="text-h6">
+            <q-chip color="positive" text-color="white">
+              {{ projeto.referencia }}
+            </q-chip>
+            {{ projeto.nome }}
+          </div>
+          <q-space />
+          <q-btn :icon="mdiWindowClose" flat dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section class="q-pt-md">
+          <q-table
+            class="q-mt-sm"
+            color="positive"
+            title="Manifestações interesse"
+            ref="tableInteresses"
+            selection="none"
+            flat
+            bordered
+            no-data-label="Não existem dados"
+            no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
+            row-key="id"
+            wrap-cells
+            :rows="manifestacoesInteresse"
+            :columns="columnsIteresses"
+            :rows-per-page-options="[5, 10, 15, 20, 0]"
+            :loading="loadingSentEmails"
+          >
+            <template v-slot:top-right>
+              <div class="row items-center">
+                <div class="col-12 text-center">Com interesse</div>
+                <div style="height: 4px" class="col-12 bg-accent"></div>
+              </div>
+            </template>
+            <template v-slot:body-cell-accao="props">
+              <q-td :props="props" auto-width>
+                <q-btn
+                  round
+                  size="xs"
+                  class="shadow-10"
+                  :color="corAccao(props.row.accao)"
+                  @click="filtraAccao(props.row.accao)"
+                />
+              </q-td>
+            </template>
+          </q-table>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn label="Fechar" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -387,7 +456,8 @@ import {
   mdiEye,
   mdiDotsVertical,
   mdiEmail,
-  mdiWindowClose
+  mdiWindowClose,
+  mdiCheckAll
 } from '@quasar/extras/mdi-v6'
 import { date, useQuasar } from 'quasar'
 import { get, post, postAuth, getAuth, apiPublicUrl } from 'boot/api'
@@ -407,6 +477,7 @@ export default defineComponent({
     const loadingSentEmails = ref(false)
     const permissaoEdicao = ref(false)
     const mostraEmailsEnviados = ref(false)
+    const mostraInteresse = ref(false)
     onMounted(async () => {
       try {
         const result = await getAuth('utilizadores/editor.php?m=2')
@@ -501,6 +572,7 @@ export default defineComponent({
     const projetoEscolhido = ref([])
     const projeto = ref({})
     const emailsEnviados = ref([])
+    const manifestacoesInteresse = ref([])
 
     const logobanco = (logo) => {
       return apiPublicUrl(logo)
@@ -625,6 +697,29 @@ export default defineComponent({
 
       loadingSentEmails.value = false
     }
+    const getInteresses = async (p) => {
+      if (typeof p !== 'undefined') {
+        projeto.value = p
+      }
+      mostraInteresse.value = true
+
+      try {
+        loadingSentEmails.value = true
+
+        const result = await postAuth('projetos/read-empresas-interesse.php', {
+          projeto_id: projeto.value.id
+        })
+
+        manifestacoesInteresse.value = result
+      } catch (e) {
+        $q.notify({
+          message: 'Não foi possível obter as manifestações de interesse',
+          type: 'warning'
+        })
+      }
+
+      loadingSentEmails.value = false
+    }
     const filtraAccao = (accao) => {
       if (actionFilter.value === null || actionFilter.value === 0)
         actionFilter.value = accao
@@ -642,10 +737,12 @@ export default defineComponent({
       mdiDotsVertical,
       mdiEmail,
       mdiWindowClose,
+      mdiCheckAll,
       loading,
       loadingSentEmails,
       permissaoEdicao,
       mostraEmailsEnviados,
+      mostraInteresse,
       pagination,
       tableRef,
       tableActionsRef,
@@ -660,6 +757,7 @@ export default defineComponent({
       projetos,
       projeto,
       emailsEnviados,
+      manifestacoesInteresse,
       projetoEscolhido,
       actionFilter,
       actionFilterMain,
@@ -680,7 +778,12 @@ export default defineComponent({
           align: 'left',
           style: 'width: 100px'
         },
-        { name: 'cliente', label: 'Cliente', field: 'cliente', align: 'left' },
+        {
+          name: 'cliente',
+          label: 'Agência executora',
+          field: 'cliente',
+          align: 'left'
+        },
         { name: 'setor', label: 'Setor', field: 'setor', align: 'left' },
         { name: 'pais', label: 'País', field: 'pais', align: 'left' },
         {
@@ -715,6 +818,10 @@ export default defineComponent({
           align: 'right'
         }
       ],
+      columnsIteresses: [
+        { name: 'nome', label: 'Empresa', field: 'nome', align: 'left' },
+        { name: 'accao', label: 'Açcão', field: 'accao', align: 'center' }
+      ],
       logobanco,
       refresh,
       onNovo,
@@ -724,6 +831,7 @@ export default defineComponent({
       openProjectLink,
       getBanco,
       getSentEmails,
+      getInteresses,
       corAccao,
       filtraAccao
     }

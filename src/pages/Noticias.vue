@@ -7,20 +7,24 @@
       <SimpleSeparator />
     </q-card>
 
+    <div class="q-pa-lg flex flex-center">
+      <q-btn-toggle v-model="banco" :options="bancos" size="lg" />
+    </div>
+
     <div class="row items-stretch justify-center q-col-gutter-md q-pt-lg">
-      <div v-for="p in projects" :key="p.title">
+      <div v-for="p in noticias" :key="p.titulo">
         <q-card
           class="bg-grey-1 col-xs-12 col-sm-6 col-md-4 col-lg-2"
           style="width: 350px"
         >
-          <q-img :src="p.image" :alt="p.title">
+          <q-img :src="p.imagem" :alt="p.titulo">
             <div class="absolute-bottom text-subtitle2 text-center">
               {{ p.country }}
             </div>
           </q-img>
           <q-card-section>
-            <p class="text-subtitle1">{{ p.title }}</p>
-            <p class="text-body-1">{{ p.description }}</p>
+            <p class="text-subtitle1">{{ p.titulo }}</p>
+            <p class="text-body-1">{{ p.descricao }}</p>
           </q-card-section>
           <q-card-actions align="right">
             <q-btn
@@ -43,52 +47,70 @@
 
 <script>
 import { mdiHome } from '@quasar/extras/mdi-v6'
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
+import { post, get, apiPublicUrl } from 'boot/api'
+import { useQuasar } from 'quasar'
 import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
   setup() {
-    const projects = [
-      {
-        link: 'https://www.miga.org/project/financiera-de-desarrollo-nacional-climate-finance-facility',
-        country: 'COLOMBIA',
-        title: 'Financiera de Desarrollo Nacional Climate Finance Facility',
-        image:
-          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-04/FDN SPG IMG.jpg',
-        description:
-          'Project Description: This summary covers a proposed senior unsecured loan facility to be provided to Financiera de Desarrollo Nacional S.A (FDN) by Banco Bilbao Vizcaya Argentaria, S.A. (BBVA) and other potential commercial...'
-      },
-      {
-        link: 'https://www.miga.org/project/zrenjanin-wastewater-treatment-plant-0',
-        country: 'SERBIA',
-        title: 'Zrenjanin Wastewater Treatment Plant',
-        image:
-          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-03/iStock-628811958 -1_0.jpg',
-        description:
-          'Environmental and Social Review Summary  Zrenjanin Wastewater Treatment Plant  This Environmental and Social Review Summary (ESRS) is prepared by MIGA staff and disclosed prior to the date on which MIGA’s...'
-      },
-      {
-        link: 'https://www.miga.org/project/sonnedix-south-africa-0',
-        country: 'SOUTH AFRICA',
-        title: 'Sonnedix South Africa',
-        image:
-          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-02/Solar Panel Home System_0.jpg',
-        description:
-          'Environmental and Social Review Summary  Mulilo Sonnedix Prieska Solar Photovoltaic Project  This Environmental and Social Review Summary (ESRS) is prepared by MIGA staff and disclosed prior to the date...'
-      },
-      {
-        link: 'https://www.miga.org/project/scatec-bond-0',
-        country: 'EGYPT, ARAB REPUBLIC OF',
-        title: 'Scatec Bond',
-        image:
-          'https://www.miga.org/sites/default/files/styles/miga_teaser/public/2022-01/iStock-1023038930_0.jpg',
-        description:
-          'Environmental and Social Review Summary  Scatec Bond Project. This Environmental and Social Review Summary (ESRS) is prepared by MIGA staff and disclosed prior to the date on which MIGA’s Board of Directors...'
+    const $q = useQuasar()
+    onMounted(async () => {
+      try {
+        const banks = await get('bancos/read-ativo.php')
+        bancos.value = banks.map(function (b) {
+          const logo = apiPublicUrl(b.logo)
+          return { label: b.nome, value: b.id, icon: 'img:' + logo }
+        })
+        banco.value = bancos.value[0].value
+      } catch (e) {
+        console.error(e)
+        $q.notify({
+          message: 'Não foi possível obter os bancos',
+          type: 'warning'
+        })
       }
-    ]
+    })
+
+    const bancos = ref([])
+    const banco = ref({})
+    const noticias = ref([])
+    const loadNoticias = ref(false)
+    const paginacao = ref({
+      total: 0,
+      pagina: 1
+    })
+
+    watch(banco, async (_current, _old) => {
+      paginacao.value.pagina = 1
+      await obterNoticias()
+    })
+    const obterNoticias = async () => {
+      loadNoticias.value = true
+      try {
+        const data = await post('noticias/read.php', {
+          pagina: paginacao.value.pagina,
+          total: paginacao.value.total,
+          banco_id: banco.value,
+          filtro: null
+        })
+        noticias.value = data.rows
+        paginacao.value.total = data.count
+      } catch (e) {
+        console.error(e)
+        $q.notify({
+          message: 'Não foi possível obter as notícias',
+          type: 'warning'
+        })
+      }
+      loadNoticias.value = false
+    }
+
     return {
       mdiHome,
-      projects
+      bancos,
+      banco,
+      noticias
     }
   },
   components: { SimpleSeparator }

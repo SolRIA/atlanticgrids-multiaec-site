@@ -145,6 +145,24 @@
 
     <SimpleSeparator />
 
+    <div class="quote q-mb-lg">
+      <div class="q-pt-xl full-width full-height flex flex-center">
+        <h5 class="text-black text-center">
+          Registe a sua empresa como parceira local das empresas sócias da
+          Plataforma Tecnológica Portuguesa da Construção.
+          <br />
+          <br />
+          <q-btn
+            rounded
+            href="/login/registo-parceiro"
+            class="text-white action-btn"
+            color="primary"
+            label="Registar"
+          />
+        </h5>
+      </div>
+    </div>
+
     <div class="q-ma-lg" style="margin-top: 80px">
       <div class="row items-stretch justify-center q-col-gutter-lg">
         <div>

@@ -8,7 +8,7 @@
     </q-card>
 
     <div class="q-pa-lg flex flex-center">
-      <q-btn-toggle v-model="banco" push rounded :options="bancos" />
+      <q-btn-toggle v-model="banco" :options="bancos" size="lg" />
     </div>
 
     <h5>Estudos</h5>
@@ -92,7 +92,7 @@
 <script>
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { mdiFilePdfBox, mdiDownload, mdiHome } from '@quasar/extras/mdi-v6'
-import { post, get } from 'boot/api'
+import { post, get, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
 import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
@@ -101,9 +101,10 @@ export default defineComponent({
     const $q = useQuasar()
     onMounted(async () => {
       try {
-        const banks = await get('bancos/read.php')
+        const banks = await get('bancos/read-ativo.php')
         bancos.value = banks.map(function (b) {
-          return { label: b.nome, value: b.id }
+          const logo = apiPublicUrl(b.logo)
+          return { label: b.nome, value: b.id, icon: 'img:' + logo }
         })
         banco.value = bancos.value[0].value
       } catch (e) {

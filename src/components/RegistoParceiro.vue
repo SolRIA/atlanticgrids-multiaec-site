@@ -31,7 +31,7 @@
             <q-input
               v-model="empresa.username"
               outlined
-              label="Utilizador"
+              label="Email utilizador"
               class="col-xs-12 col-md-6"
               :rules="[isEmailRule]"
               ref="inputName"
@@ -78,7 +78,7 @@
             <q-input
               v-model="empresa.email"
               outlined
-              label="Email"
+              label="Email contato"
               class="col-xs-12 col-md-6"
             />
 
@@ -97,11 +97,11 @@
               <template
                 v-slot:option="{ itemProps, opt, selected, toggleOption }"
               >
-                <q-item v-bind="itemProps">
+                <q-item v-bind="itemProps" :disable="opt.pai_id === 0">
                   <q-item-section>
                     <q-item-label>{{ opt.nome }}</q-item-label>
                   </q-item-section>
-                  <q-item-section side>
+                  <q-item-section side v-if="opt.pai_id > 0">
                     <q-toggle
                       :model-value="selected"
                       @update:model-value="toggleOption(opt)"
@@ -110,28 +110,6 @@
                 </q-item>
               </template>
             </q-select>
-
-            <q-input
-              v-model="empresa.telemovel"
-              outlined
-              label="Telemóvel"
-              class="col-xs-12 col-md-4"
-            >
-              <template v-slot:append>
-                <q-icon :name="mdiCellphone" color="primary" />
-              </template>
-            </q-input>
-
-            <q-input
-              v-model="empresa.telefone"
-              outlined
-              label="Telefone"
-              class="col-xs-12 col-md-4"
-            >
-              <template v-slot:append>
-                <q-icon :name="mdiPhoneClassic" color="primary" />
-              </template>
-            </q-input>
 
             <q-input
               v-model="empresa.website"
@@ -143,7 +121,6 @@
                 <q-icon :name="mdiWeb" color="primary" />
               </template>
             </q-input>
-
             <q-input
               v-model="empresa.facebook"
               outlined
@@ -276,7 +253,7 @@
       <q-btn label="Voltar" type="reset" rounded flat @click="onCancel" />
       <q-btn
         color="primary"
-        label="Criar conta"
+        label="Registar"
         rounded
         class="text-white action-btn"
         :icon="mdiLogin"
@@ -309,7 +286,7 @@ import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
 
 export default defineComponent({
-  name: 'RegistroEmpresa',
+  name: 'RegistoParceiro',
   props: { p: { type: Object, required: true } },
   emits: ['canceled', 'saved'],
   setup(props, { emit }) {

@@ -132,40 +132,12 @@
                 />
 
                 <q-select
-                  v-model="empresa.tipos_empresa"
-                  :options="tiposEmpresa"
-                  label="Àreas de especialização"
-                  option-label="nome"
-                  option-value="id"
-                  class="col-xs-12 col-md-6"
-                  multiple
-                  emit-value
-                  map-options
-                  outlined
-                >
-                  <template
-                    v-slot:option="{ itemProps, opt, selected, toggleOption }"
-                  >
-                    <q-item v-bind="itemProps">
-                      <q-item-section>
-                        <q-item-label>{{ opt.nome }}</q-item-label>
-                      </q-item-section>
-                      <q-item-section side>
-                        <q-checkbox
-                          :model-value="selected"
-                          @update:model-value="toggleOption(opt)"
-                        />
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select>
-                <q-select
                   v-model="empresa.tipos_projeto"
                   :options="tiposProjeto"
                   label="Tipos de projetos"
                   option-label="nome"
                   option-value="id"
-                  class="col-xs-12 col-md-6"
+                  class="col-xs-12"
                   multiple
                   emit-value
                   map-options
@@ -174,11 +146,11 @@
                   <template
                     v-slot:option="{ itemProps, opt, selected, toggleOption }"
                   >
-                    <q-item v-bind="itemProps">
+                    <q-item v-bind="itemProps" :disable="opt.pai_id === 0">
                       <q-item-section>
                         <q-item-label>{{ opt.nome }}</q-item-label>
                       </q-item-section>
-                      <q-item-section side>
+                      <q-item-section side v-if="opt.pai_id > 0">
                         <q-checkbox
                           :model-value="selected"
                           @update:model-value="toggleOption(opt)"
@@ -378,14 +350,6 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        tiposEmpresa.value = await get('tiposempresa/read-ativo.php')
-      } catch {
-        $q.notify({
-          message: 'Não foi possível obter os tipos de empresa',
-          type: 'warning'
-        })
-      }
-      try {
         tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
       } catch {
         $q.notify({
@@ -396,7 +360,6 @@ export default defineComponent({
       tableRef.value.requestServerInteraction()
     })
 
-    const tiposEmpresa = ref([])
     const tiposProjeto = ref([])
     const empresas = ref([])
     const empresaEscolhida = ref([])
@@ -407,7 +370,6 @@ export default defineComponent({
       grupo: '',
       ativo: true,
       pendente: true,
-      tipos_empresa: [],
       tipos_projeto: [],
       descricao: null,
       telefone: null,
@@ -478,7 +440,6 @@ export default defineComponent({
       loading,
       filter,
       mostraEditor,
-      tiposEmpresa,
       tiposProjeto,
       empresas,
       empresaEscolhida,
@@ -519,7 +480,6 @@ export default defineComponent({
           nome: '',
           ativo: true,
           pendente: true,
-          tipos_empresa: [],
           tipos_projeto: [],
           descricao: null,
           telefone: null,
@@ -549,7 +509,6 @@ export default defineComponent({
           data.append('grupo', empresa.value.grupo)
           data.append('ativo', empresa.value.ativo)
           data.append('pendente', empresa.value.pendente)
-          data.append('tipos_empresa', empresa.value.tipos_empresa)
           data.append('tipos_projeto', empresa.value.tipos_projeto)
           data.append('descricao', empresa.value.descricao)
           data.append('telefone', empresa.value.telefone)

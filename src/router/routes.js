@@ -40,6 +40,10 @@ const routes = [
       { path: '', component: () => import('pages/Login.vue') },
       { path: 'registo', component: () => import('pages/Register.vue') },
       {
+        path: 'registo-parceiro',
+        component: () => import('pages/RegisterPartner.vue')
+      },
+      {
         path: 'recuperarPassword',
         component: () => import('pages/RecoverPassword.vue')
       }
@@ -69,10 +73,6 @@ const routes = [
       {
         path: 'utilizadores',
         component: () => import('src/pages/Registed/Utilizadores.vue')
-      },
-      {
-        path: 'tiposempresa',
-        component: () => import('src/pages/Registed/TiposEmpresa.vue')
       },
       {
         path: 'tiposprojeto',
