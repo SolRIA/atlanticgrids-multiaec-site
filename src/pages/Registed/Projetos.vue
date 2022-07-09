@@ -20,7 +20,11 @@
             <template
               v-slot:option="{ itemProps, opt, selected, toggleOption }"
             >
-              <q-item v-bind="itemProps" :disable="opt.pai_id === 0">
+              <q-item
+                v-bind="itemProps"
+                :disable="opt.pai_id === 0"
+                v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''"
+              >
                 <q-item-section>
                   <q-item-label>{{ opt.nome }}</q-item-label>
                 </q-item-section>
@@ -60,7 +64,7 @@
             <template v-slot:option="scope">
               <q-item v-bind="scope.itemProps">
                 <q-item-section avatar>
-                  <img :src="logobanco(scope.opt.logo)" />
+                  <img :src="logobanco(scope.opt.logo)" width="40" />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ scope.opt.nome }}</q-item-label>
@@ -838,3 +842,11 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.header-filter-type {
+  font-size: 18px;
+  color: black;
+  opacity: 1 !important;
+}
+</style>

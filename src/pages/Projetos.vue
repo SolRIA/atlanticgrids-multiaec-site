@@ -28,7 +28,7 @@
             <template v-slot:option="scope">
               <q-item v-bind="scope.itemProps">
                 <q-item-section avatar>
-                  <img :src="logobanco(scope.opt.logo)" />
+                  <img :src="logobanco(scope.opt.logo)" width="40" />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ scope.opt.nome }}</q-item-label>

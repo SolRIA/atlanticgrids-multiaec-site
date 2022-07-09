@@ -3,5 +3,5 @@ import pt from './pt'
 
 export default {
   'en-US': enUS,
-  pt
+  pt: pt
 }
