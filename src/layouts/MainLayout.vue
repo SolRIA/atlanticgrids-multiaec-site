@@ -18,6 +18,32 @@
           />
         </router-link>
         <q-space></q-space>
+        <q-select
+          v-model="locale"
+          :options="localeOptions"
+          class="q-mx-md"
+          borderless
+          map-options
+          emit-value
+          hide-dropdown-icon
+        >
+          <template v-slot:prepend>
+            <q-icon :name="getlogo(localeOption.icon)" />
+          </template>
+          <template v-slot:selected>
+            {{ localeOption.label }}
+          </template>
+          <template v-slot:option="scope">
+            <q-item v-bind="scope.itemProps">
+              <q-item-section avatar>
+                <q-icon :name="getlogo(scope.opt.icon)" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ scope.opt.label }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
         <!-- <router-link to="/Projetos">
           <p class="hover-underline-animation">Bancos</p>
         </router-link> -->
@@ -93,12 +119,29 @@
 </style>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { mdiMenu } from '@quasar/extras/mdi-v6'
+import { mdiTranslate, mdiMenu } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useQuasar } from 'quasar'
+import { apiPublicUrl } from 'boot/api'
 
 export default defineComponent({
   name: 'MainLayout',
   setup() {
+    const $q = useQuasar()
+    const { locale } = useI18n({ useScope: 'global' })
+
+    console.log(locale.value)
+
+    const currentLocale = ref($q.lang.getLocale())
+    const localeOptions = [
+      { value: 'pt', label: 'Português', icon: 'imagens/paises/pt.svg' },
+      { value: 'en-US', label: 'English', icon: 'imagens/paises/us.svg' }
+    ]
+    const localeOption = ref(
+      localeOptions.find((l) => l.value === locale.value)
+    )
+
     const leftDrawerOpen = ref(false)
     const menuList = ref([
       { url: '/associados', nome: 'Associados' },
@@ -108,10 +151,24 @@ export default defineComponent({
       { url: '/noticias', nome: 'Noticias' },
       { url: '/tutoriais', nome: 'Tutoriais' }
     ])
+    const getlogo = (name) => {
+      return 'img:' + apiPublicUrl(name)
+    }
+
+    watch(locale, (_value, _old) => {
+      localeOption.value = localeOptions.find((l) => l.value === locale.value)
+    })
+
     return {
+      mdiTranslate,
       mdiMenu,
+      locale,
+      localeOption,
+      localeOptions,
       leftDrawerOpen,
-      menuList
+      menuList,
+      currentLocale,
+      getlogo
     }
   }
 })

@@ -43,23 +43,7 @@
             emit-value
             map-options
             outlined
-          >
-            <template
-              v-slot:option="{ itemProps, opt, selected, toggleOption }"
-            >
-              <q-item v-bind="itemProps">
-                <q-item-section>
-                  <q-item-label>{{ opt.nome }}</q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-toggle
-                    :model-value="selected"
-                    @update:model-value="toggleOption(opt)"
-                  />
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
+          />
 
           <q-select
             label="País"

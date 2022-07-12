@@ -148,8 +148,7 @@
     <div class="quote q-mb-lg">
       <div class="q-pt-xl full-width full-height flex flex-center">
         <h5 class="text-black text-center">
-          Registe a sua empresa como parceira local das empresas sócias da
-          Plataforma Tecnológica Portuguesa da Construção.
+          {{ $t('index.partner.description') }}
           <br />
           <br />
           <q-btn
@@ -157,7 +156,7 @@
             href="/login/registo-parceiro"
             class="text-white action-btn"
             color="primary"
-            label="Registar"
+            :label="$t('index.partner.register')"
           />
         </h5>
       </div>
@@ -286,7 +285,6 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
 import {
   mdiSend,
   mdiTwitter,
@@ -300,6 +298,8 @@ import {
   mdiAccountSchoolOutline,
   mdiAlphaMCircleOutline
 } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Section from 'src/components/Section.vue'
 import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 

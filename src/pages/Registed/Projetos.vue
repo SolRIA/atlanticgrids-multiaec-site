@@ -112,6 +112,7 @@
       v-model:pagination="pagination"
       v-model:selected="projetoEscolhido"
       @request="onServerRequest"
+      @row-dblclick="onProjectDlbClick"
     >
       <template v-slot:top-right>
         <q-btn-toggle
@@ -449,7 +450,6 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch } from 'vue'
 import {
   mdiPencil,
   mdiPlusBoxOutline,
@@ -463,10 +463,11 @@ import {
   mdiWindowClose,
   mdiCheckAll
 } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, onMounted, watch } from 'vue'
 import { date, useQuasar } from 'quasar'
 import { get, post, postAuth, getAuth, apiPublicUrl } from 'boot/api'
 import { accoes, accoesCliente, corAccao } from 'src/models/accoes-projetos'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
 import ProjectView from 'src/components/Registed/ProjetoView.vue'
 
@@ -474,6 +475,7 @@ export default defineComponent({
   setup() {
     const $q = useQuasar()
     const $route = useRoute()
+    const $router = useRouter()
 
     const tableRef = ref(null)
     const tableActionsRef = ref(null)
@@ -522,6 +524,8 @@ export default defineComponent({
 
       const projetoId = parseInt($route.query.id)
       if (projetoId > 0) {
+        // clear the route query id
+        $router.replace({ query: null })
         // abrir o projeto
         onViewProject({ id: projetoId })
       }
@@ -635,6 +639,15 @@ export default defineComponent({
       }).onOk(async () => {
         tableRef.value.requestServerInteraction()
       })
+    }
+    const onProjectDlbClick = (_evt, row) => {
+      if (row !== null) {
+        if (permissaoEdicao.value === true) {
+          onEditProject(row)
+        } else {
+          onViewProject(row)
+        }
+      }
     }
     const onServerRequest = async (props) => {
       try {
@@ -783,6 +796,18 @@ export default defineComponent({
           style: 'width: 100px'
         },
         {
+          name: 'tipo_aviso',
+          label: 'Tipo',
+          field: 'tipo_aviso',
+          align: 'left'
+        },
+        {
+          name: 'estado',
+          label: 'Estado',
+          field: 'estado',
+          align: 'left'
+        },
+        {
           name: 'cliente',
           label: 'Agência executora',
           field: 'cliente',
@@ -831,6 +856,7 @@ export default defineComponent({
       onNovo,
       onEditProject,
       onViewProject,
+      onProjectDlbClick,
       onServerRequest,
       openProjectLink,
       getBanco,

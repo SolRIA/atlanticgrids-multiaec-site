@@ -58,12 +58,16 @@
             <template
               v-slot:option="{ itemProps, opt, selected, toggleOption }"
             >
-              <q-item v-bind="itemProps">
+              <q-item
+                v-bind="itemProps"
+                :disable="opt.pai_id === 0"
+                v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''"
+              >
                 <q-item-section>
                   <q-item-label>{{ opt.nome }}</q-item-label>
                 </q-item-section>
-                <q-item-section side>
-                  <q-toggle
+                <q-item-section side v-if="opt.pai_id > 0">
+                  <q-checkbox
                     :model-value="selected"
                     @update:model-value="toggleOption(opt)"
                   />
@@ -279,3 +283,11 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.header-filter-type {
+  font-size: 18px;
+  color: black;
+  opacity: 1 !important;
+}
+</style>
