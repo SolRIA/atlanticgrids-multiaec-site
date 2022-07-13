@@ -97,10 +97,26 @@ export default {
     noNodes: 'Sem nós disponíveis',
     noResults: 'Nenhum resultado encontrado'
   },
-  index: {
-    partner: {
-      description:
-        'Registe-se a sua empresa como parceira local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
+  html: {
+    index: {
+      partner: {
+        description:
+          'Registe-se a sua empresa como parceira local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
+        register: 'Registar'
+      }
+    },
+    registerPartner: {
+      tabMain: 'Geral',
+      tabDescription: 'Descrição',
+      user: 'Utilizador',
+      organization: 'Empresa',
+      userEmail: 'Email utilizador',
+      userPassword: 'Password',
+      name: 'Nome',
+      contactEmail: 'Email contato',
+      projectTypes: 'Tipos de projetos',
+      logo: 'Logotipo',
+      return: 'Voltar',
       register: 'Registar'
     }
   }

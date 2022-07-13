@@ -13,12 +13,12 @@
         <q-tab
           name="geral"
           :icon="mdiBadgeAccountHorizontalOutline"
-          label="Geral"
+          :label="$t('html.registerPartner.tabMain')"
         />
         <q-tab
           name="descricao"
           :icon="mdiFileDocumentEditOutline"
-          label="Descrição"
+          :label="$t('html.registerPartner.tabDescription')"
         />
       </q-tabs>
 
@@ -27,11 +27,13 @@
       <q-tab-panels v-model="tab">
         <q-tab-panel name="geral">
           <div class="row q-col-gutter-md">
-            <div class="text-h6 col-12">Utilizador</div>
+            <div class="text-h6 col-12">
+              {{ $t('html.registerPartner.user') }}
+            </div>
             <q-input
               v-model="empresa.username"
               outlined
-              label="Email utilizador"
+              :label="$t('html.registerPartner.userEmail')"
               class="col-xs-12 col-md-6"
               :rules="[isEmailRule]"
               ref="inputName"
@@ -48,7 +50,7 @@
               v-model="empresa.password"
               outlined
               :type="isPwd ? 'password' : 'text'"
-              label="Password"
+              :label="$t('html.registerPartner.userPassword')"
               class="col-xs-12 col-md-6"
               :rules="[isPasswordValid]"
               ref="inputPassword"
@@ -68,24 +70,26 @@
                 />
               </template>
             </q-input>
-            <div class="text-h6 col-12">Empresa</div>
+            <div class="text-h6 col-12">
+              {{ $t('html.registerPartner.organization') }}
+            </div>
             <q-input
               v-model="empresa.nome"
               outlined
-              label="Nome"
+              :label="$t('html.registerPartner.name')"
               class="col-xs-12 col-md-6"
             />
             <q-input
               v-model="empresa.email"
               outlined
-              label="Email contato"
+              :label="$t('html.registerPartner.contactEmail')"
               class="col-xs-12 col-md-6"
             />
 
             <q-select
               v-model="empresa.tipos_projeto"
               :options="tiposProjeto"
-              label="Tipos de projetos"
+              :label="$t('html.registerPartner.projectTypes')"
               option-label="nome"
               option-value="id"
               class="col-xs-12"
@@ -153,7 +157,11 @@
             </q-input>
 
             <div class="col-xs-12 col-md-6">
-              <q-file outlined v-model="empresa.logo" label="Logotipo">
+              <q-file
+                outlined
+                v-model="empresa.logo"
+                :label="$t('html.registerPartner.logo')"
+              >
                 <template v-slot:prepend>
                   <q-icon :name="mdiImageSearchOutline" />
                 </template>
@@ -250,10 +258,17 @@
     <q-separator inset />
 
     <q-card-actions align="right">
-      <q-btn label="Voltar" type="reset" rounded flat @click="onCancel" />
+      <LanguageSelector />
+      <q-btn
+        :label="$t('html.registerPartner.return')"
+        type="reset"
+        rounded
+        flat
+        @click="onCancel"
+      />
       <q-btn
         color="primary"
-        label="Registar"
+        :label="$t('html.registerPartner.register')"
         rounded
         class="text-white action-btn"
         :icon="mdiLogin"
@@ -284,6 +299,7 @@ import {
 } from '@quasar/extras/mdi-v6'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
+import LanguageSelector from './LanguageSelector.vue'
 
 export default defineComponent({
   name: 'RegistoParceiro',
@@ -291,7 +307,6 @@ export default defineComponent({
   emits: ['canceled', 'saved'],
   setup(props, { emit }) {
     const $q = useQuasar()
-
     const empresa = ref(
       Object.assign(
         {
@@ -312,7 +327,6 @@ export default defineComponent({
         props.p
       )
     )
-
     onMounted(async () => {
       try {
         tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
@@ -323,15 +337,12 @@ export default defineComponent({
         })
       }
     })
-
     const inputName = ref(null)
     const inputPassword = ref(null)
-
     const tiposProjeto = ref([])
     const isPwd = ref(true)
     const tab = ref('geral')
     const onCreatingAcount = ref(false)
-
     const isEmailRule = function (val) {
       return !!val || 'Insira o utilizador'
     }
@@ -342,7 +353,6 @@ export default defineComponent({
       // do login
       if (inputName.value.validate() && inputPassword.value.validate()) {
         onCreatingAcount.value = true
-
         // account has been created,
         const data = new FormData()
         data.append('logo', empresa.value.logo)
@@ -371,11 +381,9 @@ export default defineComponent({
         }
       }
     }
-
     const onCancel = function () {
       emit('canceled')
     }
-
     return {
       mdiEyeOff,
       mdiEye,
@@ -402,6 +410,7 @@ export default defineComponent({
       onRegister,
       onCancel
     }
-  }
+  },
+  components: { LanguageSelector }
 })
 </script>
