@@ -796,6 +796,13 @@ export default defineComponent({
           style: 'width: 100px'
         },
         {
+          name: 'data_fecho',
+          label: 'Data Fecho',
+          field: 'data_fecho',
+          align: 'left',
+          style: 'width: 100px'
+        },
+        {
           name: 'tipo_aviso',
           label: 'Tipo',
           field: 'tipo_aviso',
