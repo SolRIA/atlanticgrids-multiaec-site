@@ -3,40 +3,13 @@
     <q-card>
       <q-card-section>
         <div class="row q-col-gutter-md">
-          <q-select
-            v-model="tipo"
-            :options="tipos"
-            label="Tipos de projetos"
-            option-label="nome"
-            option-value="id"
-            class="col-xs-12 col-md-3"
-            multiple
-            emit-value
-            map-options
-            outlined
+          <TipoProjetoSelector
+            :tipos="tipos"
+            :tipo="tipo"
+            @tipo_projeto_updated="tipoProjetoUpdated"
             clearable
-            dense
-          >
-            <template
-              v-slot:option="{ itemProps, opt, selected, toggleOption }"
-            >
-              <q-item
-                v-bind="itemProps"
-                :disable="opt.pai_id === 0"
-                v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''"
-              >
-                <q-item-section>
-                  <q-item-label>{{ opt.nome }}</q-item-label>
-                </q-item-section>
-                <q-item-section side v-if="opt.pai_id > 0">
-                  <q-checkbox
-                    :model-value="selected"
-                    @update:model-value="toggleOption(opt)"
-                  />
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
+            class="col-xs-12 col-md-3"
+          />
 
           <q-select
             v-model="pais"
@@ -48,30 +21,13 @@
             clearable
           />
 
-          <q-select
-            v-model="banco"
-            :options="bancos"
-            label="Banco"
-            outlined
-            dense
-            class="col-xs-12 col-md-3"
-            option-value="id"
-            option-label="nome"
-            emit-value
-            map-options
+          <BancoSelector
+            :bancos="bancos"
+            :banco="banco"
+            @banco_updated="bancoUpdated"
             clearable
-          >
-            <template v-slot:option="scope">
-              <q-item v-bind="scope.itemProps">
-                <q-item-section avatar>
-                  <img :src="logobanco(scope.opt.logo)" width="40" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ scope.opt.nome }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
+            class="col-xs-12 col-md-3"
+          />
 
           <q-input
             v-model="filtroProjeto"
@@ -470,13 +426,14 @@ import { accoes, accoesCliente, corAccao } from 'src/models/accoes-projetos'
 import { useRoute, useRouter } from 'vue-router'
 import ProjectEditor from 'src/components/Registed/Projeto.vue'
 import ProjectView from 'src/components/Registed/ProjetoView.vue'
+import BancoSelector from 'src/components/BancoSelector.vue'
+import TipoProjetoSelector from 'src/components/TipoProjetoSelector.vue'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
     const $route = useRoute()
     const $router = useRouter()
-
     const tableRef = ref(null)
     const tableActionsRef = ref(null)
     const loading = ref(false)
@@ -497,7 +454,6 @@ export default defineComponent({
           type: 'warning'
         })
       }
-
       try {
         paises.value = await get('paises/read.php')
       } catch (error) {
@@ -506,7 +462,6 @@ export default defineComponent({
           type: 'warning'
         })
       }
-
       try {
         bancos.value = await get('bancos/read-ativo.php')
       } catch {
@@ -515,13 +470,11 @@ export default defineComponent({
           type: 'warning'
         })
       }
-
       if (permissaoEdicao.value === false) {
         // get the base filter for this user: tipos_projeto to apply
         tipo.value = await getAuth('empresas/read-tipos-projeto.php')
       }
       tableRef.value.requestServerInteraction()
-
       const projetoId = parseInt($route.query.id)
       if (projetoId > 0) {
         // clear the route query id
@@ -530,22 +483,16 @@ export default defineComponent({
         onViewProject({ id: projetoId })
       }
     })
-
     let paises = ref([])
     const pais = ref(null)
-
     const bancos = ref([])
     const banco = ref(null)
-
     const tipos = ref([])
     const tipo = ref(null)
-
     const filtroProjeto = ref(null)
     const filtro = ref(null)
-
     const actionFilter = ref(0)
     const actionFilterMain = ref(null)
-
     watch(pais, (_current, _old) => {
       tableRef.value.requestServerInteraction()
     })
@@ -567,7 +514,6 @@ export default defineComponent({
     watch(filtro, (_current, _old) => {
       tableRef.value.requestServerInteraction()
     })
-
     const projetos = ref([])
     const pagination = ref({
       descending: false,
@@ -576,12 +522,17 @@ export default defineComponent({
       rowsNumber: 10,
       sortBy: null
     })
-
     const projetoEscolhido = ref([])
     const projeto = ref({})
     const emailsEnviados = ref([])
     const manifestacoesInteresse = ref([])
 
+    const tipoProjetoUpdated = (e) => {
+      tipo.value = e
+    }
+    const bancoUpdated = (e) => {
+      if (e !== undefined) banco.value = e
+    }
     const logobanco = (logo) => {
       return apiPublicUrl(logo)
     }
@@ -600,7 +551,6 @@ export default defineComponent({
         data: date.formatDate(new Date(), 'YYYY-MM-DD'),
         descricao: ''
       }
-
       $q.dialog({
         component: ProjectEditor,
         componentProps: {
@@ -653,7 +603,6 @@ export default defineComponent({
       try {
         loading.value = true
         const { page, rowsPerPage, sortBy, descending } = props.pagination
-
         const result = await post('projetos/read.php', {
           page,
           rowsPerPage,
@@ -666,9 +615,7 @@ export default defineComponent({
           tipo_id: tipo.value,
           accao: actionFilterMain.value
         })
-
         projetos.value = result.rows
-
         pagination.value.rowsNumber = result.count
         pagination.value.page = page
         pagination.value.rowsPerPage = rowsPerPage
@@ -694,16 +641,13 @@ export default defineComponent({
         projeto.value = p
       }
       mostraEmailsEnviados.value = true
-
       try {
         loadingSentEmails.value = true
-
         const result = await postAuth('projetos/read-sent-emails-project.php', {
           projeto_id: projeto.value.id,
           accao: actionFilter.value,
           nome: ''
         })
-
         emailsEnviados.value = result
       } catch (e) {
         $q.notify({
@@ -711,7 +655,6 @@ export default defineComponent({
           type: 'warning'
         })
       }
-
       loadingSentEmails.value = false
     }
     const getInteresses = async (p) => {
@@ -719,14 +662,11 @@ export default defineComponent({
         projeto.value = p
       }
       mostraInteresse.value = true
-
       try {
         loadingSentEmails.value = true
-
         const result = await postAuth('projetos/read-empresas-interesse.php', {
           projeto_id: projeto.value.id
         })
-
         manifestacoesInteresse.value = result
       } catch (e) {
         $q.notify({
@@ -734,7 +674,6 @@ export default defineComponent({
           type: 'warning'
         })
       }
-
       loadingSentEmails.value = false
     }
     const filtraAccao = (accao) => {
@@ -742,7 +681,6 @@ export default defineComponent({
         actionFilter.value = accao
       else actionFilter.value = null
     }
-
     return {
       mdiPencil,
       mdiPlusBoxOutline,
@@ -870,16 +808,11 @@ export default defineComponent({
       getSentEmails,
       getInteresses,
       corAccao,
-      filtraAccao
+      filtraAccao,
+      tipoProjetoUpdated,
+      bancoUpdated
     }
-  }
+  },
+  components: { BancoSelector, TipoProjetoSelector }
 })
 </script>
-
-<style scoped>
-.header-filter-type {
-  font-size: 18px;
-  color: black;
-  opacity: 1 !important;
-}
-</style>

@@ -1,8 +1,7 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
-    <q-card style="min-width: 60vw">
+    <q-card :class="$q.screen.lt.md ? 'phone-dialog' : 'desktop-dialog'">
       <q-card-section class="row items-center q-pb-md bg-primary text-white">
-        <q-icon :name="mdiAccountHardHat" left size="2rem" />
         <div class="text-h6">
           <q-chip color="positive" text-color="white">
             {{ projeto.referencia }}
@@ -14,70 +13,75 @@
       </q-card-section>
 
       <q-card-section class="q-pt-md">
-        <div class="row q-col-gutter-md">
-          <q-input
-            v-model="projeto.nome"
-            label="Nome"
-            outlined
-            readonly
-            class="col-xs-12 col-md-6"
-          />
+        <q-scroll-area class="dialog-scroll">
+          <div class="row q-col-gutter-md">
+            <q-input
+              v-model="projeto.nome"
+              label="Nome"
+              outlined
+              readonly
+              class="col-xs-12 col-md-6"
+            />
 
-          <q-input
-            v-model="projeto.data"
-            label="Data"
-            outlined
-            readonly
-            class="col-xs-12 col-md-6"
-          />
+            <q-input
+              v-model="projeto.data"
+              label="Data"
+              outlined
+              readonly
+              class="col-xs-12 col-md-6"
+            />
 
-          <q-select
-            v-model="projeto.tipos"
-            :options="tipos"
-            readonly
-            label="Tipos de projetos"
-            option-label="nome"
-            option-value="id"
-            class="col-xs-12 col-md-4"
-            multiple
-            emit-value
-            map-options
-            outlined
-          />
+            <q-select
+              v-model="projeto.tipos"
+              :options="tipos"
+              readonly
+              label="Tipos de projetos"
+              option-label="nome"
+              option-value="id"
+              class="col-xs-12 col-md-4"
+              multiple
+              emit-value
+              map-options
+              outlined
+            />
 
-          <q-select
-            label="País"
-            outlined
-            v-model="projeto.pais"
-            :options="paises"
-            readonly
-            class="col-xs-12 col-md-4"
-            option-value="nome"
-            option-label="nome"
-            emit-value
-            map-options
-            clearable
-          />
+            <q-select
+              label="País"
+              outlined
+              v-model="projeto.pais"
+              :options="paises"
+              readonly
+              class="col-xs-12 col-md-4"
+              option-value="nome"
+              option-label="nome"
+              emit-value
+              map-options
+              clearable
+            />
 
-          <q-select
-            label="Banco"
-            outlined
-            v-model="projeto.banco_id"
-            :options="bancos"
-            readonly
-            class="col-xs-12 col-md-4"
-            option-value="id"
-            option-label="nome"
-            emit-value
-            map-options
-          />
+            <q-select
+              label="Banco"
+              outlined
+              v-model="projeto.banco_id"
+              :options="bancos"
+              readonly
+              class="col-xs-12 col-md-4"
+              option-value="id"
+              option-label="nome"
+              emit-value
+              map-options
+            />
 
-          <div v-html="projeto.descricao"></div>
-        </div>
+            <div v-html="projeto.descricao"></div>
+          </div>
+        </q-scroll-area>
       </q-card-section>
 
-      <q-card-section v-if="mostraAccoes">
-        <h6>Indique o seu interesse neste projeto</h6>
+      <q-card-section
+        v-if="mostraAccoes"
+        style="height: 200px; background-color: #efefef; padding: 0px"
+      >
+        <h6 style="margin: 10px; padding: 10px">Indique o seu interesse</h6>
         <div class="flex flex-center">
           <q-btn-toggle
             v-model="accao"
@@ -110,10 +114,6 @@
         </div>
       </q-card-section>
 
-      <q-card-actions align="right">
-        <q-btn label="Fechar" color="primary" @click="onOKClick" />
-      </q-card-actions>
-
       <q-inner-loading :showing="loading">
         <q-spinner-gears size="50px" color="primary" />
       </q-inner-loading>
@@ -121,12 +121,23 @@
   </q-dialog>
 </template>
 
+<style scoped>
+.dialog-scroll {
+  /* set the max-height 100vh - 24 (top space)  - 68 (header) - 16 (margin) - 48 (footer) - 24 (bottom space) */
+  height: calc(100vh - 390px);
+}
+.desktop-dialog {
+  min-width: 60vw;
+  overflow: hidden;
+}
+.phone-dialog {
+  min-width: 100vw;
+  overflow: hidden;
+}
+</style>
+
 <script>
-import {
-  mdiWindowClose,
-  mdiAccountHardHat,
-  mdiCalendarMonth
-} from '@quasar/extras/mdi-v6'
+import { mdiWindowClose, mdiCalendarMonth } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
 import { postAuth, getAuth } from 'boot/api'
@@ -149,7 +160,7 @@ export default defineComponent({
   setup(props) {
     const $q = useQuasar()
 
-    const { dialogRef, onDialogOK } = useDialogPluginComponent()
+    const { dialogRef } = useDialogPluginComponent()
     const loading = ref(false)
     const accao = ref(null)
     const projeto = ref(
@@ -197,7 +208,6 @@ export default defineComponent({
 
     return {
       mdiWindowClose,
-      mdiAccountHardHat,
       mdiCalendarMonth,
       loading,
       projeto,
@@ -206,14 +216,7 @@ export default defineComponent({
 
       dialogRef,
 
-      atualizaAccao,
-      onOKClick: () => {
-        // on OK, it is REQUIRED to
-        // call onDialogOK (with optional payload)
-        onDialogOK()
-        // or with payload: onDialogOK({ ... })
-        // ...and it will also hide the dialog automatically
-      }
+      atualizaAccao
     }
   }
 })

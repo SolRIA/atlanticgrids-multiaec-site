@@ -1,6 +1,8 @@
 <template>
   <q-page padding>
-    <q-table class="q-mt-sm" color="positive"
+    <q-table
+      class="q-mt-sm"
+      color="positive"
       title="Tipos Projeto"
       ref="tableRef"
       selection="single"
@@ -12,28 +14,40 @@
       :loading="loading"
       v-model:pagination="pagination"
       v-model:selected="tipoEscolhido"
-      @request="onServerRequest">
-      
+      @request="onServerRequest"
+    >
       <template v-slot:top-right>
-        <q-space/>
-        <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md"/>
+        <q-space />
+        <q-btn
+          label="Novo"
+          color="positive"
+          @click="onNovo"
+          :icon="mdiPlusBoxOutline"
+          class="q-mr-md"
+        />
       </template>
 
       <template v-slot:body-cell-ativo="props">
         <q-td :props="props" auto-width>
-          <q-checkbox v-model="props.row.ativo" disable/>
+          <q-checkbox v-model="props.row.ativo" disable />
         </q-td>
       </template>
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
-          <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEdit(props.row)"/>
+          <q-btn
+            dense
+            flat
+            color="positive"
+            :icon="mdiPencil"
+            @click="onEdit(props.row)"
+          />
         </q-td>
       </template>
     </q-table>
 
     <q-dialog persistent v-model="mostraEditor">
-      <q-card style="min-width: 60vw;">
+      <q-card style="min-width: 60vw">
         <q-card-section class="row items-center q-pb-md bg-primary text-white">
           <q-icon :name="mdiArchiveCogOutline" left size="2rem" />
           <div class="text-h6">{{ tipo.nome }} ({{ tipo.id }})</div>
@@ -43,14 +57,19 @@
 
         <q-card-section class="q-pt-md">
           <div class="row q-col-gutter-sm">
-            <q-input v-model="tipo.nome" label="Nome" outlined class="col-xs-12" />
+            <q-input
+              v-model="tipo.nome"
+              label="Nome"
+              outlined
+              class="col-xs-12"
+            />
             <q-checkbox v-model="tipo.ativo" label="Ativo" />
           </div>
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn label="Cancelar" flat v-close-popup />
-          <q-btn label="Guardar" color="primary" @click="onOk"/>
+          <q-btn label="Guardar" color="primary" @click="onOk" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -58,13 +77,18 @@
 </template>
 
 <script>
-import { mdiArchiveCogOutline, mdiWindowClose, mdiPlusBoxOutline, mdiPencil } from '@quasar/extras/mdi-v6'
+import {
+  mdiArchiveCogOutline,
+  mdiWindowClose,
+  mdiPlusBoxOutline,
+  mdiPencil
+} from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { get, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
-  setup () {
+  setup() {
     const $q = useQuasar()
 
     const loading = ref(false)
@@ -72,7 +96,7 @@ export default defineComponent({
     const tableRef = ref(null)
 
     onMounted(() => {
-        tableRef.value.requestServerInteraction()
+      tableRef.value.requestServerInteraction()
     })
 
     const tipos = ref([])
@@ -95,7 +119,10 @@ export default defineComponent({
       try {
         tipos.value = await get('tiposprojeto/read.php')
       } catch {
-          $q.notify({ message: 'Não foi possível obter os tipos de projeto', type: 'warning' })
+        $q.notify({
+          message: 'Não foi possível obter os tipos de projeto',
+          type: 'warning'
+        })
       }
       loading.value = false
     }
@@ -134,6 +161,5 @@ export default defineComponent({
       }
     }
   }
-  
 })
 </script>
