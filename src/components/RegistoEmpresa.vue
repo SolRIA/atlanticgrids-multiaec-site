@@ -82,7 +82,12 @@
               class="col-xs-12 col-md-6"
             />
 
-            <q-select
+            <TipoProjetoSelector
+              :tipos="tiposProjeto"
+              v-model:tipo="empresa.tipos_projeto"
+              class="col-xs-12"
+            />
+            <!-- <q-select
               v-model="empresa.tipos_projeto"
               :options="tiposProjeto"
               label="Tipos de projetos"
@@ -109,7 +114,7 @@
                   </q-item-section>
                 </q-item>
               </template>
-            </q-select>
+            </q-select> -->
 
             <q-input
               v-model="empresa.telemovel"
@@ -307,6 +312,7 @@ import {
 } from '@quasar/extras/mdi-v6'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
+import TipoProjetoSelector from './TipoProjetoSelector.vue'
 
 export default defineComponent({
   name: 'RegistroEmpresa',
@@ -314,7 +320,6 @@ export default defineComponent({
   emits: ['canceled', 'saved'],
   setup(props, { emit }) {
     const $q = useQuasar()
-
     const empresa = ref(
       Object.assign(
         {
@@ -335,7 +340,6 @@ export default defineComponent({
         props.p
       )
     )
-
     onMounted(async () => {
       try {
         tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
@@ -346,15 +350,12 @@ export default defineComponent({
         })
       }
     })
-
     const inputName = ref(null)
     const inputPassword = ref(null)
-
     const tiposProjeto = ref([])
     const isPwd = ref(true)
     const tab = ref('geral')
     const onCreatingAcount = ref(false)
-
     const isEmailRule = function (val) {
       return !!val || 'Insira o utilizador'
     }
@@ -365,7 +366,6 @@ export default defineComponent({
       // do login
       if (inputName.value.validate() && inputPassword.value.validate()) {
         onCreatingAcount.value = true
-
         // account has been created,
         const data = new FormData()
         data.append('logo', empresa.value.logo)
@@ -394,11 +394,9 @@ export default defineComponent({
         }
       }
     }
-
     const onCancel = function () {
       emit('canceled')
     }
-
     return {
       mdiEyeOff,
       mdiEye,
@@ -425,6 +423,7 @@ export default defineComponent({
       onRegister,
       onCancel
     }
-  }
+  },
+  components: { TipoProjetoSelector }
 })
 </script>

@@ -55,6 +55,10 @@ const routes = [
     children: [
       { path: '', component: () => import('src/pages/Registed/Projetos.vue') },
       {
+        path: 'keywords',
+        component: () => import('src/pages/Registed/ProjetosKeywords.vue')
+      },
+      {
         path: 'accoes',
         component: () => import('src/pages/Registed/EmailActions.vue')
       },

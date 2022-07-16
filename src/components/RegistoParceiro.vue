@@ -86,7 +86,13 @@
               class="col-xs-12 col-md-6"
             />
 
-            <q-select
+            <TipoProjetoSelector
+              :tipos="tiposProjeto"
+              :tipo="empresa.tipos_projeto"
+              class="col-xs-12"
+            />
+
+            <!-- <q-select
               v-model="empresa.tipos_projeto"
               :options="tiposProjeto"
               :label="$t('html.registerPartner.projectTypes')"
@@ -113,7 +119,7 @@
                   </q-item-section>
                 </q-item>
               </template>
-            </q-select>
+            </q-select> -->
 
             <q-input
               v-model="empresa.website"

@@ -1,8 +1,7 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
-    <q-card style="min-width: 60vw">
+    <q-card :class="$q.screen.lt.md ? 'phone-dialog' : 'desktop-dialog'">
       <q-card-section class="row items-center q-pb-md bg-primary text-white">
-        <q-icon :name="mdiAccountHardHat" left size="2rem" />
         <div class="text-h6">
           <q-chip color="positive" text-color="white">
             {{ projeto.referencia }}
@@ -14,171 +13,151 @@
       </q-card-section>
 
       <q-card-section class="q-pt-md">
-        <div class="row q-col-gutter-md">
-          <q-input
-            v-model="projeto.nome"
-            label="Nome"
-            outlined
-            class="col-xs-12 col-md-6"
-          />
-
-          <q-input
-            v-model="projeto.data"
-            label="Data"
-            outlined
-            class="col-xs-12 col-md-6"
-          >
-            <template v-slot:append>
-              <q-btn :icon="mdiCalendarMonth" flat dense color="positive">
-                <q-popup-proxy
-                  ref="qDateProxy"
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
-                  <q-date v-model="projeto.data" mask="YYYY-MM-DD">
-                    <q-btn label="Fechar" color="positive" flat v-close-popup />
-                  </q-date>
-                </q-popup-proxy>
-              </q-btn>
-            </template>
-          </q-input>
-
-          <q-select
-            v-model="projeto.tipos"
-            :options="tipos"
-            label="Tipos de projetos"
-            option-label="nome"
-            option-value="id"
-            class="col-xs-12 col-md-4"
-            multiple
-            emit-value
-            map-options
-            outlined
-          >
-            <template
-              v-slot:option="{ itemProps, opt, selected, toggleOption }"
-            >
-              <q-item
-                v-bind="itemProps"
-                :disable="opt.pai_id === 0"
-                v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''"
-              >
-                <q-item-section>
-                  <q-item-label>{{ opt.nome }}</q-item-label>
-                </q-item-section>
-                <q-item-section side v-if="opt.pai_id > 0">
-                  <q-checkbox
-                    :model-value="selected"
-                    @update:model-value="toggleOption(opt)"
-                  />
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-
-          <q-select
-            label="País"
-            outlined
-            v-model="projeto.pais"
-            :options="paises"
-            clearable
-            class="col-xs-12 col-md-4"
-          />
-
-          <q-select
-            label="Banco"
-            outlined
-            v-model="projeto.banco_id"
-            :options="bancos"
-            class="col-xs-12 col-md-4"
-            option-value="id"
-            option-label="nome"
-            emit-value
-            map-options
-          />
-
-          <div class="col-xs-12">
-            <q-editor
-              v-model="projeto.descricao"
-              :toolbar="[
-                [
-                  {
-                    label: $q.lang.editor.align,
-                    icon: $q.iconSet.editor.align,
-                    fixedLabel: true,
-                    options: ['left', 'center', 'right', 'justify']
-                  },
-                  'fullscreen'
-                ],
-                [
-                  'bold',
-                  'italic',
-                  'strike',
-                  'underline',
-                  'subscript',
-                  'superscript'
-                ],
-                ['token', 'hr', 'link', 'custom_btn'],
-                [
-                  {
-                    label: $q.lang.editor.formatting,
-                    icon: $q.iconSet.editor.formatting,
-                    list: 'no-icons',
-                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code']
-                  },
-                  {
-                    label: $q.lang.editor.fontSize,
-                    icon: $q.iconSet.editor.fontSize,
-                    fixedLabel: true,
-                    fixedIcon: true,
-                    list: 'no-icons',
-                    options: [
-                      'size-1',
-                      'size-2',
-                      'size-3',
-                      'size-4',
-                      'size-5',
-                      'size-6',
-                      'size-7'
-                    ]
-                  },
-                  {
-                    label: $q.lang.editor.defaultFont,
-                    icon: $q.iconSet.editor.font,
-                    fixedIcon: true,
-                    list: 'no-icons',
-                    options: [
-                      'default_font',
-                      'arial',
-                      'arial_black',
-                      'comic_sans',
-                      'courier_new',
-                      'impact',
-                      'lucida_grande',
-                      'times_new_roman',
-                      'verdana'
-                    ]
-                  },
-                  'removeFormat'
-                ],
-                ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
-                ['undo', 'redo'],
-                ['viewsource']
-              ]"
-              :fonts="{
-                arial: 'Arial',
-                arial_black: 'Arial Black',
-                comic_sans: 'Comic Sans MS',
-                courier_new: 'Courier New',
-                impact: 'Impact',
-                lucida_grande: 'Lucida Grande',
-                times_new_roman: 'Times New Roman',
-                verdana: 'Verdana'
-              }"
+        <q-scroll-area class="dialog-scroll">
+          <div class="row q-col-gutter-md">
+            <q-input
+              v-model="projeto.nome"
+              label="Nome"
+              outlined
+              class="col-xs-12 col-md-6"
             />
+
+            <q-input
+              v-model="projeto.data"
+              label="Data"
+              outlined
+              class="col-xs-12 col-md-6"
+            >
+              <template v-slot:append>
+                <q-btn :icon="mdiCalendarMonth" flat dense color="positive">
+                  <q-popup-proxy
+                    ref="qDateProxy"
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="projeto.data" mask="YYYY-MM-DD">
+                      <q-btn
+                        label="Fechar"
+                        color="positive"
+                        flat
+                        v-close-popup
+                      />
+                    </q-date>
+                  </q-popup-proxy>
+                </q-btn>
+              </template>
+            </q-input>
+
+            <TipoProjetoSelector
+              :tipos="tipos"
+              :tipo="projeto.tipos"
+              class="col-xs-12 col-md-4"
+            />
+
+            <q-select
+              label="País"
+              outlined
+              v-model="projeto.pais"
+              :options="paises"
+              clearable
+              class="col-xs-12 col-md-4"
+            />
+
+            <q-select
+              label="Banco"
+              outlined
+              v-model="projeto.banco_id"
+              :options="bancos"
+              class="col-xs-12 col-md-4"
+              option-value="id"
+              option-label="nome"
+              emit-value
+              map-options
+            />
+
+            <div class="col-xs-12">
+              <q-editor
+                v-model="projeto.descricao"
+                :toolbar="[
+                  [
+                    {
+                      label: $q.lang.editor.align,
+                      icon: $q.iconSet.editor.align,
+                      fixedLabel: true,
+                      options: ['left', 'center', 'right', 'justify']
+                    },
+                    'fullscreen'
+                  ],
+                  [
+                    'bold',
+                    'italic',
+                    'strike',
+                    'underline',
+                    'subscript',
+                    'superscript'
+                  ],
+                  ['token', 'hr', 'link', 'custom_btn'],
+                  [
+                    {
+                      label: $q.lang.editor.formatting,
+                      icon: $q.iconSet.editor.formatting,
+                      list: 'no-icons',
+                      options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code']
+                    },
+                    {
+                      label: $q.lang.editor.fontSize,
+                      icon: $q.iconSet.editor.fontSize,
+                      fixedLabel: true,
+                      fixedIcon: true,
+                      list: 'no-icons',
+                      options: [
+                        'size-1',
+                        'size-2',
+                        'size-3',
+                        'size-4',
+                        'size-5',
+                        'size-6',
+                        'size-7'
+                      ]
+                    },
+                    {
+                      label: $q.lang.editor.defaultFont,
+                      icon: $q.iconSet.editor.font,
+                      fixedIcon: true,
+                      list: 'no-icons',
+                      options: [
+                        'default_font',
+                        'arial',
+                        'arial_black',
+                        'comic_sans',
+                        'courier_new',
+                        'impact',
+                        'lucida_grande',
+                        'times_new_roman',
+                        'verdana'
+                      ]
+                    },
+                    'removeFormat'
+                  ],
+                  ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+                  ['undo', 'redo'],
+                  ['viewsource']
+                ]"
+                :fonts="{
+                  arial: 'Arial',
+                  arial_black: 'Arial Black',
+                  comic_sans: 'Comic Sans MS',
+                  courier_new: 'Courier New',
+                  impact: 'Impact',
+                  lucida_grande: 'Lucida Grande',
+                  times_new_roman: 'Times New Roman',
+                  verdana: 'Verdana'
+                }"
+              />
+            </div>
           </div>
-        </div>
+        </q-scroll-area>
       </q-card-section>
 
       <q-card-actions align="right">
@@ -193,15 +172,27 @@
   </q-dialog>
 </template>
 
+<style scoped>
+.dialog-scroll {
+  /* set the max-height 100vh - 24 (top space)  - 68 (header) - 16 (margin) - 48 (footer) - 24 (bottom space) */
+  height: calc(100vh - 490px);
+}
+.desktop-dialog {
+  min-width: 60vw;
+  overflow: hidden;
+}
+.phone-dialog {
+  min-width: 100vw;
+  overflow: hidden;
+}
+</style>
+
 <script>
-import {
-  mdiWindowClose,
-  mdiAccountHardHat,
-  mdiCalendarMonth
-} from '@quasar/extras/mdi-v6'
+import { mdiWindowClose, mdiCalendarMonth } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
 import { postAuth, getAuth } from 'boot/api'
+import TipoProjetoSelector from '../TipoProjetoSelector.vue'
 
 export default defineComponent({
   name: 'ProjectEditor',
@@ -218,7 +209,6 @@ export default defineComponent({
   ],
   setup(props) {
     const $q = useQuasar()
-
     const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent()
     const loading = ref(false)
     const projeto = ref(
@@ -236,7 +226,6 @@ export default defineComponent({
         props.p
       )
     )
-
     onMounted(async () => {
       if (projeto.value.id > 0) {
         loading.value = true
@@ -254,16 +243,12 @@ export default defineComponent({
         loading.value = false
       }
     })
-
     return {
       mdiWindowClose,
-      mdiAccountHardHat,
       mdiCalendarMonth,
       loading,
       projeto,
-
       dialogRef,
-
       onOKClick: async () => {
         try {
           await postAuth('projetos/update.php', projeto.value)
@@ -276,11 +261,11 @@ export default defineComponent({
         // or with payload: onDialogOK({ ... })
         // ...and it will also hide the dialog automatically
       },
-
       // we can passthrough onDialogCancel directly
       onCancelClick: onDialogCancel
     }
-  }
+  },
+  components: { TipoProjetoSelector }
 })
 </script>
 
