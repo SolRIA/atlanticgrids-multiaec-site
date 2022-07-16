@@ -57,9 +57,27 @@
 
         <q-card-section class="q-pt-md">
           <div class="row q-col-gutter-sm">
+            <q-select
+              v-model="tipo.pai_id"
+              :options="tipos_pai"
+              label="Pai"
+              option-label="nome"
+              option-value="id"
+              emit-value
+              map-options
+              outlined
+              class="col-xs-12"
+            />
+
             <q-input
               v-model="tipo.nome"
               label="Nome"
+              outlined
+              class="col-xs-12"
+            />
+            <q-input
+              v-model="tipo.nome_en"
+              label="Nome inglês"
               outlined
               class="col-xs-12"
             />
@@ -100,10 +118,17 @@ export default defineComponent({
     })
 
     const tipos = ref([])
+    const tipos_pai = ref([])
     const tipoEscolhido = ref([])
     const tipo = ref({ id: 0, nome: '', ativo: true })
     const colunas = [
       { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
+      {
+        name: 'nome_en',
+        label: 'Nome inglês',
+        field: 'nome_en',
+        align: 'left'
+      },
       { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
       { name: 'actions', label: '', field: 'actions' }
     ]
@@ -117,7 +142,10 @@ export default defineComponent({
     const onServerRequest = async (_props) => {
       loading.value = true
       try {
-        tipos.value = await get('tiposprojeto/read.php')
+        const tiposAll = await get('tiposprojeto/read.php')
+
+        tipos.value = Object.freeze(tiposAll.filter((t) => t.pai_id > 0))
+        tipos_pai.value = Object.freeze(tiposAll.filter((t) => t.pai_id === 0))
       } catch {
         $q.notify({
           message: 'Não foi possível obter os tipos de projeto',
@@ -136,13 +164,14 @@ export default defineComponent({
       tableRef,
       mostraEditor,
       tipos,
+      tipos_pai,
       tipoEscolhido,
       tipo,
       colunas,
       pagination,
       onServerRequest,
       onNovo: () => {
-        tipo.value = { id: 0, nome: '', ativo: true }
+        tipo.value = { id: 0, pai_id: 1, nome: '', nome_en: '', ativo: true }
         mostraEditor.value = true
       },
       onEdit: (b) => {
