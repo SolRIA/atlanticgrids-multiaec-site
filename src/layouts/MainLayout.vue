@@ -22,20 +22,56 @@
 
         <!-- <router-link to="/Projetos">
           <p class="hover-underline-animation">Bancos</p>
-        </router-link> -->
+        </router-link>
         <router-link to="/associados" class="desktop-only">
           <p class="hover-underline-animation">Associados</p>
         </router-link>
         <router-link to="/projetos" class="desktop-only">
           <p class="hover-underline-animation">Projetos</p>
-        </router-link>
-        <router-link to="/login" class="q-mr-lg desktop-only">
-          <p class="hover-underline-animation">Login</p>
-        </router-link>
-        <!-- <q-btn class="toolbar-btn" flat no-caps to="/">MULTI AEC</q-btn>
-        <q-space></q-space>
-        <q-btn class="toolbar-btn" flat no-caps label="Ver Projetos" to="/Projetos"/>
-        <q-btn class="toolbar-btn q-mx-md" flat no-caps label="Login" to="/Login"/> -->
+        </router-link> -->
+        <q-btn
+          label="Associados"
+          to="/associados"
+          flat
+          no-caps
+          stretch
+          class="toolbar-btn"
+        />
+        <q-btn
+          label="Projetos"
+          to="/projetos"
+          flat
+          no-caps
+          stretch
+          class="toolbar-btn"
+        />
+        <q-btn label="Login" flat stretch no-caps class="toolbar-btn">
+          <q-menu>
+            <q-list style="min-width: 200px">
+              <q-item clickable v-close-popup to="/login">
+                <q-item-section>
+                  <q-item-label>Login Associados</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup to="/login">
+                <q-item-section>
+                  <q-item-label>Login Parceiros</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator inset />
+              <q-item clickable v-close-popup to="/login/registo">
+                <q-item-section>
+                  <q-item-label>Registo Associados</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup to="/login/registo-parceiro">
+                <q-item-section>
+                  <q-item-label>Registo Parceiros</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -66,7 +102,11 @@
 </template>
 
 <style scoped>
-.hover-underline-animation {
+.toolbar-btn {
+  color: black;
+  font-size: 20px;
+}
+/* .hover-underline-animation {
   display: inline-block;
   position: relative;
   color: black;
@@ -91,7 +131,7 @@
 .hover-underline-animation:hover:after {
   transform: scaleX(1);
   transform-origin: bottom left;
-}
+} */
 </style>
 
 <script>

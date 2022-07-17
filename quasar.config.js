@@ -27,7 +27,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['i18n', 'auth'],
+    boot: ['i18n', 'auth', 'quasar-lang-pack'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
@@ -105,7 +105,7 @@ module.exports = configure(function (/* ctx */) {
       },
 
       iconSet: 'svg-material-icons', // Quasar icon set
-      lang: 'pt', // Quasar language pack
+      //lang: 'pt', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),

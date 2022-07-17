@@ -61,7 +61,9 @@ export default defineComponent({
       localeOption.value = localeOptions[1]
     }
     locale.value = localeOption.value.value
-    $q.lang.set(locale)
+    try {
+      $q.lang.set(locale)
+    } catch {}
 
     emit('language_changed', locale.value)
 
