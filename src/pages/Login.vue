@@ -66,8 +66,18 @@
         </q-card-actions>
         <q-card-section class="q-pa-none">
           <q-btn-group spread>
-            <q-btn label="Voltar" type="reset" flat to="/" />
-            <q-btn label="Criar conta" type="reset" flat to="/login/registo" />
+            <q-btn
+              label="Registar Associado"
+              type="reset"
+              flat
+              to="/login/registo"
+            />
+            <q-btn
+              label="Registar Parceiro"
+              type="reset"
+              flat
+              to="/login/registo-parceiro"
+            />
             <q-btn
               label="Recuperar senha"
               type="reset"
@@ -77,6 +87,10 @@
           </q-btn-group>
         </q-card-section>
       </q-card>
+
+      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-btn fab :icon="mdiHome" color="accent" to="/" />
+      </q-page-sticky>
     </q-page>
   </q-page-container>
 </template>
@@ -88,7 +102,8 @@ import {
   mdiEyeOff,
   mdiEye,
   mdiLogin,
-  mdiCloseCircle
+  mdiCloseCircle,
+  mdiHome
 } from '@quasar/extras/mdi-v6'
 import { post } from 'boot/api'
 import { useQuasar } from 'quasar'
@@ -148,6 +163,7 @@ export default defineComponent({
       mdiEye,
       mdiLogin,
       mdiCloseCircle,
+      mdiHome,
       inputName,
       inputPassword,
       email,
@@ -165,5 +181,5 @@ export default defineComponent({
 <style lang="sass" scoped>
 .card-login
   width: 100%
-  max-width: 500px
+  max-width: 600px
 </style>
