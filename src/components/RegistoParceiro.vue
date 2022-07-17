@@ -92,34 +92,19 @@
               class="col-xs-12"
             />
 
-            <!-- <q-select
-              v-model="empresa.tipos_projeto"
-              :options="tiposProjeto"
-              :label="$t('html.registerPartner.projectTypes')"
-              option-label="nome"
+            <q-select
+              v-model="empresa.pais_id"
+              :options="paises"
+              :label="$t('html.registerPartner.country')"
+              :option-label="lang === 'pt' ? 'nome' : 'nome_en'"
               option-value="id"
-              class="col-xs-12"
-              multiple
+              @filter="filterFn"
+              use-input
               emit-value
               map-options
               outlined
-            >
-              <template
-                v-slot:option="{ itemProps, opt, selected, toggleOption }"
-              >
-                <q-item v-bind="itemProps" :disable="opt.pai_id === 0">
-                  <q-item-section>
-                    <q-item-label>{{ opt.nome }}</q-item-label>
-                  </q-item-section>
-                  <q-item-section side v-if="opt.pai_id > 0">
-                    <q-toggle
-                      :model-value="selected"
-                      @update:model-value="toggleOption(opt)"
-                    />
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select> -->
+              class="col-xs-12"
+            />
 
             <q-input
               v-model="empresa.website"
@@ -264,7 +249,7 @@
     <q-separator inset />
 
     <q-card-actions align="right">
-      <LanguageSelector />
+      <LanguageSelector @language_changed="languageChanged" />
       <q-btn
         :label="$t('html.registerPartner.return')"
         type="reset"
@@ -287,7 +272,6 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
 import {
   mdiEyeOff,
   mdiEye,
@@ -303,6 +287,7 @@ import {
   mdiCellphone,
   mdiPhoneClassic
 } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
 import LanguageSelector from './LanguageSelector.vue'
@@ -328,7 +313,8 @@ export default defineComponent({
           facebook: null,
           twitter: null,
           linkedin: null,
-          logo: null
+          logo: null,
+          pais_id: null
         },
         props.p
       )
@@ -349,6 +335,9 @@ export default defineComponent({
     const isPwd = ref(true)
     const tab = ref('geral')
     const onCreatingAcount = ref(false)
+    const paises = ref([])
+    const lang = ref('pt')
+
     const isEmailRule = function (val) {
       return !!val || 'Insira o utilizador'
     }
@@ -390,6 +379,18 @@ export default defineComponent({
     const onCancel = function () {
       emit('canceled')
     }
+    const languageChanged = (e) => {
+      lang.value = e
+    }
+    const filterFn = (val, update) => {
+      update(async () => {
+        if (val !== '') {
+          const needle = val.toLowerCase()
+          paises.value = await get('paises/read-all.php?filtro=' + val)
+        }
+      })
+    }
+
     return {
       mdiEyeOff,
       mdiEye,
@@ -407,14 +408,18 @@ export default defineComponent({
       inputName,
       inputPassword,
       tab,
+      paises,
       empresa,
       tiposProjeto,
       isPwd,
       onCreatingAcount,
       isEmailRule,
       isPasswordValid,
+      lang,
       onRegister,
-      onCancel
+      onCancel,
+      languageChanged,
+      filterFn
     }
   },
   components: { LanguageSelector }

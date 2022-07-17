@@ -35,17 +35,14 @@ import { defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
   name: 'LanguageSelector',
-  setup() {
+  emits: ['language_changed'],
+  setup(_props, { emit }) {
     const $q = useQuasar()
     const { locale } = useI18n({ useScope: 'global' })
 
     let currentLocale = localStorage.getItem('lang')
     if (typeof currentLocale === 'undefined' || currentLocale === null)
       currentLocale = $q.lang.getLocale()
-
-    console.log('quasar locale useI18n', locale.value)
-    console.log('quasar locale ', $q.lang.isoName)
-    console.log('browser locale', currentLocale)
 
     const localeOptions = [
       { value: 'pt', label: 'Português', icon: 'imagens/paises/pt.svg' },
@@ -66,7 +63,7 @@ export default defineComponent({
     locale.value = localeOption.value.value
     $q.lang.set(locale)
 
-    console.log('quasar locale after change', $q.lang.isoName)
+    emit('language_changed', locale.value)
 
     const getlogo = (name) => {
       return 'img:' + apiPublicUrl(name)
@@ -78,6 +75,7 @@ export default defineComponent({
         $q.lang.set(lang.default)
       })
       localStorage.setItem('lang', locale.value)
+      emit('language_changed', locale.value)
     })
 
     return {

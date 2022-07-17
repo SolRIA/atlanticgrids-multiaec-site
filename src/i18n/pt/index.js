@@ -106,14 +106,15 @@ export default {
       }
     },
     registerPartner: {
-      tabMain: 'Geral',
-      tabDescription: 'Descrição',
+      tabMain: 'Informação geral',
+      tabDescription: 'Experiência Multi AEC',
       user: 'Utilizador',
       organization: 'Empresa',
       userEmail: 'Email utilizador',
       userPassword: 'Password',
       name: 'Nome',
       contactEmail: 'Email contato',
+      country: 'País',
       projectTypes: 'Tipos de projetos',
       logo: 'Logotipo',
       return: 'Voltar',
