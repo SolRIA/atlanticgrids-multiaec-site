@@ -33,7 +33,7 @@
               outlined
               label="Utilizador"
               class="col-xs-12 col-md-6"
-              :rules="[isEmailRule]"
+              :rules="[isUsernamevalid]"
               ref="inputName"
             >
               <template v-if="empresa.username" v-slot:append>
@@ -79,42 +79,59 @@
               v-model="empresa.email"
               outlined
               label="Email"
+              :rules="[isEmailRule]"
+              ref="inputEmail"
+              class="col-xs-12 col-md-6"
+            />
+
+            <q-input
+              v-model="empresa.nif"
+              outlined
+              label="NIF"
+              :rules="[isNifValid]"
+              ref="inputNif"
+              class="col-xs-12 col-md-6"
+            />
+
+            <q-input
+              v-model="empresa.cae"
+              outlined
+              label="CAE"
+              :rules="[isCaeValid]"
+              ref="inputCae"
               class="col-xs-12 col-md-6"
             />
 
             <TipoProjetoSelector
               :tipos="tiposProjeto"
-              v-model:tipo="empresa.tipos_projeto"
+              :tipo="empresa.tipos_projeto"
+              @tipo_projeto_updated="tipoProjetoUpdated"
               class="col-xs-12"
             />
-            <!-- <q-select
-              v-model="empresa.tipos_projeto"
-              :options="tiposProjeto"
-              label="Tipos de projetos"
+
+            <q-select
+              v-model="empresa.concelho_id"
+              :options="concelhos"
+              label="Concelho"
               option-label="nome"
               option-value="id"
-              class="col-xs-12"
-              multiple
+              @filter="filterFn"
+              use-input
               emit-value
               map-options
               outlined
-            >
-              <template
-                v-slot:option="{ itemProps, opt, selected, toggleOption }"
-              >
-                <q-item v-bind="itemProps">
-                  <q-item-section>
-                    <q-item-label>{{ opt.nome }}</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-toggle
-                      :model-value="selected"
-                      @update:model-value="toggleOption(opt)"
-                    />
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select> -->
+              :rules="[isConcelhoValid]"
+              ref="inputConcelho"
+              class="col-xs-12"
+            />
+
+            <q-input
+              v-model="empresa.morada"
+              outlined
+              type="textarea"
+              label="Morada"
+              class="col-xs-12"
+            />
 
             <q-input
               v-model="empresa.telemovel"
@@ -327,6 +344,9 @@ export default defineComponent({
           password: '',
           email: '',
           nome: '',
+          nif: '',
+          cae: '',
+          concelho_id: null,
           tipos_projeto: [],
           descricao: '',
           telefone: null,
@@ -343,6 +363,23 @@ export default defineComponent({
     onMounted(async () => {
       try {
         tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
+
+        if (empresa.value.tipos_projeto.length === 0) {
+          empresa.value.tipos_projeto = [tiposProjeto.value[0]]
+        }
+      } catch {
+        $q.notify({
+          message: 'Não foi possível obter os tipos de projeto',
+          type: 'warning'
+        })
+      }
+
+      try {
+        if (empresa.value.concelho_id > 0) {
+          concelhos.value = await get(
+            'concelhos/read.php?id=' + empresa.value.concelho_id
+          )
+        }
       } catch {
         $q.notify({
           message: 'Não foi possível obter os tipos de projeto',
@@ -352,19 +389,80 @@ export default defineComponent({
     })
     const inputName = ref(null)
     const inputPassword = ref(null)
+    const inputEmail = ref(null)
+    const inputNif = ref(null)
+    const inputCae = ref(null)
+    const inputConcelho = ref(null)
     const tiposProjeto = ref([])
     const isPwd = ref(true)
     const tab = ref('geral')
     const onCreatingAcount = ref(false)
-    const isEmailRule = function (val) {
+    const concelhos = ref([])
+
+    const isUsernamevalid = (val) => {
       return !!val || 'Insira o utilizador'
     }
-    const isPasswordValid = function (val) {
+    const isEmailRule = (val) => {
+      const valid = String(val)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+      return valid || 'Insira um email válido'
+    }
+    const isPasswordValid = (val) => {
       return !!val || 'Insira a password'
     }
+    const isNifValid = (val) => {
+      let firstDigit = 0,
+        checkDigit = 0,
+        i = 0
+
+      if (val !== null && val.length === 9) {
+        firstDigit = parseInt(val.charAt(0))
+        checkDigit = firstDigit * 9
+        for (i = 2; i <= 8; i++) {
+          checkDigit += parseInt(val.charAt(i - 1)) * (10 - i)
+        }
+        checkDigit = 11 - (checkDigit % 11)
+        if (checkDigit >= 10) {
+          checkDigit = 0
+        }
+        if (checkDigit === parseInt(val.charAt(8))) {
+          return true
+        }
+      }
+      return 'NIF inválido'
+    }
+    const isCaeValid = (val) => {
+      if (val === null || val.length !== 5) return 'CAE inválido'
+      else return true
+    }
+    const isConcelhoValid = (val) => {
+      if (val <= 0) return 'Indique o concelho'
+      else return true
+    }
+    const tipoProjetoUpdated = (e) => {
+      empresa.value.tipos_projeto = e
+    }
+    const filterFn = (val, update) => {
+      update(async () => {
+        if (val !== '') {
+          const needle = val.toLowerCase()
+          concelhos.value = await get('concelhos/read.php?id=0&filtro=' + val)
+        }
+      })
+    }
     const onRegister = async () => {
-      // do login
-      if (inputName.value.validate() && inputPassword.value.validate()) {
+      // validate
+      if (
+        inputName.value.validate() &&
+        inputPassword.value.validate() &&
+        inputEmail.value.validate() &&
+        inputNif.value.validate() &&
+        inputCae.value.validate() &&
+        inputConcelho.value.validate()
+      ) {
         onCreatingAcount.value = true
         // account has been created,
         const data = new FormData()
@@ -372,6 +470,10 @@ export default defineComponent({
         data.append('username', empresa.value.username)
         data.append('password', empresa.value.password)
         data.append('nome', empresa.value.nome)
+        data.append('nif', empresa.value.nif)
+        data.append('cae', empresa.value.cae)
+        data.append('morada', empresa.value.morada)
+        data.append('concelho_id', empresa.value.concelho_id)
         data.append('tipos_projeto', empresa.value.tipos_projeto)
         data.append('descricao', empresa.value.descricao)
         data.append('telefone', empresa.value.telefone)
@@ -397,6 +499,7 @@ export default defineComponent({
     const onCancel = function () {
       emit('canceled')
     }
+
     return {
       mdiEyeOff,
       mdiEye,
@@ -413,13 +516,23 @@ export default defineComponent({
       mdiPhoneClassic,
       inputName,
       inputPassword,
+      inputEmail,
+      inputNif,
+      inputCae,
+      inputConcelho,
       tab,
       empresa,
       tiposProjeto,
       isPwd,
+      concelhos,
+      tipoProjetoUpdated,
       onCreatingAcount,
+      isUsernamevalid,
       isEmailRule,
-      isPasswordValid,
+      isNifValid,
+      isCaeValid,
+      isConcelhoValid,
+      filterFn,
       onRegister,
       onCancel
     }

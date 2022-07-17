@@ -291,6 +291,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
 import LanguageSelector from './LanguageSelector.vue'
+import TipoProjetoSelector from './TipoProjetoSelector.vue'
 
 export default defineComponent({
   name: 'RegistoParceiro',
@@ -422,6 +423,6 @@ export default defineComponent({
       filterFn
     }
   },
-  components: { LanguageSelector }
+  components: { LanguageSelector, TipoProjetoSelector }
 })
 </script>
