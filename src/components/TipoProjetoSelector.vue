@@ -10,7 +10,7 @@
     map-options
     outlined
     :clearable="clearable"
-    dense
+    :dense="dense"
   >
     <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
       <q-item
@@ -46,6 +46,10 @@ export default defineComponent({
       required: true
     },
     clearable: {
+      type: Boolean,
+      required: false
+    },
+    dense: {
       type: Boolean,
       required: false
     }

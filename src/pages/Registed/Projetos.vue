@@ -8,6 +8,7 @@
             :tipo="tipo"
             @tipo_projeto_updated="tipoProjetoUpdated"
             clearable
+            dense
             class="col-xs-12 col-md-3"
           />
 
