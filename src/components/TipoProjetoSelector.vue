@@ -3,7 +3,7 @@
     v-model="projectType"
     :options="tipos"
     label="Tipos de projetos"
-    option-label="nome"
+    :option-label="lang === 'pt' ? 'nome' : 'nome_en'"
     option-value="id"
     multiple
     emit-value
@@ -19,7 +19,9 @@
         v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''"
       >
         <q-item-section>
-          <q-item-label>{{ opt.nome }}</q-item-label>
+          <q-item-label>{{
+            lang === 'pt' ? opt.nome : opt.nome_en
+          }}</q-item-label>
         </q-item-section>
         <q-item-section side v-if="opt.pai_id > 0">
           <q-checkbox
@@ -52,6 +54,13 @@ export default defineComponent({
     dense: {
       type: Boolean,
       required: false
+    },
+    lang: {
+      type: String,
+      required: false,
+      default(_rawProps) {
+        return 'pt'
+      }
     }
   },
   emits: ['tipo_projeto_updated'],
@@ -64,7 +73,6 @@ export default defineComponent({
     watch(
       () => props.tipo,
       (current, _o) => {
-        console.log('tipo:', current)
         projectType.value = current
       }
     )

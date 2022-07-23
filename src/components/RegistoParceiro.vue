@@ -33,10 +33,10 @@
             <q-input
               v-model="empresa.username"
               outlined
-              :label="$t('html.registerPartner.userEmail')"
+              :label="$t('html.registerPartner.username')"
               class="col-xs-12 col-md-6"
-              :rules="[isEmailRule]"
-              ref="inputName"
+              :rules="[isUsernamevalid]"
+              ref="inputUserName"
             >
               <template v-if="empresa.username" v-slot:append>
                 <q-icon
@@ -76,12 +76,16 @@
             <q-input
               v-model="empresa.nome"
               outlined
+              :rules="[isNameValid]"
+              ref="inputName"
               :label="$t('html.registerPartner.name')"
               class="col-xs-12 col-md-6"
             />
             <q-input
               v-model="empresa.email"
               outlined
+              :rules="[isEmailRule]"
+              ref="inputEmail"
               :label="$t('html.registerPartner.contactEmail')"
               class="col-xs-12 col-md-6"
             />
@@ -89,6 +93,7 @@
             <TipoProjetoSelector
               :tipos="tiposProjeto"
               :tipo="empresa.tipos_projeto"
+              :lang="lang"
               class="col-xs-12"
             />
 
@@ -99,6 +104,8 @@
               :option-label="lang === 'pt' ? 'nome' : 'nome_en'"
               option-value="id"
               @filter="filterFn"
+              :rules="[isCountryValid]"
+              ref="inputCountry"
               use-input
               emit-value
               map-options
@@ -288,8 +295,10 @@ import {
   mdiPhoneClassic
 } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
+import { isEmail } from '/src/models/validations'
 import LanguageSelector from './LanguageSelector.vue'
 import TipoProjetoSelector from './TipoProjetoSelector.vue'
 
@@ -299,6 +308,7 @@ export default defineComponent({
   emits: ['canceled', 'saved'],
   setup(props, { emit }) {
     const $q = useQuasar()
+    const { t } = useI18n()
     const empresa = ref(
       Object.assign(
         {
@@ -323,15 +333,20 @@ export default defineComponent({
     onMounted(async () => {
       try {
         tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
+        empresa.value.tipos_projeto = [
+          tiposProjeto.value.filter((t) => t.pai_id > 0)[0].id
+        ]
       } catch {
         $q.notify({
-          message: 'Não foi possível obter os tipos de projeto',
+          message: t('html.errors.getProjectTypes'),
           type: 'warning'
         })
       }
     })
-    const inputName = ref(null)
+    const inputUserName = ref(null)
     const inputPassword = ref(null)
+    const inputName = ref(null)
+    const inputCountry = ref(null)
     const tiposProjeto = ref([])
     const isPwd = ref(true)
     const tab = ref('geral')
@@ -339,15 +354,30 @@ export default defineComponent({
     const paises = ref([])
     const lang = ref('pt')
 
-    const isEmailRule = function (val) {
-      return !!val || 'Insira o utilizador'
+    const isUsernamevalid = function (val) {
+      return !!val || t('html.errors.noUsername')
+    }
+    const isNameValid = function (val) {
+      return !!val || t('html.errors.noName')
+    }
+    const isEmailRule = (val) => {
+      return isEmail(val) || t('html.errors.noEmail')
     }
     const isPasswordValid = function (val) {
-      return !!val || 'Insira a password'
+      return !!val || t('html.errors.noPassword')
+    }
+    const isCountryValid = (val) => {
+      if (val <= 0) return t('html.errors.noCountry')
+      else return true
     }
     const onRegister = async () => {
       // do login
-      if (inputName.value.validate() && inputPassword.value.validate()) {
+      if (
+        inputUserName.value.validate() &&
+        inputPassword.value.validate() &&
+        inputName.value.validate() &&
+        inputCountry.value.validate()
+      ) {
         onCreatingAcount.value = true
         // account has been created,
         const data = new FormData()
@@ -356,6 +386,7 @@ export default defineComponent({
         data.append('password', empresa.value.password)
         data.append('nome', empresa.value.nome)
         data.append('tipos_projeto', empresa.value.tipos_projeto)
+        data.append('pais_id', empresa.value.pais_id)
         data.append('descricao', empresa.value.descricao)
         data.append('telefone', empresa.value.telefone)
         data.append('telemovel', empresa.value.telemovel)
@@ -365,11 +396,19 @@ export default defineComponent({
         data.append('twitter', empresa.value.twitter)
         data.append('linkedin', empresa.value.linkedin)
         try {
-          await postForm('empresas/create.php', data)
-          emit('saved')
-        } catch {
+          const result = await postForm('empresas/create-parceiro.php', data)
+          if (result.ok === true) {
+            emit('saved')
+          } else {
+            $q.notify({
+              message: result.message,
+              type: 'warning'
+            })
+          }
+        } catch (error) {
+          console.log(error)
           $q.notify({
-            message: 'Não foi possível criar o registo',
+            message: t('html.registerPartner.error'),
             type: 'warning'
           })
         } finally {
@@ -386,7 +425,6 @@ export default defineComponent({
     const filterFn = (val, update) => {
       update(async () => {
         if (val !== '') {
-          const needle = val.toLowerCase()
           paises.value = await get('paises/read-all.php?filtro=' + val)
         }
       })
@@ -407,15 +445,20 @@ export default defineComponent({
       mdiCellphone,
       mdiPhoneClassic,
       inputName,
+      inputUserName,
       inputPassword,
+      inputCountry,
       tab,
       paises,
       empresa,
       tiposProjeto,
       isPwd,
       onCreatingAcount,
+      isUsernamevalid,
+      isNameValid,
       isEmailRule,
       isPasswordValid,
+      isCountryValid,
       lang,
       onRegister,
       onCancel,
