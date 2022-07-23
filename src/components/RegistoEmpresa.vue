@@ -72,6 +72,13 @@
             <q-input
               v-model="empresa.nome"
               outlined
+              :rules="[isNameValid]"
+              label="Nome Fiscal"
+              class="col-xs-12 col-md-6"
+            />
+            <q-input
+              v-model="empresa.titulo"
+              outlined
               label="Nome"
               class="col-xs-12 col-md-6"
             />
@@ -81,7 +88,7 @@
               label="Email"
               :rules="[isEmailRule]"
               ref="inputEmail"
-              class="col-xs-12 col-md-6"
+              class="col-xs-12 col-md-4"
             />
 
             <q-input
@@ -90,7 +97,7 @@
               label="NIF"
               :rules="[isNifValid]"
               ref="inputNif"
-              class="col-xs-12 col-md-6"
+              class="col-xs-12 col-md-4"
             />
 
             <q-input
@@ -99,7 +106,7 @@
               label="CAE"
               :rules="[isCaeValid]"
               ref="inputCae"
-              class="col-xs-12 col-md-6"
+              class="col-xs-12 col-md-4"
             />
 
             <TipoProjetoSelector
@@ -329,6 +336,7 @@ import {
 } from '@quasar/extras/mdi-v6'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
+import { isEmail } from '/src/models/validations'
 import TipoProjetoSelector from './TipoProjetoSelector.vue'
 
 export default defineComponent({
@@ -346,6 +354,7 @@ export default defineComponent({
           nome: '',
           nif: '',
           cae: '',
+          titulo: null,
           concelho_id: null,
           tipos_projeto: [],
           descricao: '',
@@ -365,7 +374,9 @@ export default defineComponent({
         tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
 
         if (empresa.value.tipos_projeto.length === 0) {
-          empresa.value.tipos_projeto = [tiposProjeto.value[0]]
+          empresa.value.tipos_projeto = [
+            tiposProjeto.value.filter((t) => t.pai_id > 0)[0].id
+          ]
         }
       } catch {
         $q.notify({
@@ -402,13 +413,11 @@ export default defineComponent({
     const isUsernamevalid = (val) => {
       return !!val || 'Insira o utilizador'
     }
+    const isNameValid = (val) => {
+      return !!val || 'Insira o Nome'
+    }
     const isEmailRule = (val) => {
-      const valid = String(val)
-        .toLowerCase()
-        .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        )
-      return valid || 'Insira um email válido'
+      return isEmail(val) || 'Insira um email válido'
     }
     const isPasswordValid = (val) => {
       return !!val || 'Insira a password'
@@ -470,6 +479,7 @@ export default defineComponent({
         data.append('username', empresa.value.username)
         data.append('password', empresa.value.password)
         data.append('nome', empresa.value.nome)
+        data.append('titulo', empresa.value.titulo)
         data.append('nif', empresa.value.nif)
         data.append('cae', empresa.value.cae)
         data.append('morada', empresa.value.morada)
@@ -484,8 +494,16 @@ export default defineComponent({
         data.append('twitter', empresa.value.twitter)
         data.append('linkedin', empresa.value.linkedin)
         try {
-          await postForm('empresas/create.php', data)
-          emit('saved')
+          const result = await postForm('empresas/create.php', data)
+
+          if (result.ok === true) {
+            emit('saved')
+          } else {
+            $q.notify({
+              message: result.message,
+              type: 'warning'
+            })
+          }
         } catch {
           $q.notify({
             message: 'Não foi possível criar o registo',
@@ -528,6 +546,8 @@ export default defineComponent({
       tipoProjetoUpdated,
       onCreatingAcount,
       isUsernamevalid,
+      isNameValid,
+      isPasswordValid,
       isEmailRule,
       isNifValid,
       isCaeValid,

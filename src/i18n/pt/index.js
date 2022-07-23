@@ -105,12 +105,20 @@ export default {
         register: 'Registar'
       }
     },
+    errors: {
+      getProjectTypes: 'Não foi possível obter os tipos de projeto',
+      noUsername: 'Insira o utilizador',
+      noPassword: 'Insira a password',
+      noName: 'Insira o nome',
+      noEmail: 'Insira um email válido',
+      noCountry: 'Escolha um país'
+    },
     registerPartner: {
       tabMain: 'Informação geral',
       tabDescription: 'Experiência Multi AEC',
       user: 'Utilizador',
       organization: 'Empresa',
-      userEmail: 'Email utilizador',
+      username: 'Nome de utilizador',
       userPassword: 'Password',
       name: 'Nome',
       contactEmail: 'Email contato',
@@ -118,7 +126,10 @@ export default {
       projectTypes: 'Tipos de projetos',
       logo: 'Logotipo',
       return: 'Voltar',
-      register: 'Registar'
+      register: 'Registar',
+      error: 'Não foi possível criar a conta',
+      success:
+        'A conta foi criada com sucesso. Vai ser validada pela PTPC e será notificado por email assim que estiver ativo.'
     }
   }
 }
