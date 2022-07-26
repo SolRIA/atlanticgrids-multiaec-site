@@ -12,7 +12,7 @@
       <q-icon :name="getlogo(localeOption.icon)" />
     </template>
     <template v-slot:selected>
-      {{ localeOption.label }}
+      <div class="text-subtitle2">{{ localeOption.label }}</div>
     </template>
     <template v-slot:option="scope">
       <q-item v-bind="scope.itemProps">

@@ -98,6 +98,11 @@ export default {
         register: 'Register'
       }
     },
+    registed: {
+      invite: 'Invite',
+      inviteMessage:
+        'Come and discover the collaboration platform for construction'
+    },
     errors: {
       getProjectTypes: 'Unable to get project types',
       noUsername: 'Enter username',
