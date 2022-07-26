@@ -3,17 +3,34 @@
     <!-- Be sure to play with the Layout demo on docs -->
 
     <!-- (Optional) The Header -->
-    <q-header elevated>
+    <q-header elevated class="bg-grey-2">
       <q-toolbar>
-        <q-btn flat round dense :icon="mdiMenu" @click="toggleLeftDrawer" />
+        <q-btn
+          :icon="mdiMenu"
+          @click="toggleLeftDrawer"
+          flat
+          stretch
+          color="black"
+        />
 
         <q-toolbar-title>
-          {{ username }}
+          <div class="text-black">{{ username }}</div>
         </q-toolbar-title>
 
         <q-space />
 
-        <q-btn flat round dense :icon="mdiLogout" @click="onLogout" />
+        <LanguageSelector />
+
+        <q-btn
+          flat
+          stretch
+          color="black"
+          :label="$t('html.registed.invite')"
+          :href="
+            'mailto:?subject=MultiAEC&body=' + $t('html.registed.inviteMessage')
+          "
+        />
+        <q-btn :icon="mdiLogout" @click="onLogout" flat stretch color="black" />
       </q-toolbar>
     </q-header>
 
@@ -70,14 +87,14 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getAuth } from 'boot/api'
 import { mdiMenu, mdiLogout } from '@quasar/extras/mdi-v6'
+import LanguageSelector from 'src/components/LanguageSelector.vue'
 
 export default {
+  components: { LanguageSelector },
   setup() {
     const $router = useRouter()
-
     const leftDrawerOpen = ref(false)
     const menuList = ref([])
-
     onMounted(async () => {
       try {
         menuList.value = await getAuth('menu/read.php')
@@ -85,7 +102,6 @@ export default {
         console.error(e)
       }
     })
-
     return {
       mdiMenu,
       mdiLogout,

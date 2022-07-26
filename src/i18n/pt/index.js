@@ -105,6 +105,11 @@ export default {
         register: 'Registar'
       }
     },
+    registed: {
+      invite: 'Convidar',
+      inviteMessage:
+        'Venha conhecer a plataforma de colaboração para construção'
+    },
     errors: {
       getProjectTypes: 'Não foi possível obter os tipos de projeto',
       noUsername: 'Insira o utilizador',
