@@ -10,7 +10,6 @@
         class="bg-primary text-white shadow-2"
         narrow-indicator
       >
-        <q-tab name="geral" :icon="mdiAccountTie" label="Utilizador" />
         <q-tab
           name="empresa"
           :icon="mdiAccountGroup"
@@ -28,7 +27,7 @@
       <q-separator />
 
       <q-tab-panels v-model="tab">
-        <q-tab-panel name="geral">
+        <q-tab-panel name="empresa">
           <div class="row justify-center">
             <q-img
               :src="apiPublicUrl(empresa.logo)"
@@ -50,6 +49,8 @@
               v-model="utilizador.username"
               outlined
               label="Utilizador"
+              :rules="[isUsernamevalid]"
+              ref="inputUsername"
               class="col-xs-12 col-md-6"
             >
               <template v-if="utilizador.username" v-slot:append>
@@ -67,8 +68,6 @@
               :type="isPwd ? 'password' : 'text'"
               label="Password"
               class="col-xs-12 col-md-6"
-              :rules="[isPasswordValid]"
-              ref="inputPassword"
             >
               <template v-slot:append>
                 <q-icon
@@ -85,13 +84,17 @@
                 />
               </template>
             </q-input>
-          </div>
-        </q-tab-panel>
 
-        <q-tab-panel name="empresa">
-          <div class="row q-col-gutter-md">
             <q-input
               v-model="empresa.nome"
+              :rules="[isNameValid]"
+              label="Nome Fiscal"
+              ref="inputName"
+              outlined
+              class="col-xs-12 col-md-6"
+            />
+            <q-input
+              v-model="empresa.titulo"
               label="Nome"
               outlined
               class="col-xs-12 col-md-6"
@@ -99,39 +102,61 @@
             <q-input
               v-model="empresa.email"
               label="Email"
+              :rules="[isEmailRule]"
+              ref="inputEmail"
               outlined
               clearable
-              class="col-xs-12 col-md-6"
+              class="col-xs-12 col-md-4"
+            />
+
+            <q-input
+              v-model="empresa.nif"
+              outlined
+              label="NIF"
+              :rules="[isNifValid]"
+              ref="inputNif"
+              class="col-xs-12 col-md-4"
+            />
+
+            <q-input
+              v-model="empresa.cae"
+              outlined
+              label="CAE"
+              :rules="[isCaeValid]"
+              ref="inputCae"
+              class="col-xs-12 col-md-4"
+            />
+
+            <TipoProjetoSelector
+              :tipos="tiposProjeto"
+              :tipo="empresa.tipos_projeto"
+              @tipo_projeto_updated="tipoProjetoUpdated"
+              class="col-xs-12"
             />
 
             <q-select
-              v-model="empresa.tipos_projeto"
-              :options="tiposProjeto"
-              label="Tipos de projetos"
+              v-model="empresa.concelho_id"
+              :options="concelhos"
+              label="Concelho"
               option-label="nome"
               option-value="id"
-              class="col-xs-12 col-md-6"
-              multiple
+              @filter="filterFn"
+              use-input
               emit-value
               map-options
               outlined
-            >
-              <template
-                v-slot:option="{ itemProps, opt, selected, toggleOption }"
-              >
-                <q-item v-bind="itemProps">
-                  <q-item-section>
-                    <q-item-label>{{ opt.nome }}</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-toggle
-                      :model-value="selected"
-                      @update:model-value="toggleOption(opt)"
-                    />
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
+              :rules="[isConcelhoValid]"
+              ref="inputConcelho"
+              class="col-xs-12"
+            />
+
+            <q-input
+              v-model="empresa.morada"
+              outlined
+              type="textarea"
+              label="Morada"
+              class="col-xs-12"
+            />
 
             <q-input
               v-model="empresa.telemovel"
@@ -288,8 +313,12 @@
               verdana: 'Verdana'
             }"
           />
+          <p>{{ empresa.descricao.length }}</p>
         </q-tab-panel>
       </q-tab-panels>
+
+      <q-separator inset />
+
       <q-card-actions align="right">
         <q-btn
           label="Guardar"
@@ -304,9 +333,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
 import {
-  mdiAccountTie,
   mdiShieldCheckOutline,
   mdiWeb,
   mdiFacebook,
@@ -322,17 +349,41 @@ import {
   mdiCellphone,
   mdiPhoneClassic
 } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, onMounted } from 'vue'
 import { get, getAuth, postAuth, postFormAuth, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
+import { isEmail } from '/src/models/validations'
+import TipoProjetoSelector from 'src/components/TipoProjetoSelector.vue'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
-
-    const tab = ref('geral')
-    const isPwd = ref(true)
-    const empresaExistente = ref(false)
-
+    const utilizador = ref({
+      username: '',
+      password: '',
+      perfil: '',
+      empresa_id: 0
+    })
+    const empresa = ref({
+      id: 0,
+      email: '',
+      nome: '',
+      nif: '',
+      cae: '',
+      titulo: null,
+      concelho_id: null,
+      morada: null,
+      tipos_projeto: [],
+      ativo: true,
+      descricao: null,
+      website: null,
+      telemovel: null,
+      telefone: null,
+      facebook: null,
+      twitter: null,
+      linkedin: null,
+      logo: null
+    })
     onMounted(async () => {
       try {
         utilizador.value = await getAuth('utilizadores/read-single.php')
@@ -367,66 +418,120 @@ export default defineComponent({
             type: 'warning'
           })
         }
+        // concelhos
+        try {
+          if (empresa.value.concelho_id > 0) {
+            concelhos.value = await get(
+              'concelhos/read.php?id=' + empresa.value.concelho_id
+            )
+          }
+        } catch {
+          $q.notify({
+            message: 'Não foi possível obter os concelhos',
+            type: 'warning'
+          })
+        }
       }
     })
 
+    const inputName = ref(null)
+    const inputUsername = ref(null)
+    const inputEmail = ref(null)
+    const inputNif = ref(null)
+    const inputCae = ref(null)
+    const inputConcelho = ref(null)
     const tiposProjeto = ref([])
+    const isPwd = ref(true)
+    const tab = ref('empresa')
+    const empresaExistente = ref(false)
+    const concelhos = ref([])
     const logo = ref(null)
-    const utilizador = ref({
-      username: '',
-      password: '',
-      perfil: '',
-      empresa_id: 0
-    })
-    const empresa = ref({
-      id: 0,
-      nome: '',
-      email: '',
-      ativo: true,
-      descricao: null,
-      website: null,
-      telemovel: null,
-      telefone: null,
-      facebook: null,
-      twitter: null,
-      linkedin: null,
-      logo: null,
-      tipos_projeto: []
-    })
 
-    const isPasswordValid = (val) => {
-      return !!val || 'Insira a password'
+    const isUsernamevalid = (val) => {
+      return !!val || 'Insira o utilizador'
+    }
+    const isNameValid = (val) => {
+      return !!val || 'Insira o Nome'
+    }
+    const isEmailRule = (val) => {
+      return isEmail(val) || 'Insira um email válido'
+    }
+    const isNifValid = (val) => {
+      let firstDigit = 0,
+        checkDigit = 0,
+        i = 0
+
+      if (val !== null && val.length === 9) {
+        firstDigit = parseInt(val.charAt(0))
+        checkDigit = firstDigit * 9
+        for (i = 2; i <= 8; i++) {
+          checkDigit += parseInt(val.charAt(i - 1)) * (10 - i)
+        }
+        checkDigit = 11 - (checkDigit % 11)
+        if (checkDigit >= 10) {
+          checkDigit = 0
+        }
+        if (checkDigit === parseInt(val.charAt(8))) {
+          return true
+        }
+      }
+      return 'NIF inválido'
+    }
+    const isCaeValid = (val) => {
+      if (val === null || val.length !== 5) return 'CAE inválido'
+      else return true
+    }
+    const isConcelhoValid = (val) => {
+      if (val <= 0) return 'Indique o concelho'
+      else return true
+    }
+    const tipoProjetoUpdated = (e) => {
+      empresa.value.tipos_projeto = e
+    }
+    const filterFn = (val, update) => {
+      update(async () => {
+        if (val !== '') {
+          const needle = val.toLowerCase()
+          concelhos.value = await get('concelhos/read.php?id=0&filtro=' + val)
+        }
+      })
     }
     const guarda = async () => {
       // guardar o utilizador, só o username
-      try {
-        await postAuth('utilizadores/update-self.php', utilizador.value)
-      } catch {
-        $q.notify({
-          message: 'Não foi possível guardar os dados do utilizador',
-          type: 'warning'
-        })
-      }
-
+      // validate
       if (
-        typeof utilizador.value.empresa_id !== 'undefined' &&
-        utilizador.value.empresa_id > 0
+        inputName.value.validate() &&
+        inputUsername.value.validate() &&
+        inputEmail.value.validate() &&
+        inputNif.value.validate() &&
+        inputCae.value.validate() &&
+        inputConcelho.value.validate()
       ) {
-        // guardar os dados da empresa
-
-        await postAuth('empresas/update-self.php', empresa.value)
-
-        //guardar o logotipo
-        const data = new FormData()
-        data.append('id', empresa.value.id)
-        data.append('logo', logo.value)
-        await postFormAuth('empresas/update-logo.php', data)
+        try {
+          await postAuth('utilizadores/update-self.php', utilizador.value)
+        } catch {
+          $q.notify({
+            message: 'Não foi possível guardar os dados do utilizador',
+            type: 'warning'
+          })
+          return
+        }
+        if (
+          typeof utilizador.value.empresa_id !== 'undefined' &&
+          utilizador.value.empresa_id > 0
+        ) {
+          // guardar os dados da empresa
+          await postAuth('empresas/update-self.php', empresa.value)
+          //guardar o logotipo
+          const data = new FormData()
+          data.append('id', empresa.value.id)
+          data.append('logo', logo.value)
+          await postFormAuth('empresas/update-logo.php', data)
+        }
+        $q.notify({ message: 'Os dados foram guardados', type: 'positive' })
       }
-      $q.notify({ message: 'Os dados foram guardados', type: 'positive' })
     }
-
     return {
-      mdiAccountTie,
       mdiShieldCheckOutline,
       mdiWeb,
       mdiFacebook,
@@ -441,18 +546,33 @@ export default defineComponent({
       mdiCheckboxMarkedOutline,
       mdiCellphone,
       mdiPhoneClassic,
+      inputName,
+      inputUsername,
+      inputEmail,
+      inputNif,
+      inputCae,
+      inputConcelho,
       tab,
       isPwd,
       empresaExistente,
       tiposProjeto,
       logo,
+      concelhos,
       utilizador,
       empresa,
       username: localStorage.getItem('login'),
-      isPasswordValid,
+      tipoProjetoUpdated,
+      isUsernamevalid,
+      isNameValid,
+      isEmailRule,
+      isNifValid,
+      isCaeValid,
+      isConcelhoValid,
+      filterFn,
       guarda,
       apiPublicUrl
     }
-  }
+  },
+  components: { TipoProjetoSelector }
 })
 </script>

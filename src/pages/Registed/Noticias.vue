@@ -1,5 +1,9 @@
 <template>
   <q-page padding>
+    <div class="q-pa-lg flex flex-center">
+      <q-btn-toggle v-model="banco" push rounded :options="bancos" />
+    </div>
+
     <q-table
       class="q-mt-sm"
       color="positive"
@@ -36,13 +40,6 @@
             :icon="mdiPencil"
             @click="onEdit(props.row)"
           />
-        </q-td>
-      </template>
-      <template v-slot:body-cell-banco_id="props">
-        <q-td :props="props" auto-width>
-          <q-avatar rounded>
-            <img :src="logobanco(props.row.banco_id)" />
-          </q-avatar>
         </q-td>
       </template>
     </q-table>
@@ -87,8 +84,6 @@
               v-model="noticia.banco_id"
               :options="bancos"
               class="col-xs-12"
-              option-value="id"
-              option-label="nome"
               emit-value
               map-options
             />
@@ -110,8 +105,8 @@ import {
   mdiPlusBoxOutline,
   mdiPencil
 } from '@quasar/extras/mdi-v6'
-import { defineComponent, ref, onMounted } from 'vue'
-import { get, postAuth, apiPublicUrl } from 'boot/api'
+import { defineComponent, ref, onMounted, watch } from 'vue'
+import { get, postAuth, post } from 'boot/api'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -124,18 +119,21 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        bancos.value = await get('bancos/read-ativo.php')
+        const banks = await get('bancos/read-ativo.php')
+        bancos.value = banks.map(function (b) {
+          return { label: b.nome, value: b.id }
+        })
+        banco.value = bancos.value[0].value
       } catch {
         $q.notify({
           message: 'Não foi possível obter os bancos',
           type: 'warning'
         })
       }
-
-      tableRef.value.requestServerInteraction()
     })
 
     const bancos = ref([])
+    const banco = ref({})
     const noticias = ref([])
     const noticiaEscolhida = ref([])
     const noticia = ref({
@@ -155,20 +153,40 @@ export default defineComponent({
         field: 'created_at',
         align: 'left'
       },
-      { name: 'banco_id', label: 'Banco', field: 'banco_id', align: 'left' },
       { name: 'actions', label: '', field: 'actions' }
     ]
-
     const pagination = ref({
       descending: false,
       page: 1,
       rowsPerPage: 10,
       rowsNumber: 10
     })
-    const onServerRequest = async (_props) => {
+
+    watch(banco, (_current, _old) => {
+      tableRef.value.requestServerInteraction()
+    })
+
+    const onServerRequest = async (props) => {
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      const filter = props.filter
       loading.value = true
       try {
-        noticias.value = await get('noticias/read.php')
+        const result = await post('noticias/read.php', {
+          page,
+          rowsPerPage,
+          sortBy,
+          descending,
+          filter,
+          banco_id: banco.value
+        })
+
+        noticias.value = result.rows
+
+        pagination.value.rowsNumber = result.total
+        pagination.value.page = page
+        pagination.value.rowsPerPage = rowsPerPage
+        pagination.value.sortBy = sortBy
+        pagination.value.descending = descending
       } catch {
         $q.notify({
           message: 'Não foi possível obter as notícias',
@@ -176,10 +194,6 @@ export default defineComponent({
         })
       }
       loading.value = false
-    }
-    const logobanco = (banco_id) => {
-      const logo = bancos.value.find((b) => b.id === banco_id).logo
-      return apiPublicUrl(logo)
     }
 
     return {
@@ -193,6 +207,7 @@ export default defineComponent({
       noticiaEscolhida,
       noticia,
       bancos,
+      banco,
       colunas,
       pagination,
       onServerRequest,
@@ -221,8 +236,7 @@ export default defineComponent({
         } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
-      },
-      logobanco
+      }
     }
   }
 })

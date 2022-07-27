@@ -34,7 +34,7 @@
               label="Utilizador"
               class="col-xs-12 col-md-6"
               :rules="[isUsernamevalid]"
-              ref="inputName"
+              ref="inputUsername"
             >
               <template v-if="empresa.username" v-slot:append>
                 <q-icon
@@ -71,23 +71,24 @@
             <div class="text-h6 col-12">Empresa</div>
             <q-input
               v-model="empresa.nome"
-              outlined
               :rules="[isNameValid]"
               label="Nome Fiscal"
+              ref="inputName"
+              outlined
               class="col-xs-12 col-md-6"
             />
             <q-input
               v-model="empresa.titulo"
-              outlined
               label="Nome"
+              outlined
               class="col-xs-12 col-md-6"
             />
             <q-input
               v-model="empresa.email"
-              outlined
               label="Email"
               :rules="[isEmailRule]"
               ref="inputEmail"
+              outlined
               class="col-xs-12 col-md-4"
             />
 
@@ -318,7 +319,6 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
 import {
   mdiEyeOff,
   mdiEye,
@@ -334,9 +334,10 @@ import {
   mdiCellphone,
   mdiPhoneClassic
 } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
-import { isEmail } from '/src/models/validations'
+import { isEmail, isNifPf, isCae } from '/src/models/validations'
 import TipoProjetoSelector from './TipoProjetoSelector.vue'
 
 export default defineComponent({
@@ -356,6 +357,7 @@ export default defineComponent({
           cae: '',
           titulo: null,
           concelho_id: null,
+          morada: null,
           tipos_projeto: [],
           descricao: '',
           telefone: null,
@@ -393,12 +395,13 @@ export default defineComponent({
         }
       } catch {
         $q.notify({
-          message: 'Não foi possível obter os tipos de projeto',
+          message: 'Não foi possível obter os concelhos',
           type: 'warning'
         })
       }
     })
     const inputName = ref(null)
+    const inputUsername = ref(null)
     const inputPassword = ref(null)
     const inputEmail = ref(null)
     const inputNif = ref(null)
@@ -423,29 +426,10 @@ export default defineComponent({
       return !!val || 'Insira a password'
     }
     const isNifValid = (val) => {
-      let firstDigit = 0,
-        checkDigit = 0,
-        i = 0
-
-      if (val !== null && val.length === 9) {
-        firstDigit = parseInt(val.charAt(0))
-        checkDigit = firstDigit * 9
-        for (i = 2; i <= 8; i++) {
-          checkDigit += parseInt(val.charAt(i - 1)) * (10 - i)
-        }
-        checkDigit = 11 - (checkDigit % 11)
-        if (checkDigit >= 10) {
-          checkDigit = 0
-        }
-        if (checkDigit === parseInt(val.charAt(8))) {
-          return true
-        }
-      }
-      return 'NIF inválido'
+      return isNifPf(val) || 'NIF inválido'
     }
     const isCaeValid = (val) => {
-      if (val === null || val.length !== 5) return 'CAE inválido'
-      else return true
+      return isCae(val) || 'CAE inválido'
     }
     const isConcelhoValid = (val) => {
       if (val <= 0) return 'Indique o concelho'
@@ -457,7 +441,6 @@ export default defineComponent({
     const filterFn = (val, update) => {
       update(async () => {
         if (val !== '') {
-          const needle = val.toLowerCase()
           concelhos.value = await get('concelhos/read.php?id=0&filtro=' + val)
         }
       })
@@ -466,6 +449,7 @@ export default defineComponent({
       // validate
       if (
         inputName.value.validate() &&
+        inputUsername.value.validate() &&
         inputPassword.value.validate() &&
         inputEmail.value.validate() &&
         inputNif.value.validate() &&
@@ -533,6 +517,7 @@ export default defineComponent({
       mdiCellphone,
       mdiPhoneClassic,
       inputName,
+      inputUsername,
       inputPassword,
       inputEmail,
       inputNif,
@@ -543,8 +528,8 @@ export default defineComponent({
       tiposProjeto,
       isPwd,
       concelhos,
-      tipoProjetoUpdated,
       onCreatingAcount,
+      tipoProjetoUpdated,
       isUsernamevalid,
       isNameValid,
       isPasswordValid,

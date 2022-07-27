@@ -71,8 +71,16 @@ const routes = [
         component: () => import('src/pages/Registed/Conta.vue')
       },
       {
+        path: 'contaparceiro',
+        component: () => import('src/pages/Registed/ContaParceiro.vue')
+      },
+      {
         path: 'empresas',
         component: () => import('src/pages/Registed/Empresas.vue')
+      },
+      {
+        path: 'parceiros',
+        component: () => import('src/pages/Registed/Parceiros.vue')
       },
       {
         path: 'utilizadores',
