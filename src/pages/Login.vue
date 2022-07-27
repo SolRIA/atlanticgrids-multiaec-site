@@ -96,8 +96,6 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
 import {
   mdiEyeOff,
   mdiEye,
@@ -105,6 +103,8 @@ import {
   mdiCloseCircle,
   mdiHome
 } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { post } from 'boot/api'
 import { useQuasar } from 'quasar'
 

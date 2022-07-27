@@ -1,18 +1,18 @@
 <template>
-  <q-card bordered class="card-login">
-    <q-card-section>
+  <q-page padding>
+    <q-card>
       <q-tabs
         v-model="tab"
         outside-arrows
         inline-label
         mobile-arrows
-        dense
         align="center"
+        class="bg-primary text-white shadow-2"
         narrow-indicator
       >
         <q-tab
-          name="geral"
-          :icon="mdiBadgeAccountHorizontalOutline"
+          name="empresa"
+          :icon="mdiAccountGroup"
           :label="$t('html.registerPartner.tabMain')"
         />
         <q-tab
@@ -25,35 +25,47 @@
       <q-separator />
 
       <q-tab-panels v-model="tab">
-        <q-tab-panel name="geral">
+        <q-tab-panel name="empresa">
+          <div class="row justify-center">
+            <q-img
+              :src="apiPublicUrl(empresa.logo)"
+              style="height: 80px"
+              fit="scale-down"
+            />
+          </div>
+          <q-chip
+            square
+            color="primary"
+            text-color="white"
+            :icon="mdiShieldCheckOutline"
+            size="lg"
+          >
+            {{ utilizador.perfil }}
+          </q-chip>
           <div class="row q-col-gutter-md">
-            <div class="text-h6 col-12">
-              {{ $t('html.registerPartner.user') }}
-            </div>
             <q-input
-              v-model="empresa.username"
+              v-model="utilizador.username"
               outlined
-              :label="$t('html.registerPartner.username')"
-              class="col-xs-12 col-md-6"
+              label="Utilizador"
               :rules="[isUsernamevalid]"
-              ref="inputUserName"
+              ref="inputUsername"
+              class="col-xs-12 col-md-6"
             >
-              <template v-if="empresa.username" v-slot:append>
+              <template v-if="utilizador.username" v-slot:append>
                 <q-icon
                   :name="mdiCloseCircle"
-                  @click.stop="empresa.username = null"
+                  @click.stop="utilizador.username = null"
                   class="cursor-pointer"
                 />
               </template>
             </q-input>
             <q-input
-              v-model="empresa.password"
+              v-model="utilizador.password"
               outlined
+              lazy-rules=""
               :type="isPwd ? 'password' : 'text'"
-              :label="$t('html.registerPartner.userPassword')"
+              label="Password"
               class="col-xs-12 col-md-6"
-              :rules="[isPasswordValid]"
-              ref="inputPassword"
             >
               <template v-slot:append>
                 <q-icon
@@ -63,37 +75,27 @@
                   @click="isPwd = !isPwd"
                 />
                 <q-icon
-                  v-if="empresa.password"
+                  v-if="utilizador.password"
                   :name="mdiCloseCircle"
-                  @click.stop="empresa.password = null"
+                  @click.stop="utilizador.password = null"
                   class="cursor-pointer"
                 />
               </template>
             </q-input>
-            <div class="text-h6 col-12">
-              {{ $t('html.registerPartner.organization') }}
-            </div>
+
             <q-input
               v-model="empresa.nome"
-              outlined
               :rules="[isNameValid]"
+              label="Nome Fiscal"
               ref="inputName"
-              :label="$t('html.registerPartner.name')"
-              class="col-xs-12 col-md-6"
-            />
-            <q-input
-              v-model="empresa.email"
               outlined
-              :rules="[isEmailRule]"
-              ref="inputEmail"
-              :label="$t('html.registerPartner.contactEmail')"
               class="col-xs-12 col-md-6"
             />
 
             <TipoProjetoSelector
               :tipos="tiposProjeto"
               :tipo="empresa.tipos_projeto"
-              :lang="lang"
+              @tipo_projeto_updated="tipoProjetoUpdated"
               class="col-xs-12"
             />
 
@@ -113,6 +115,44 @@
               class="col-xs-12"
             />
 
+            <q-select
+              v-model="empresa.concelho_id"
+              :options="concelhos"
+              label="Concelho"
+              option-label="nome"
+              option-value="id"
+              @filter="filterFn"
+              use-input
+              emit-value
+              map-options
+              outlined
+              :rules="[isConcelhoValid]"
+              ref="inputConcelho"
+              class="col-xs-12"
+            />
+
+            <q-input
+              v-model="empresa.telemovel"
+              outlined
+              label="Telemóvel"
+              class="col-xs-12 col-md-4"
+            >
+              <template v-slot:append>
+                <q-icon :name="mdiCellphone" color="primary" />
+              </template>
+            </q-input>
+
+            <q-input
+              v-model="empresa.telefone"
+              outlined
+              label="Telefone"
+              class="col-xs-12 col-md-4"
+            >
+              <template v-slot:append>
+                <q-icon :name="mdiPhoneClassic" color="primary" />
+              </template>
+            </q-input>
+
             <q-input
               v-model="empresa.website"
               outlined
@@ -123,6 +163,7 @@
                 <q-icon :name="mdiWeb" color="primary" />
               </template>
             </q-input>
+
             <q-input
               v-model="empresa.facebook"
               outlined
@@ -155,11 +196,7 @@
             </q-input>
 
             <div class="col-xs-12 col-md-6">
-              <q-file
-                outlined
-                v-model="empresa.logo"
-                :label="$t('html.registerPartner.logo')"
-              >
+              <q-file outlined v-model="logo" label="Logotipo">
                 <template v-slot:prepend>
                   <q-icon :name="mdiImageSearchOutline" />
                 </template>
@@ -171,6 +208,7 @@
         <q-tab-panel name="descricao">
           <q-editor
             v-model="empresa.descricao"
+            placeholder="Insira a descrição da sua empresa"
             :toolbar="[
               [
                 {
@@ -251,121 +289,140 @@
           <p>{{ empresa.descricao.length }}</p>
         </q-tab-panel>
       </q-tab-panels>
-    </q-card-section>
 
-    <q-separator inset />
+      <q-separator inset />
 
-    <q-card-actions align="right">
-      <LanguageSelector @language_changed="languageChanged" />
-      <q-btn
-        :label="$t('html.registerPartner.return')"
-        type="reset"
-        rounded
-        flat
-        @click="onCancel"
-      />
-      <q-btn
-        color="primary"
-        :label="$t('html.registerPartner.register')"
-        rounded
-        class="text-white action-btn"
-        :icon="mdiLogin"
-        size="lg"
-        @click="onRegister"
-        :loading="onCreatingAcount"
-      />
-    </q-card-actions>
-  </q-card>
+      <q-card-actions align="right">
+        <q-btn
+          label="Guardar"
+          color="primary"
+          size="lg"
+          :icon="mdiCheckboxMarkedOutline"
+          @click="guarda"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-page>
 </template>
 
 <script>
 import {
-  mdiEyeOff,
-  mdiEye,
-  mdiLogin,
-  mdiCloseCircle,
+  mdiShieldCheckOutline,
   mdiWeb,
   mdiFacebook,
   mdiTwitter,
   mdiLinkedin,
-  mdiBadgeAccountHorizontalOutline,
-  mdiFileDocumentEditOutline,
   mdiImageSearchOutline,
+  mdiAccountGroup,
+  mdiEyeOff,
+  mdiEye,
+  mdiCloseCircle,
+  mdiFileDocumentEditOutline,
+  mdiCheckboxMarkedOutline,
   mdiCellphone,
   mdiPhoneClassic
 } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { get, getAuth, postAuth, postFormAuth, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
-import { get, postForm } from 'boot/api'
 import { isEmail } from '/src/models/validations'
-import LanguageSelector from './LanguageSelector.vue'
-import TipoProjetoSelector from './TipoProjetoSelector.vue'
+import TipoProjetoSelector from 'src/components/TipoProjetoSelector.vue'
 
 export default defineComponent({
-  name: 'RegistoParceiro',
-  components: { LanguageSelector, TipoProjetoSelector },
-  props: { p: { type: Object, required: true } },
-  emits: ['canceled', 'saved'],
-  setup(props, { emit }) {
+  components: { TipoProjetoSelector },
+  setup() {
     const $q = useQuasar()
-    const { t } = useI18n()
-    const empresa = ref(
-      Object.assign(
-        {
-          username: '',
-          password: '',
-          email: '',
-          nome: '',
-          tipos_projeto: [],
-          descricao: '',
-          telefone: null,
-          telemovel: null,
-          website: null,
-          facebook: null,
-          twitter: null,
-          linkedin: null,
-          logo: null,
-          pais_id: null
-        },
-        props.p
-      )
-    )
+    const utilizador = ref({
+      username: '',
+      password: '',
+      perfil: '',
+      parceiro_id: 0
+    })
+    const empresa = ref({
+      id: 0,
+      email: '',
+      nome: '',
+      tipos_projeto: [],
+      descricao: null,
+      website: null,
+      telemovel: null,
+      telefone: null,
+      facebook: null,
+      twitter: null,
+      linkedin: null,
+      logo: null,
+      pais_id: null
+    })
     onMounted(async () => {
       try {
-        tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
-        empresa.value.tipos_projeto = [
-          tiposProjeto.value.filter((t) => t.pai_id > 0)[0].id
-        ]
+        utilizador.value = await getAuth('utilizadores/read-single.php')
       } catch {
         $q.notify({
-          message: t('html.errors.getProjectTypes'),
+          message: 'Não foi possível obter os dados do utilizador',
           type: 'warning'
         })
       }
+      if (
+        typeof utilizador.value.empresa_id !== 'undefined' &&
+        utilizador.value.empresa_id > 0
+      ) {
+        // tipos de projeto
+        try {
+          tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
+        } catch {
+          $q.notify({
+            message: 'Não foi possível obter os tipos de projeto',
+            type: 'warning'
+          })
+        }
+        // empresa
+        try {
+          empresa.value = await get(
+            'empresas/read-single-parceiro.php?id=' +
+              utilizador.value.parceiro_id
+          )
+          empresaExistente.value = true
+        } catch {
+          $q.notify({
+            message: 'Não foi possível obter os dados do parceiro',
+            type: 'warning'
+          })
+        }
+        // paises
+        try {
+          if (empresa.value.pais_id > 0) {
+            paises.value = await get(
+              'paises/read-single.php?id=' + empresa.value.pais_id
+            )
+          }
+        } catch {
+          $q.notify({
+            message: 'Não foi possível obter o país',
+            type: 'warning'
+          })
+        }
+      }
     })
-    const inputUserName = ref(null)
-    const inputPassword = ref(null)
+
     const inputName = ref(null)
+    const inputUsername = ref(null)
+    const inputEmail = ref(null)
     const inputCountry = ref(null)
     const tiposProjeto = ref([])
     const isPwd = ref(true)
-    const tab = ref('geral')
-    const onCreatingAcount = ref(false)
+    const tab = ref('empresa')
+    const empresaExistente = ref(false)
     const paises = ref([])
-    const lang = ref('pt')
+    const logo = ref(null)
 
-    const isUsernamevalid = function (val) {
-      return !!val || t('html.errors.noUsername')
+    const isUsernamevalid = (val) => {
+      return !!val || 'Insira o utilizador'
     }
-    const isNameValid = function (val) {
-      return !!val || t('html.errors.noName')
+    const isNameValid = (val) => {
+      return !!val || 'Insira o Nome'
     }
     const isEmailRule = (val) => {
-      return isEmail(val) || t('html.errors.noEmail')
-    }
-    const isPasswordValid = function (val) {
-      return !!val || t('html.errors.noPassword')
+      return isEmail(val) || 'Insira um email válido'
     }
     const isCountryValid = (val) => {
       if (val <= 0) return t('html.errors.noCountry')
@@ -374,58 +431,6 @@ export default defineComponent({
     const tipoProjetoUpdated = (e) => {
       empresa.value.tipos_projeto = e
     }
-    const onRegister = async () => {
-      // do login
-      if (
-        inputUserName.value.validate() &&
-        inputPassword.value.validate() &&
-        inputName.value.validate() &&
-        inputCountry.value.validate()
-      ) {
-        onCreatingAcount.value = true
-        // account has been created,
-        const data = new FormData()
-        data.append('logo', empresa.value.logo)
-        data.append('username', empresa.value.username)
-        data.append('password', empresa.value.password)
-        data.append('nome', empresa.value.nome)
-        data.append('tipos_projeto', empresa.value.tipos_projeto)
-        data.append('pais_id', empresa.value.pais_id)
-        data.append('descricao', empresa.value.descricao)
-        data.append('telefone', empresa.value.telefone)
-        data.append('telemovel', empresa.value.telemovel)
-        data.append('email', empresa.value.email)
-        data.append('website', empresa.value.website)
-        data.append('facebook', empresa.value.facebook)
-        data.append('twitter', empresa.value.twitter)
-        data.append('linkedin', empresa.value.linkedin)
-        try {
-          const result = await postForm('empresas/create-parceiro.php', data)
-          if (result.ok === true) {
-            emit('saved')
-          } else {
-            $q.notify({
-              message: result.message,
-              type: 'warning'
-            })
-          }
-        } catch (error) {
-          console.log(error)
-          $q.notify({
-            message: t('html.registerPartner.error'),
-            type: 'warning'
-          })
-        } finally {
-          onCreatingAcount.value = false
-        }
-      }
-    }
-    const onCancel = function () {
-      emit('canceled')
-    }
-    const languageChanged = (e) => {
-      lang.value = e
-    }
     const filterFn = (val, update) => {
       update(async () => {
         if (val !== '') {
@@ -433,42 +438,75 @@ export default defineComponent({
         }
       })
     }
-
+    const guarda = async () => {
+      // guardar o utilizador, só o username
+      // validate
+      if (
+        inputName.value.validate() &&
+        inputUsername.value.validate() &&
+        inputEmail.value.validate() &&
+        inputCountry.value.validate()
+      ) {
+        try {
+          await postAuth('utilizadores/update-self.php', utilizador.value)
+        } catch {
+          $q.notify({
+            message: 'Não foi possível guardar os dados do utilizador',
+            type: 'warning'
+          })
+          return
+        }
+        if (
+          typeof utilizador.value.empresa_id !== 'undefined' &&
+          utilizador.value.empresa_id > 0
+        ) {
+          // guardar os dados da empresa
+          await postAuth('empresas/update-self-parceiro.php', empresa.value)
+          //guardar o logotipo
+          const data = new FormData()
+          data.append('id', empresa.value.id)
+          data.append('logo', logo.value)
+          await postFormAuth('empresas/update-logo-parceiro.php', data)
+        }
+        $q.notify({ message: 'Os dados foram guardados', type: 'positive' })
+      }
+    }
     return {
-      mdiEyeOff,
-      mdiEye,
-      mdiLogin,
-      mdiCloseCircle,
+      mdiShieldCheckOutline,
       mdiWeb,
       mdiFacebook,
       mdiTwitter,
       mdiLinkedin,
-      mdiBadgeAccountHorizontalOutline,
-      mdiFileDocumentEditOutline,
       mdiImageSearchOutline,
+      mdiAccountGroup,
+      mdiEyeOff,
+      mdiEye,
+      mdiCloseCircle,
+      mdiFileDocumentEditOutline,
+      mdiCheckboxMarkedOutline,
       mdiCellphone,
       mdiPhoneClassic,
       inputName,
-      inputUserName,
-      inputPassword,
+      inputUsername,
+      inputEmail,
       inputCountry,
       tab,
-      paises,
-      empresa,
-      tiposProjeto,
       isPwd,
-      onCreatingAcount,
-      lang,
+      empresaExistente,
+      tiposProjeto,
+      logo,
+      paises,
+      utilizador,
+      empresa,
+      username: localStorage.getItem('login'),
+      tipoProjetoUpdated,
       isUsernamevalid,
       isNameValid,
       isEmailRule,
-      isPasswordValid,
       isCountryValid,
-      tipoProjetoUpdated,
-      onRegister,
-      onCancel,
-      languageChanged,
-      filterFn
+      filterFn,
+      guarda,
+      apiPublicUrl
     }
   }
 })

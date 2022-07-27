@@ -3,7 +3,7 @@
     <q-table
       class="q-mt-sm"
       color="positive"
-      title="Empresas"
+      title="Parceiros"
       ref="tableRef"
       selection="single"
       no-data-label="Sem dados"
@@ -70,8 +70,8 @@
     <q-dialog persistent v-model="mostraEditor">
       <q-card style="min-width: 60vw">
         <q-card-section class="row items-center q-pb-md bg-primary text-white">
-          <q-icon :name="mdiAccountGroup" left size="2rem" />
-          <div class="text-h6">{{ empresa.titulo }} ({{ empresa.id }})</div>
+          <q-icon :name="mdiHandshakeOutline" left size="2rem" />
+          <div class="text-h6">{{ empresa.nome }} ({{ empresa.id }})</div>
           <q-space />
           <q-btn :icon="mdiWindowClose" flat dense v-close-popup />
         </q-card-section>
@@ -104,33 +104,19 @@
             <q-tab-panel name="geral">
               <div class="row q-col-gutter-md">
                 <q-input
-                  v-model="empresa.titulo"
-                  label="Título"
-                  outlined
-                  class="col-xs-12 col-md-6"
-                />
-                <q-input
                   v-model="empresa.nome"
-                  label="Nome Fiscal"
-                  ref="inputName"
+                  label="Nome"
                   :rules="[isNameValid]"
+                  ref="inputName"
                   outlined
                   class="col-xs-12 col-md-6"
                 />
                 <q-input
                   v-model="empresa.email"
                   label="Email"
-                  outlined
                   :rules="[isEmailRule]"
                   ref="inputEmail"
-                  class="col-xs-12 col-md-6"
-                />
-                <q-select
-                  v-model="empresa.grupo"
-                  :options="grupos"
-                  label="Grupo"
                   outlined
-                  clearable
                   class="col-xs-12 col-md-6"
                 />
 
@@ -142,18 +128,18 @@
                 />
 
                 <q-select
-                  v-model="empresa.concelho_id"
-                  :options="concelhos"
-                  label="Concelho"
-                  option-label="nome"
+                  v-model="empresa.pais_id"
+                  :options="paises"
+                  :label="$t('html.registerPartner.country')"
+                  :option-label="lang === 'pt' ? 'nome' : 'nome_en'"
                   option-value="id"
                   @filter="filterFn"
+                  :rules="[isCountryValid]"
+                  ref="inputCountry"
                   use-input
                   emit-value
                   map-options
                   outlined
-                  :rules="[isConcelhoValid]"
-                  ref="inputConcelho"
                   class="col-xs-12"
                 />
 
@@ -318,11 +304,10 @@
 
 <script>
 import {
-  mdiAccountTie,
   mdiWindowClose,
   mdiPlusBoxOutline,
   mdiPencil,
-  mdiAccountGroup,
+  mdiHandshakeOutline,
   mdiWeb,
   mdiFacebook,
   mdiTwitter,
@@ -335,7 +320,7 @@ import {
 import { defineComponent, ref, onMounted } from 'vue'
 import { get, postFormAuth, apiPublicUrl, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
-import { isEmail, isNifPt, isCae } from '/src/models/validations'
+import { isEmail } from '/src/models/validations'
 import TipoProjetoSelector from 'src/components/TipoProjetoSelector.vue'
 
 export default defineComponent({
@@ -347,6 +332,10 @@ export default defineComponent({
     const mostraEditor = ref(false)
     const tableRef = ref(null)
     const tab = ref('geral')
+    const inputName = ref(null)
+    const inputEmail = ref(null)
+    const inputCountry = ref(null)
+    const lang = ref('pt')
 
     onMounted(async () => {
       try {
@@ -360,36 +349,28 @@ export default defineComponent({
       tableRef.value.requestServerInteraction()
     })
 
-    const inputName = ref(null)
-    const inputEmail = ref(null)
-    const inputNif = ref(null)
-    const inputCae = ref(null)
-    const inputConcelho = ref(null)
-
     const tiposProjeto = ref([])
-    const concelhos = ref([])
+    const paises = ref([])
     const empresas = ref([])
     const empresaEscolhida = ref([])
     const empresa = ref({
       id: 0,
       nome: '',
       titulo: '',
-      grupo: '',
       ativo: true,
       pendente: true,
       tipos_projeto: [],
       descricao: null,
-      telefone: null,
-      telemovel: null,
       email: null,
       website: null,
       facebook: null,
       twitter: null,
       linkedin: null,
       logo: null,
-      concelho_id: null
+      pais_id: 0
     })
     const logo = ref(null)
+
     const pagination = ref({
       descending: false,
       page: 1,
@@ -397,42 +378,35 @@ export default defineComponent({
       rowsNumber: 10,
       sortBy: null
     })
+    const filter = ref(null)
 
-    const isNameValid = (val) => {
-      return !!val || 'Insira o Nome'
-    }
     const isEmailRule = (val) => {
       return isEmail(val) || 'Insira um email válido'
     }
-    const isNifValid = (val) => {
-      return isNifPt(val) || 'NIF inválido'
+    const isNameValid = function (val) {
+      return !!val || t('html.errors.noName')
     }
-    const isCaeValid = (val) => {
-      return isCae(val) || 'CAE inválido'
-    }
-    const isConcelhoValid = (val) => {
-      if (val <= 0) return 'Indique o concelho'
+    const isCountryValid = (val) => {
+      if (val <= 0) return t('html.errors.noCountry')
       else return true
-    }
-    const tipoProjetoUpdated = (e) => {
-      empresa.value.tipos_projeto = e
     }
     const filterFn = (val, update) => {
       update(async () => {
         if (val !== '') {
-          concelhos.value = await get('concelhos/read.php?id=0&filtro=' + val)
+          paises.value = await get('paises/read-all.php?filtro=' + val)
         }
       })
     }
-
-    const filter = ref(null)
+    const tipoProjetoUpdated = (e) => {
+      empresa.value.tipos_projeto = e
+    }
     const onServerRequest = async (props) => {
       const { page, rowsPerPage, sortBy, descending } = props.pagination
       const filter = props.filter
 
       loading.value = true
       try {
-        const result = await postAuth('empresas/read.php', {
+        const result = await postAuth('empresas/read-parceiros.php', {
           page,
           rowsPerPage,
           sortBy,
@@ -449,7 +423,7 @@ export default defineComponent({
         pagination.value.descending = descending
       } catch {
         $q.notify({
-          message: 'Não foi possível obter as empresas',
+          message: 'Não foi possível obter os parceiros',
           type: 'warning'
         })
       }
@@ -457,11 +431,10 @@ export default defineComponent({
     }
 
     return {
-      mdiAccountTie,
       mdiWindowClose,
       mdiPlusBoxOutline,
       mdiPencil,
-      mdiAccountGroup,
+      mdiHandshakeOutline,
       mdiWeb,
       mdiFacebook,
       mdiTwitter,
@@ -471,29 +444,21 @@ export default defineComponent({
       mdiFileDocumentEditOutline,
       mdiFilterOutline,
       tableRef,
-      inputName,
-      inputEmail,
-      inputNif,
-      inputCae,
-      inputConcelho,
       tab,
+      inputEmail,
+      inputName,
+      inputCountry,
       loading,
       filter,
+      lang,
       mostraEditor,
       tiposProjeto,
-      concelhos,
+      paises,
       empresas,
       empresaEscolhida,
       empresa,
       logo,
       pagination,
-      grupos: [
-        'Grandes empresas',
-        'Entidades SCTN',
-        'PME',
-        'Entidades administração pública',
-        'Associações'
-      ],
       colunas: [
         {
           name: 'logo',
@@ -503,6 +468,7 @@ export default defineComponent({
           style: 'width: 100px'
         },
         { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
+        { name: 'pais', label: 'País', field: 'pais', align: 'left' },
         { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
         {
           name: 'pendente',
@@ -514,47 +480,44 @@ export default defineComponent({
       ],
       onServerRequest,
       apiPublicUrl,
-      tipoProjetoUpdated,
-      isNameValid,
       isEmailRule,
-      isNifValid,
-      isCaeValid,
-      isConcelhoValid,
+      isNameValid,
+      isCountryValid,
       filterFn,
+      tipoProjetoUpdated,
       onNovo: () => {
         logo.value = null
         empresa.value = {
           id: 0,
           nome: '',
-          titulo: '',
-          grupo: '',
           ativo: true,
           pendente: true,
           tipos_projeto: [],
           descricao: null,
-          telefone: null,
-          telemovel: null,
           email: null,
           website: null,
           facebook: null,
           twitter: null,
           linkedin: null,
           logo: null,
-          concelho_id: null
+          pais_id: null
         }
         mostraEditor.value = true
       },
       onEdit: async (b) => {
-        empresa.value = await get('empresas/read-single.php?id=' + b.id)
+        empresa.value = await get(
+          'empresas/read-single-parceiro.php?id=' + b.id
+        )
+        // paises
         try {
-          if (empresa.value.concelho_id > 0) {
-            concelhos.value = await get(
-              'concelhos/read.php?id=' + empresa.value.concelho_id
+          if (empresa.value.pais_id > 0) {
+            paises.value = await get(
+              'paises/read-single.php?id=' + empresa.value.pais_id
             )
           }
         } catch {
           $q.notify({
-            message: 'Não foi possível obter os concelhos',
+            message: 'Não foi possível obter o país',
             type: 'warning'
           })
         }
@@ -567,32 +530,24 @@ export default defineComponent({
           if (
             inputName.value.validate() &&
             inputEmail.value.validate() &&
-            inputNif.value.validate() &&
-            inputCae.value.validate() &&
-            inputConcelho.value.validate()
+            inputCountry.value.validate()
           ) {
             const data = new FormData()
             data.append('logo', logo.value)
             data.append('id', empresa.value.id)
             data.append('nome', empresa.value.nome)
-            data.append('titulo', empresa.value.titulo)
-            data.append('grupo', empresa.value.grupo)
-            data.append('nif', empresa.value.nif)
-            data.append('cae', empresa.value.cae)
             data.append('ativo', empresa.value.ativo)
             data.append('pendente', empresa.value.pendente)
             data.append('tipos_projeto', empresa.value.tipos_projeto)
             data.append('descricao', empresa.value.descricao)
-            data.append('telefone', empresa.value.telefone)
-            data.append('telemovel', empresa.value.telemovel)
             data.append('email', empresa.value.email)
             data.append('website', empresa.value.website)
             data.append('facebook', empresa.value.facebook)
             data.append('twitter', empresa.value.twitter)
             data.append('linkedin', empresa.value.linkedin)
-            data.append('concelho_id', empresa.value.concelho_id)
+            data.append('pais_id', empresa.value.pais_id)
 
-            await postFormAuth('empresas/update.php', data)
+            await postFormAuth('empresas/update-parceiro.php', data)
             mostraEditor.value = false
             tableRef.value.requestServerInteraction()
           }

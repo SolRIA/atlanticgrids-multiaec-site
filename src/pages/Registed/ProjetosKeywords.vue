@@ -130,6 +130,7 @@ import { useQuasar } from 'quasar'
 import BancoSelector from 'src/components/BancoSelector.vue'
 
 export default defineComponent({
+  components: { BancoSelector },
   setup() {
     const $q = useQuasar()
 
@@ -186,7 +187,9 @@ export default defineComponent({
       return ''
     }
     const bancoAlterado = (b) => {
-      banco.value = bancos.value.find((c) => c.id === b)
+      if (b.id !== undefined)
+        banco.value = bancos.value.find((c) => c.id === b.id)
+      else banco.value = bancos.value.find((c) => c.id === b)
       tableRef.value.requestServerInteraction()
     }
     const bancoAlteradoKeyword = (b) => {
@@ -278,7 +281,6 @@ export default defineComponent({
       onDelete,
       filterFn
     }
-  },
-  components: { BancoSelector }
+  }
 })
 </script>
