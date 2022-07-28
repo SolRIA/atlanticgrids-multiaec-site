@@ -2,7 +2,7 @@
   <q-page padding>
     <q-card class="card-title">
       <q-card-section>
-        <h3>NOTICIAS</h3>
+        <h3>{{ $t('html.news.title') }}</h3>
       </q-card-section>
       <SimpleSeparator />
     </q-card>
@@ -50,11 +50,15 @@ import { mdiHome } from '@quasar/extras/mdi-v6'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { post, get, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
+  components: { SimpleSeparator },
   setup() {
     const $q = useQuasar()
+    const { t } = useI18n()
+
     onMounted(async () => {
       try {
         const banks = await get('bancos/read-ativo.php')
@@ -66,7 +70,7 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         $q.notify({
-          message: 'Não foi possível obter os bancos',
+          message: t('html.errors.errorLoadBanks'),
           type: 'warning'
         })
       }
@@ -99,7 +103,7 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         $q.notify({
-          message: 'Não foi possível obter as notícias',
+          message: t('html.errors.errorLoadNews'),
           type: 'warning'
         })
       }
@@ -112,7 +116,6 @@ export default defineComponent({
       banco,
       noticias
     }
-  },
-  components: { SimpleSeparator }
+  }
 })
 </script>

@@ -6,7 +6,7 @@
           <q-avatar rounded>
             <q-img :src="logobanco('imagens/bancos/wb.png')" />
           </q-avatar>
-          Banco Muldial (BM)
+          {{ $t('html.bank.bm') }} ({{ $t('html.bank.bmInitials') }})
         </h3>
       </q-card-section>
       <SimpleSeparator />
@@ -14,74 +14,41 @@
 
     <q-card class="q-mt-md">
       <q-card-section>
-        <p>
-          O Banco Mundial é como uma cooperativa, composta por 189 países
-          membros. Esses países membros, ou acionistas, são representados por
-          uma Assembleia de Governadores , que são os principais responsáveis
-          pelas políticas do Banco Mundial. Geralmente, os governadores são
-          ministros das finanças ou ministros do desenvolvimento dos países
-          membros. Reúnem-se uma vez por ano nas Reuniões Anuais dos Conselhos
-          de Governadores do Grupo Banco Mundial e do Fundo Monetário
-          Internacional.
-        </p>
-        <p>
-          O Banco Mundial (BM) é constituído por 5 organizações independentes,
-          mas que trabalham em conjunto para os objetivos da instituição:
-        </p>
+        <p>{{ $t('html.bankBm.p1') }}</p>
+        <p>{{ $t('html.bankBm.p2') }}</p>
         <ol>
           <li>
-            The International Bank for Reconstruction and Development (IBRD)
+            {{ $t('html.bankBm.p3') }}
             <ul>
-              <li>
-                O IBRD presta auxilio financeiro a países com médios ou fracos
-                recursos financeiros, mas que ainda assim sejam dignos de
-                crédito pela instituição.
-              </li>
+              <li>{{ $t('html.bankBm.obj1') }}</li>
             </ul>
           </li>
 
           <li>
-            The International Development Association (IDA)
+            {{ $t('html.bankBm.p4') }}
             <ul>
-              <li>
-                A IDA oferece empréstimos sem juros e promove doações a países
-                muito pobres.
-              </li>
+              <li>{{ $t('html.bankBm.obj2') }}</li>
             </ul>
           </li>
 
           <li>
-            The International Finance Coorporation (IFC)
+            {{ $t('html.bankBm.p5') }}
             <ul>
-              <li>
-                A IFC é uma instituição focada exclusivamente nos sectores
-                privados. Ajuda países em desenvolvimento a alcançar um
-                crescimento sustentável, financiando investimentos e mobilizando
-                capital nos mercados financeiros e prestando consultoria a
-                empresas e Governos.
-              </li>
+              <li>{{ $t('html.bankBm.obj3') }}</li>
             </ul>
           </li>
 
           <li>
-            The Multilateral Investment Guarantee Agency (MIGA)
+            {{ $t('html.bankBm.p6') }}
             <ul>
-              <li>
-                A MIGA promove o investimento estrangeiro direto nos países em
-                desenvolvimento, fornecendo seguros contra riscos políticos
-                (Garantias) a investidores e credores.
-              </li>
+              <li>{{ $t('html.bankBm.obj4') }}</li>
             </ul>
           </li>
 
           <li>
-            The International center for Settlement of Investment Disputes
-            (ICSID)
+            {{ $t('html.bankBm.p7') }}
             <ul>
-              <li>
-                O ICSID é um centro de Arbitragem para disputas de investimentos
-                nos países de atuação do Banco Mundial.
-              </li>
+              <li>{{ $t('html.bankBm.obj5') }}</li>
             </ul>
           </li>
         </ol>

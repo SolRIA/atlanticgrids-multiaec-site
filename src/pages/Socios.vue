@@ -2,14 +2,14 @@
   <q-page padding>
     <q-card class="card-title">
       <q-card-section>
-        <h3>ASSOCIADOS</h3>
+        <h3>{{ $t('html.associates.title') }}</h3>
       </q-card-section>
       <SimpleSeparator />
     </q-card>
 
     <!-- grupos -->
     <div v-for="(grupo, index) in grupos" :key="index">
-      <h6>{{ grupo }}</h6>
+      <h6>{{ groupName(grupo) }}</h6>
       <div class="row items-center justify-center q-col-gutter-md">
         <div
           v-for="empresa in empresas.filter((e) => e.grupo === grupo)"
@@ -57,12 +57,15 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { get, apiPublicUrl } from 'boot/api'
+import { useI18n } from 'vue-i18n'
 import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
+  components: { SimpleSeparator },
   setup() {
     const $q = useQuasar()
     const $router = useRouter()
+    const { t } = useI18n()
     const loading = ref(false)
     const empresas = ref([])
     onMounted(async () => {
@@ -70,7 +73,7 @@ export default defineComponent({
         empresas.value = await get('empresas/read-ativo.php')
       } catch {
         $q.notify({
-          message: 'Não foi possível obter as empresa',
+          message: t('html.errors.errorLoadCompanies'),
           type: 'warning'
         })
       }
@@ -80,6 +83,22 @@ export default defineComponent({
     }
     const abreEmpresa = (id) => {
       $router.push({ path: '/associado', query: { id: id } })
+    }
+    const groupName = (g) => {
+      switch (g) {
+        case 'Grandes empresas':
+          return t('html.associates.bigCompanies')
+        case 'Entidades SCTN':
+          return t('html.associates.sctn')
+        case 'PME':
+          return t('html.associates.pme')
+        case 'Entidades administração pública':
+          return t('html.associates.public')
+        case 'Associações':
+          return t('html.associates.associations')
+        default:
+          break
+      }
     }
     return {
       mdiHome,
@@ -93,9 +112,9 @@ export default defineComponent({
         'Associações'
       ],
       logoEmpresa,
-      abreEmpresa
+      abreEmpresa,
+      groupName
     }
-  },
-  components: { SimpleSeparator }
+  }
 })
 </script>

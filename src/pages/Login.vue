@@ -67,19 +67,19 @@
         <q-card-section class="q-pa-none">
           <q-btn-group spread>
             <q-btn
-              label="Registar Associado"
+              :label="$t('html.login.registerAssociated')"
               type="reset"
               flat
               to="/login/registo"
             />
             <q-btn
-              label="Registar Parceiro"
+              :label="$t('html.login.registerPartner')"
               type="reset"
               flat
               to="/login/registo-parceiro"
             />
             <q-btn
-              label="Recuperar senha"
+              :label="$t('html.login.recoverPassword')"
               type="reset"
               flat
               to="/login/recuperarPassword"
@@ -107,12 +107,14 @@ import { defineComponent, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { post } from 'boot/api'
 import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup() {
     const $route = useRoute()
     const $router = useRouter()
     const $q = useQuasar()
+    const { t } = useI18n()
 
     const inputName = ref(null)
     const inputPassword = ref(null)
@@ -123,10 +125,10 @@ export default defineComponent({
     let onLogin = ref(false)
 
     const isEmailRule = function (val) {
-      return !!val || 'Insira o utilizador'
+      return !!val || t('html.errors.noUsername')
     }
     const isPasswordValid = function (val) {
-      return !!val || 'Insira a password'
+      return !!val || t('html.errors.noPassword')
     }
     const doLogin = async () => {
       // do login
@@ -144,12 +146,15 @@ export default defineComponent({
 
             $router.push({ path: 'registed', query: $route.query })
           } else {
-            $q.notify({ message: 'Credenciais inválidas', type: 'warning' })
+            $q.notify({
+              message: t('html.errors.invalidCredentials'),
+              type: 'warning'
+            })
           }
         } catch (error) {
           console.log(error)
           $q.notify({
-            message: 'Não foi possível efetuar o login',
+            message: t('html.errors.loginError'),
             type: 'warning'
           })
         }

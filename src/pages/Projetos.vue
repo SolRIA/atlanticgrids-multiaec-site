@@ -2,20 +2,14 @@
   <q-page padding>
     <q-card>
       <q-card-section>
-        <p>Instituições Financeiras do projeto</p>
-        <p>
-          Este separador apresenta uma breve descrição de cada banco e qual o
-          procurement atualmente disponível no sector da construção por cada
-          banco. ( até aqui esta informação é pública). Só os membros da PTPC
-          podem ver informação adiciona
-        </p>
+        <p>{{ $t('html.index.projects') }}</p>
       </q-card-section>
       <q-card-section>
         <div class="row q-col-gutter-md">
           <q-select
             v-model="banco"
             :options="bancos"
-            label="Banco"
+            :label="$t('html.index.bank')"
             outlined
             dense
             class="col-xs-12 col-md-3"
@@ -40,7 +34,7 @@
           <q-select
             v-model="pais"
             :options="paises"
-            label="País"
+            :label="$t('html.index.countries')"
             outlined
             dense
             class="col-xs-12 col-md-3"
@@ -53,7 +47,7 @@
 
           <q-input
             v-model="filtro"
-            label="Pesquisa livre"
+            :label="$t('html.index.freesearch')"
             debounce="500"
             outlined
             dense
@@ -66,10 +60,10 @@
     <q-table
       class="q-mt-sm"
       color="positive"
-      title="Projetos"
+      :title="$t('html.index.projects')"
       ref="tableRef"
       selection="none"
-      no-data-label="Sem dados"
+      :no-data-label="$t('html.errors.noData')"
       row-key="id"
       wrap-cells
       :grid="$q.screen.xs"
@@ -123,16 +117,18 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch } from 'vue'
 import { mdiAlertDecagram } from '@quasar/extras/mdi-v6'
+import { defineComponent, ref, onMounted, watch } from 'vue'
 import { get, post, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup() {
     const $q = useQuasar()
     const $router = useRouter()
+    const { t } = useI18n()
 
     const tableRef = ref(null)
     const loading = ref(false)
@@ -143,7 +139,7 @@ export default defineComponent({
         bancos.value = await get('bancos/read.php')
       } catch {
         $q.notify({
-          message: 'Não foi possível efetuar obter os bancos',
+          message: t('html.errors.errorLoadBanks'),
           type: 'warning'
         })
       }
@@ -152,7 +148,7 @@ export default defineComponent({
         paises.value = await get('paises/read.php')
       } catch {
         $q.notify({
-          message: 'Não foi possível obter os países',
+          message: t('html.errors.errorLoadCountries'),
           type: 'warning'
         })
       }
@@ -217,7 +213,7 @@ export default defineComponent({
       } catch (e) {
         console.log(e)
         $q.notify({
-          message: 'Não foi possível obter os projetos',
+          message: t('html.errors.errorLoadProjects'),
           type: 'warning'
         })
       }
@@ -245,23 +241,33 @@ export default defineComponent({
       columns: [
         {
           name: 'referencia',
-          label: 'Referência',
+          label: t('html.projects.reference'),
           field: 'referencia',
           align: 'left'
         },
         { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
         {
           name: 'data',
-          label: 'Data',
+          label: t('html.projects.data'),
           field: 'data',
           align: 'left',
           style: 'width: 100px'
         },
-        { name: 'setor', label: 'Setor', field: 'setor', align: 'left' },
-        { name: 'pais', label: 'País', field: 'pais', align: 'left' },
+        {
+          name: 'setor',
+          label: t('html.projects.sector'),
+          field: 'setor',
+          align: 'left'
+        },
+        {
+          name: 'pais',
+          label: t('html.projects.country'),
+          field: 'pais',
+          align: 'left'
+        },
         {
           name: 'banco_id',
-          label: 'Banco',
+          label: t('html.projects.bank'),
           field: 'banco_id',
           align: 'center'
         },

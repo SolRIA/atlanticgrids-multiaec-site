@@ -2,47 +2,28 @@
   <q-page padding>
     <q-card class="card-title">
       <q-card-section>
-        <h3>MERCADO MULTILATERAIS</h3>
+        <h3>{{ $t('html.multiaec.title') }}</h3>
       </q-card-section>
       <SimpleSeparator />
     </q-card>
 
     <q-card class="q-mt-lg">
       <q-card-section>
-        <p>
-          As Multilaterais Financeiras são Instituições Financeiras
-          Internacionais (IFI), que promovem o desenvolvimento económico e
-          social, em países em desenvolvimento, tendo como objetivo a redução
-          dos níveis de pobreza nos países de operação. Estas Organizações
-          Financeiras, que tem como os acionistas os estados, movimentam uma
-          oferta à escala global que ultrapassa os 100 mil milhões de
-          dólares/ano em empréstimos, doações, garantias e participações de
-          capital nos sectores público e privado dos países em desenvolvimento.
-          Para além da participação Portuguesa no Sistema das Nações Unidas,
-          Portugal e acionista em nove IFI´s de relevo:
-        </p>
+        <p>{{ $t('html.multiaec.p1') }}</p>
 
         <ul>
-          <li>Grupo Banco Mundial (Grupo BM);</li>
-          <li>Grupo Banco Interamericano de Desenvolvimento (BID);</li>
-          <li>Banco Europeu para a Reconstrução e Desenvolvimento (BERD);</li>
-          <li>Grupo Banco Europeu de Investimento (Grupo BEI);</li>
-          <li>Grupo Banco Africano de Desenvolvimento (BAfD);</li>
-          <li>Banco de Desenvolvimento da América Latina (CAF);</li>
-          <li>Banco Asiático de Desenvolvimento (BAsD);</li>
-          <li>Banco Asiático de Investimento em Infraestrutura (BAII);</li>
-          <li>Banco de Desenvolvimento do Conselho da Europa (CEB).</li>
+          <li>{{ $t('html.multiaec.obj1') }}</li>
+          <li>{{ $t('html.multiaec.obj2') }}</li>
+          <li>{{ $t('html.multiaec.obj3') }}</li>
+          <li>{{ $t('html.multiaec.obj4') }}</li>
+          <li>{{ $t('html.multiaec.obj5') }}</li>
+          <li>{{ $t('html.multiaec.obj6') }}</li>
+          <li>{{ $t('html.multiaec.obj7') }}</li>
+          <li>{{ $t('html.multiaec.obj8') }}</li>
+          <li>{{ $t('html.multiaec.obj9') }}</li>
         </ul>
 
-        <p>
-          O mercado das multilaterais financeiras representa um enorme potencial
-          no que diz respeito a oportunidades de negócio, investimento e
-          parcerias internacionais para as empresas que pretendem
-          internacionalizar as suas operações nos países em desenvolvimento,
-          gerando oportunidades de exportação, quer por, via do Procurement
-          criado pelos projetos financiados, ou por, financiamento de projetos
-          de investimento para as empresas e investidores.
-        </p>
+        <p>{{ $t('html.multiaec.p2') }}</p>
       </q-card-section>
     </q-card>
 
