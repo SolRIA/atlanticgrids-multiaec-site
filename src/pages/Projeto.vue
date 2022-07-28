@@ -2,7 +2,7 @@
   <q-page padding>
     <q-card class="card-title">
       <q-card-section>
-        <h3>PROJETO</h3>
+        <h3>{{ $t('html.project.title') }}</h3>
       </q-card-section>
       <SimpleSeparator />
     </q-card>
@@ -10,44 +10,39 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <p>
-          O Projeto MULTI AEC é um projeto promovido pelo Cluster AEC, que visa
-          o reforço das atividades de cooperação e parceria no sector da
-          Arquitetura Engenharia e Construção, nos mercados das Multilaterais
-          Financeiras, numa abordagem a quatro desses mercados
+          {{ $t('html.project.p1') }}
         </p>
         <ul>
-          <li>Banco Mundial (BM);</li>
-          <li>Banco Interamericano de Desenvolvimento (BID);</li>
-          <li>Banco Europeu para a Reconstrução e Desenvolvimento (BERD);</li>
-          <li>Banco Europeu de Investimento (Grupo BEI);</li>
+          <li>{{ $t('html.bank.bm') }} ({{ $t('html.bank.bmInitials') }});</li>
+          <li>
+            {{ $t('html.bank.bid') }} ({{ $t('html.bank.bidInitials') }});
+          </li>
+          <li>
+            {{ $t('html.bank.berd') }} ({{ $t('html.bank.berdInitials') }});
+          </li>
+          <li>
+            {{ $t('html.bank.bei') }} ({{ $t('html.bank.beiInitials') }});
+          </li>
         </ul>
         <p>
-          promovendo a inovação e a capacidade competitiva internacional, bem
-          como a promoção internacional do setor da construção, contribuindo
-          para alavancar a presença do tecido empresarial nos mercados externos,
-          privilegiando geografias estratégicas nas quais a eficiência, inovação
-          e know-how do setor AEC sejam reconhecidas.
+          {{ $t('html.project.p2') }}
         </p>
         <p>
-          O projeto MULTI AEC é concretizado ao nível de cinco objetivo
-          operacionais, a saber:
+          {{ $t('html.project.p3') }}
         </p>
+
         <ul>
-          <li>Objetivos:</li>
-          <ul>
-            <li>
-              Criação da Rede Operacional de mobilização para as Instituições
-              Multilaterais;
-            </li>
-            <li>
-              Realização de Visitas de Trabalho às Instituições Multilaterais;
-            </li>
-            <li>Desenvolvimento de um Plano de Internacionalização;</li>
-            <li>
-              Capacitação Estratégica, preparação de concursos e demonstração;
-            </li>
-            <li>Promoção Coletiva do setor AEC.</li>
-          </ul>
+          <li>
+            {{ $t('html.project.obj1') }}
+          </li>
+          <li>
+            {{ $t('html.project.obj2') }}
+          </li>
+          <li>{{ $t('html.project.obj3') }}</li>
+          <li>
+            {{ $t('html.project.obj4') }}
+          </li>
+          <li>{{ $t('html.project.obj5') }}</li>
         </ul>
       </q-card-section>
     </q-card>

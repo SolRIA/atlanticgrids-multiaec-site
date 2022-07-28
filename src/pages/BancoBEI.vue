@@ -6,7 +6,7 @@
           <q-avatar rounded>
             <q-img :src="logobanco('imagens/bancos/eib.png')" />
           </q-avatar>
-          Banco Europeu de Investimento (BEI)
+          {{ $t('html.bank.bei') }} ({{ $t('html.bank.beiInitials') }})
         </h3>
       </q-card-section>
       <SimpleSeparator />
@@ -15,44 +15,27 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <p>
-          O Banco Europeu de Investimento é um dos maiores credores
-          multinacionais do mundo, é o braço de empréstimos da UE. O BEI atua
-          não só na União Europeia como no resto do mundo.
+          {{ $t('html.bankBei.p1') }}
         </p>
         <p>
-          A maioria dos empréstimos do BEI é atribuída a projetos nos
-          Estados-Membros da UE (cerca de 90% do volume total) que apoiam o
-          desenvolvimento e a integração contínuos da União. Estes empréstimos
-          são dirigidos a governos e ás empresas.
+          {{ $t('html.bankBei.p2') }}
         </p>
         <p>
-          As operações financeiras internacionais do BEI em todo o mundo ajudam
-          a resolver os desequilíbrios e a estabelecer parcerias de colaboração
-          mais estreitas, estimulam a economia mundial estável e aberta e
-          permitem a integração de conhecimentos e tecnologias.
+          {{ $t('html.bankBei.p3') }}
         </p>
         <ul>
           <li>
-            O BEI fornece empréstimos a clientes de todos os tamanhos, sendo a
-            sua presença muitas vezes fundamental para atrair outros
-            investidores.
+            {{ $t('html.bankBei.p4') }}
           </li>
           <li>
-            O BEI estimula e catalisa capital privado através do investimento em
-            equity.
+            {{ $t('html.bankBei.p5') }}
           </li>
           <li>
-            O BEI fornece garantias que cobrem os riscos de grandes e pequenos
-            projetos. Também disponibiliza carteiras de crédito que tornam os
-            projetos mais atrativos para outros investidores.
+            {{ $t('html.bankBei.p6') }}
           </li>
         </ul>
         <p>
-          O BEI oferece muitas oportunidades para fornecedores, empreiteiros e
-          consultores em todo o mundo. A maioria dessas oportunidades de
-          aquisição está relacionada a projetos financiados pelo BERD nas
-          regiões onde atua. Mas há também um número limitado de oportunidades
-          de contratos envolvendo projetos e departamentos internos do BERD.
+          {{ $t('html.bankBei.p7') }}
         </p>
       </q-card-section>
     </q-card>

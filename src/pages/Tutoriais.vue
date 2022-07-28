@@ -2,7 +2,7 @@
   <q-page padding>
     <q-card class="card-title">
       <q-card-section>
-        <h3>TUTORIAIS</h3>
+        <h3>{{ $t('html.tutorials.title') }}</h3>
       </q-card-section>
       <SimpleSeparator />
     </q-card>
@@ -11,7 +11,7 @@
       <q-btn-toggle v-model="banco" :options="bancos" size="lg" />
     </div>
 
-    <h5>Estudos</h5>
+    <h5>{{ $t('html.tutorials.studies') }}</h5>
 
     <q-card flat bordered>
       <q-list>
@@ -90,15 +90,19 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, watch } from 'vue'
 import { mdiFilePdfBox, mdiDownload, mdiHome } from '@quasar/extras/mdi-v6'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { post, get, apiPublicUrl } from 'boot/api'
 import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 import SimpleSeparator from 'src/components/SimpleSeparator.vue'
 
 export default defineComponent({
+  components: { SimpleSeparator },
   setup() {
     const $q = useQuasar()
+    const { t } = useI18n()
+
     onMounted(async () => {
       try {
         const banks = await get('bancos/read-ativo.php')
@@ -110,7 +114,7 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         $q.notify({
-          message: 'Não foi possível obter os bancos',
+          message: t('html.errors.errorLoadBanks'),
           type: 'warning'
         })
       }
@@ -161,7 +165,7 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         $q.notify({
-          message: 'Não foi possível obter os estudos',
+          message: t('html.errors.errorLoadStudies'),
           type: 'warning'
         })
       }
@@ -181,7 +185,7 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         $q.notify({
-          message: 'Não foi possível obter os vídeos',
+          message: t('html.errors.errorLoadVideos'),
           type: 'warning'
         })
       }
@@ -200,7 +204,6 @@ export default defineComponent({
       paginacaoEstudos,
       paginacaoVideos
     }
-  },
-  components: { SimpleSeparator }
+  }
 })
 </script>

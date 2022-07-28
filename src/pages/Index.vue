@@ -24,10 +24,11 @@
         >
           <div class="custom-caption">
             <h2 class="text-white animation_2">
-              PROJETO <span class="text-secondary">MULTI AEC</span>
+              {{ $t('html.index.project') }}
+              <span class="text-secondary">MULTI AEC</span>
             </h2>
             <h4 class="animation_1 text-white">
-              GESTÃO INTEGRADA DAS MULTILATERAIS
+              {{ $t('html.index.multiaec') }}
             </h4>
           </div>
         </div>
@@ -44,8 +45,10 @@
         >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
-              Banco Mundial
-              <span class="text-secondary">(BM)</span>
+              {{ $t('html.bank.bm') }}
+              <span class="text-secondary"
+                >({{ $t('html.bank.bmInitials') }})</span
+              >
             </h2>
 
             <div class="animation_2">
@@ -53,7 +56,7 @@
                 rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO"
+                :label="$t('html.index.presentation')"
                 to="/banco-bm"
               />
             </div>
@@ -72,15 +75,17 @@
         >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
-              Banco Interamericano de Desenvolvimento
-              <span class="text-secondary">(BID)</span>
+              {{ $t('html.bank.bid') }}
+              <span class="text-secondary"
+                >({{ $t('html.bank.bidInitials') }})</span
+              >
             </h2>
             <div class="animation_2">
               <q-btn
                 rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO"
+                :label="$t('html.index.presentation')"
                 to="/banco-bid"
               />
             </div>
@@ -99,15 +104,17 @@
         >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
-              Banco Europeu para a Reconstrução e Desenvolvimento
-              <span class="text-secondary">(BERD)</span>
+              {{ $t('html.bank.berd') }}
+              <span class="text-secondary"
+                >({{ $t('html.bank.berdInitials') }})</span
+              >
             </h2>
             <div class="animation_2">
               <q-btn
                 rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO"
+                :label="$t('html.index.presentation')"
                 to="/banco-berd"
               />
             </div>
@@ -126,15 +133,17 @@
         >
           <div class="custom-caption">
             <h2 class="animation_2 text-white">
-              Banco Europeu de Investimento
-              <span class="text-secondary">(BEI)</span>
+              {{ $t('html.bank.bei') }}
+              <span class="text-secondary"
+                >({{ $t('html.bank.beiInitials') }})</span
+              >
             </h2>
             <div class="animation_2">
               <q-btn
                 rounded
                 class="text-white action-btn"
                 color="primary"
-                label="APRESENTAÇÃO"
+                :label="$t('html.index.presentation')"
                 to="/banco-bei"
               />
             </div>
@@ -145,32 +154,15 @@
 
     <SimpleSeparator />
 
-    <div class="quote q-mb-lg">
-      <div class="q-pt-xl full-width full-height flex flex-center">
-        <h5 class="text-black text-center">
-          {{ $t('html.index.partner.description') }}
-          <br />
-          <br />
-          <q-btn
-            rounded
-            href="/login/registo-parceiro"
-            class="text-white action-btn"
-            color="primary"
-            :label="$t('html.index.partner.register')"
-          />
-        </h5>
-      </div>
-    </div>
-
     <div class="q-ma-lg" style="margin-top: 80px">
       <div class="row items-stretch justify-center q-col-gutter-lg">
         <div>
           <Section
             :icon="mdiInformationOutline"
             link="/projeto"
-            title="Projeto"
-            btnText="Ver mais"
-            description="O Projeto MULTI AEC é um projeto promovido pelo Cluster AEC, que visa o reforço das atividades de cooperação e parceria no sector da Arquitetura Engenharia e Construção, nos mercados das Multilaterais Financeiras."
+            :title="$t('html.index.projectLc')"
+            :btnText="$t('html.index.more')"
+            :description="$t('html.index.multiaecDesc')"
           />
         </div>
       </div>
@@ -182,9 +174,9 @@
           <Section
             :icon="mdiAlphaMCircleOutline"
             link="/mercado"
-            title="Mercado das Multilaterais"
-            btnText="Ver mais"
-            description="As Multilaterais Financeiras são Instituições Financeiras Internacionais (IFI), que promovem o desenvolvimento económico e social, em países em desenvolvimento, tendo como objetivo a redução dos níveis de pobreza nos países de operação."
+            :title="$t('html.index.multiaecMarket')"
+            :btnText="$t('html.index.more')"
+            :description="$t('html.index.multiaecMarketDesc')"
           />
         </div>
 
@@ -192,9 +184,9 @@
           <Section
             :icon="mdiNewspaperVariantOutline"
             link="/noticias"
-            title="Noticias"
-            btnText="Ver mais"
-            description="Veja aqui informações e notícias sobre as atividades mais recentes dos bancos multilaterais que fazem parte  deste projeto"
+            :title="$t('html.index.news')"
+            :btnText="$t('html.index.more')"
+            :description="$t('html.index.newsDesc')"
           />
         </div>
 
@@ -202,10 +194,54 @@
           <Section
             :icon="mdiAccountSchoolOutline"
             link="/tutoriais"
-            title="Tutoriais"
-            btnText="Ver mais"
-            description="Aqui pode encontrar informação sobre Webinars, Videos promocionais, relatórios anuais dos bancos e documentos estratégicos, etc…"
+            :title="$t('html.index.tutoriais')"
+            :btnText="$t('html.index.more')"
+            :description="$t('html.index.tutoriaisDesc')"
           />
+        </div>
+      </div>
+    </div>
+
+    <div id="register" class="q-pa-lg">
+      <h4 class="text-center">{{ $t('html.index.associate.name') }}</h4>
+      <div class="row q-col-gutter-lg q-ma-md">
+        <div class="col-xs-12 col-md-6">
+          <q-img src="/images/associates.jpg" fit="scale-down" />
+        </div>
+
+        <div class="col-xs-12 col-md-6 self-center">
+          <p class="text-body1">
+            {{ $t('html.index.associate.description') }}
+          </p>
+
+          <q-btn
+            rounded
+            href="/login/registo-parceiro"
+            class="text-white action-btn"
+            color="primary"
+            :label="$t('html.index.partner.register')"
+          />
+        </div>
+      </div>
+
+      <h4 class="text-center">{{ $t('html.index.partner.name') }}</h4>
+      <div class="row q-col-gutter-lg q-ma-md">
+        <div class="col-xs-12 col-md-6 self-center">
+          <p class="text-body1">
+            {{ $t('html.index.partner.description') }}
+          </p>
+
+          <q-btn
+            rounded
+            href="/login/registo"
+            class="text-white action-btn"
+            color="primary"
+            :label="$t('html.index.partner.register')"
+          />
+        </div>
+
+        <div class="col-xs-12 col-md-6">
+          <q-img src="/images/partners.jpg" fit="scale-down" />
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@
           <q-avatar rounded>
             <q-img :src="logobanco('imagens/bancos/ebrd.png')" />
           </q-avatar>
-          Banco Europeu de Reconstrução e Desenvolvimento (BERD)
+          {{ $t('html.bank.berd') }} ({{ $t('html.bank.berdInitials') }})
         </h3>
       </q-card-section>
       <SimpleSeparator />
@@ -15,42 +15,23 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <p>
-          O Banco Europeu de Reconstrução e Desenvolvimento (BERD) foi criado
-          para ajudar a construir uma nova era pós-Guerra Fria na Europa Central
-          e Oriental. Desempenhou um papel histórico e ganhou experiência única
-          na promoção de mudanças na região, tendo até ao momento investindo
-          quase € 150 biliões em mais de 6.000 projetos.
+          {{ $t('html.bankBerd.p1') }}
         </p>
         <p>
-          O BERD oferece muitas oportunidades para fornecedores, empreiteiros e
-          consultores em todo o mundo. A maioria dessas oportunidades de
-          aquisição está relacionada a projetos financiados pelo BERD nas
-          regiões onde atua. Mas há também um número limitado de oportunidades
-          de contratos envolvendo projetos e departamentos internos do BERD.
+          {{ $t('html.bankBerd.p2') }}
         </p>
         <p>
-          O BERD oferece produtos financeiros adaptados a cada cliente, sejam
-          eles Países ou empresas que atuem nos mercados cobertos pela
-          instituição. Os potenciais clientes devem demonstrar que seu projeto
-          ou negócio cumpre os requisitos mínimos para que o envolvimento do
-          BERD se efetue.
+          {{ $t('html.bankBerd.p3') }}
         </p>
         <p>
-          O financiamento do BERD para projetos do setor privado geralmente
-          varia de € 5 milhões a € 250 milhões, na forma de empréstimos ou
-          ações. O investimento médio do BERD é de € 25 milhões. Projetos
-          menores podem ser financiados por intermediários financeiros ou por
-          meio de programas especiais para investimentos diretos menores nos
-          países menos avançados.
+          {{ $t('html.bankBerd.p4') }}
         </p>
-        <p>As formas de financiamento direto que o BERD dispõe são:</p>
+        <p>{{ $t('html.bankBerd.p5') }}</p>
         <ul>
-          <li>Empréstimos</li>
-          <li>Investimentos igualitários</li>
-          <li>Garantias para promover o comércio</li>
-          <li>
-            Apoio a PMEs, através de assistência de intermediários financeiros.
-          </li>
+          <li>{{ $t('html.bankBerd.obj1') }}</li>
+          <li>{{ $t('html.bankBerd.obj2') }}</li>
+          <li>{{ $t('html.bankBerd.obj3') }}</li>
+          <li>{{ $t('html.bankBerd.obj4') }}</li>
         </ul>
 
         <iframe
