@@ -238,6 +238,11 @@ export default {
       registerPartner: 'Register Partner',
       recoverPassword: 'Recover Password'
     },
+    recover: {
+      recoverMessage:
+        'Enter the user to change the password. If you are registered on our platform, you will receive an email where you can reset your password.',
+      changePasswordMessage: 'Enter the new password'
+    },
     errors: {
       getProjectTypes: 'Unable to get project types',
       noUsername: 'Enter username',
@@ -256,6 +261,7 @@ export default {
       errorLoadCountries: 'Could not get countries',
       errorLoadProjects: 'Unable to get projects',
       errorLoadCompanies: 'Unable to get companies',
+      error: 'Unable to complete the request',
       noData: 'No data'
     },
     registerPartner: {

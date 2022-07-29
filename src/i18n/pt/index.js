@@ -245,6 +245,11 @@ export default {
       registerPartner: 'Registar Parceiro',
       recoverPassword: 'Recuperar senha'
     },
+    recover: {
+      recoverMessage:
+        'Indique o utilizador para alterar a palavra-passe. Caso o utilizador esteja registado na nossa plataforma, irá receber um email onde poderá redefinir a palavra-passe.',
+      changePasswordMessage: 'Indique a nova palavra-passe'
+    },
     errors: {
       getProjectTypes: 'Não foi possível obter os tipos de projeto',
       noUsername: 'Insira o utilizador',
@@ -263,6 +268,7 @@ export default {
       errorLoadCountries: 'Não foi possível obter os países',
       errorLoadProjects: 'Não foi possível obter os projetos',
       errorLoadCompanies: 'Não foi possível obter as empresas',
+      error: 'Não foi possível concluir o pedido',
       noData: 'Sem dados'
     },
     registerPartner: {
@@ -270,7 +276,7 @@ export default {
       tabDescription: 'Experiência Multi AEC',
       user: 'Utilizador',
       organization: 'Empresa',
-      username: 'Nome de utilizador',
+      username: 'Utilizador',
       userPassword: 'Password',
       name: 'Nome',
       contactEmail: 'Email contato',

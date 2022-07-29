@@ -32,14 +32,15 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { post } from 'boot/api'
-import { nomeAccao } from 'src/models/accoes-projetos.js'
 import {
   mdiAlertDecagramOutline,
   mdiCheckDecagramOutline
 } from '@quasar/extras/mdi-v6'
+
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { post } from 'boot/api'
+import { nomeAccao } from 'src/models/accoes-projetos.js'
 
 export default defineComponent({
   setup() {
