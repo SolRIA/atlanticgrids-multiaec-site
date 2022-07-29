@@ -45,7 +45,11 @@ const routes = [
       },
       {
         path: 'recuperarPassword',
-        component: () => import('pages/RecoverPassword.vue')
+        component: () => import('pages/PasswordRecover.vue')
+      },
+      {
+        path: 'alterarPassword',
+        component: () => import('pages/PasswordChange.vue')
       }
     ]
   },

@@ -1,7 +1,7 @@
 <template>
   <q-page-container class="col-sm-12 col-md-9">
     <q-page padding class="fit row justify-center items-center">
-      <q-card bordered class="card-login">
+      <q-card bordered class="card-login q-pa-lg">
         <q-card-section>
           <div class="text-h6">{{ $t('html.index.passwordRecover') }}</div>
         </q-card-section>
@@ -9,18 +9,18 @@
         <q-separator inset />
 
         <q-card-section>
+          <p>{{ $t('html.recover.recoverMessage') }}</p>
           <q-input
-            v-model="email"
+            v-model="username"
             outlined
-            type="email"
-            label="email"
-            :rules="[isEmailRule]"
+            :label="$t('html.registerPartner.username')"
+            :rules="[isUsernameRule]"
             ref="inputName"
           >
-            <template v-if="email" v-slot:append>
+            <template v-if="username" v-slot:append>
               <q-icon
                 :name="mdiCloseCircle"
-                @click.stop="email = null"
+                @click.stop="username = null"
                 class="cursor-pointer"
               />
             </template>
@@ -52,26 +52,39 @@ import { defineComponent, ref } from 'vue'
 import { mdiEmailSend, mdiCloseCircle, mdiHome } from '@quasar/extras/mdi-v6'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useQuasar } from 'quasar'
+import { post } from 'src/boot/api'
 
 export default defineComponent({
   setup() {
+    const $q = useQuasar()
     const $router = useRouter()
     const { t } = useI18n()
 
     const inputName = ref(null)
 
-    const email = ref('')
+    const username = ref('')
     let onRecoverAccount = ref(false)
 
-    const isEmailRule = function (val) {
+    const isUsernameRule = function (val) {
       return !!val || t('html.errors.noUsername')
     }
-    const doRecover = function () {
+    const doRecover = async () => {
       // do login
-      if (inputName.value.validate() && inputPassword.value.validate()) {
+      if (inputName.value.validate()) {
         onRecoverAccount = true
 
-        //TODO: recover password
+        try {
+          await post('utilizadores/password-pedido-recuperacao.php', {
+            username: username.value
+          })
+        } catch {
+          $q.notify({
+            message: t('html.errors.error'),
+            type: 'warning'
+          })
+        }
+
         $router.push('/')
 
         onRecoverAccount = false
@@ -83,11 +96,17 @@ export default defineComponent({
       mdiCloseCircle,
       mdiHome,
       inputName,
-      email,
+      username,
       onRecoverAccount,
-      isEmailRule,
+      isUsernameRule,
       doRecover
     }
   }
 })
 </script>
+
+<style lang="sass" scoped>
+.card-login
+  width: 100%
+  max-width: 600px
+</style>
