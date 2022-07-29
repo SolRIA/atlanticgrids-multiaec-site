@@ -33,6 +33,10 @@ import { useQuasar } from 'quasar'
 import { apiPublicUrl } from 'boot/api'
 import { defineComponent, ref, watch } from 'vue'
 
+const langList = import.meta.glob(
+  '../../node_modules/quasar/lang/(pt|en-US).mjs'
+)
+
 export default defineComponent({
   name: 'LanguageSelector',
   emits: ['language_changed'],
@@ -62,7 +66,7 @@ export default defineComponent({
     }
     locale.value = localeOption.value.value
     try {
-      $q.lang.set(locale)
+      loadLanguage(locale)
     } catch {}
 
     emit('language_changed', locale.value)
@@ -71,14 +75,29 @@ export default defineComponent({
       return 'img:' + apiPublicUrl(name)
     }
 
-    watch(locale, (_value, _old) => {
-      localeOption.value = localeOptions.find((l) => l.value === locale.value)
-      import('quasar/lang/' + locale.value /* @vite-ignore */).then((lang) => {
-        $q.lang.set(lang.default)
-      })
-      localStorage.setItem('lang', locale.value)
-      emit('language_changed', locale.value)
+    watch(locale, (value, _old) => {
+      localeOption.value = localeOptions.find((l) => l.value === value)
+
+      // set quasar's language too!!
+      loadLanguage(value)
+
+      localStorage.setItem('lang', value)
+      emit('language_changed', value)
     })
+
+    const loadLanguage = (langName) => {
+      // set quasar's language too!!
+      try {
+        langList[`../../node_modules/quasar/lang/${langName}.mjs`]().then(
+          (language) => {
+            console.log(language.default)
+            $q.lang.set(language.default)
+          }
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
     return {
       locale,

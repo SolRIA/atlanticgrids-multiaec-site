@@ -337,7 +337,7 @@ import {
 import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
-import { isEmail, isNifPf, isCae } from '/src/models/validations'
+import { isEmail, isNifPt, isCae } from '/src/models/validations'
 import TipoProjetoSelector from './TipoProjetoSelector.vue'
 
 export default defineComponent({
@@ -426,7 +426,7 @@ export default defineComponent({
       return !!val || 'Insira a password'
     }
     const isNifValid = (val) => {
-      return isNifPf(val) || 'NIF inválido'
+      return isNifPt(val) || 'NIF inválido'
     }
     const isCaeValid = (val) => {
       return isCae(val) || 'CAE inválido'
