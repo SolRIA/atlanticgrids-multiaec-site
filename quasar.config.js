@@ -100,7 +100,8 @@ module.exports = configure(function (/* ctx */) {
         },
         notify: {
           position: 'top-right',
-          progress: true
+          progress: true,
+          type: 'positive'
         }
       },
 

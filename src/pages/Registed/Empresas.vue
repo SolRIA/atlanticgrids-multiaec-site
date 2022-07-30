@@ -82,13 +82,30 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
-          <q-btn
-            dense
-            flat
-            color="positive"
-            :icon="mdiPencil"
-            @click="onEdit(props.row)"
-          />
+          <q-btn dense flat color="positive" :icon="mdiDotsVertical">
+            <q-menu>
+              <q-list style="min-width: 100px">
+                <q-item clickable v-close-popup @click="onEdit(props.row)">
+                  <q-item-section avatar>
+                    <q-icon :name="mdiPencil" color="positive" />
+                  </q-item-section>
+                  <q-item-section>Editar</q-item-section>
+                </q-item>
+
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="onApprove(props.row)"
+                  v-if="props.row.pendente"
+                >
+                  <q-item-section avatar>
+                    <q-icon :name="mdiCheckCircleOutline" color="positive" />
+                  </q-item-section>
+                  <q-item-section>Aprovar</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-td>
       </template>
     </q-table>
@@ -347,7 +364,9 @@ import {
   mdiAccountTie,
   mdiWindowClose,
   mdiPlusBoxOutline,
+  mdiDotsVertical,
   mdiPencil,
+  mdiCheckCircleOutline,
   mdiAccountGroup,
   mdiWeb,
   mdiFacebook,
@@ -495,6 +514,7 @@ export default defineComponent({
       mdiAccountTie,
       mdiWindowClose,
       mdiPlusBoxOutline,
+      mdiDotsVertical,
       mdiPencil,
       mdiAccountGroup,
       mdiWeb,
@@ -505,6 +525,7 @@ export default defineComponent({
       mdiBadgeAccountHorizontalOutline,
       mdiFileDocumentEditOutline,
       mdiFilterOutline,
+      mdiCheckCircleOutline,
       tableRef,
       inputName,
       inputEmail,
@@ -636,6 +657,25 @@ export default defineComponent({
         } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
+      },
+      onApprove: (row) => {
+        $q.dialog({
+          title: 'Aprovar Associado',
+          message: `Quer aprovar ${row.nome} como associado?`,
+          cancel: true,
+          persistent: true
+        }).onOk(async () => {
+          try {
+            await postAuth('empresas/aprovar-associado.php', { id: row.id })
+            tableRef.value.requestServerInteraction()
+
+            if (result.ok)
+              $q.notify({ message: 'Aprovação concluída com sucesso' })
+            else $q.notify({ message: result.message, type: 'warning' })
+          } catch {
+            $q.notify({ message: 'Não foi possível aprovar', type: 'warning' })
+          }
+        })
       }
     }
   }
