@@ -18,18 +18,44 @@
       @request="onServerRequest"
     >
       <template v-slot:top-right>
-        <q-btn
-          label="Novo"
-          color="positive"
-          @click="onNovo"
-          :icon="mdiPlusBoxOutline"
-          class="q-mr-md"
-        />
-        <q-input v-model="filter" outlined dense clearable debounce="500">
-          <template v-slot:append>
-            <q-icon :name="mdiFilterOutline" />
-          </template>
-        </q-input>
+        <div class="row q-col-gutter-sm justify-end">
+          <div class="col-sm-12 col-md-4">
+            <q-toggle
+              toggle-indeterminate
+              v-model="active"
+              :label="
+                active === null ? 'Todas' : active ? 'Ativas' : 'Inativas'
+              "
+            />
+          </div>
+
+          <div class="col-sm-12 col-md-4">
+            <q-toggle
+              toggle-indeterminate
+              v-model="pending"
+              :label="
+                pending === null ? 'Todas' : pending ? 'Pendentes' : 'Aprovadas'
+              "
+            />
+          </div>
+
+          <div class="col-sm-12 col-md-4">
+            <q-btn
+              label="Novo"
+              color="positive"
+              @click="onNovo"
+              :icon="mdiPlusBoxOutline"
+            />
+          </div>
+
+          <div class="col-sm-12">
+            <q-input v-model="filter" outlined dense clearable debounce="500">
+              <template v-slot:append>
+                <q-icon :name="mdiFilterOutline" />
+              </template>
+            </q-input>
+          </div>
+        </div>
       </template>
 
       <template v-slot:body-cell-ativo="props">
@@ -332,7 +358,7 @@ import {
   mdiFileDocumentEditOutline,
   mdiFilterOutline
 } from '@quasar/extras/mdi-v6'
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, watch } from 'vue'
 import { get, postFormAuth, apiPublicUrl, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
 import { isEmail, isNifPt, isCae } from '/src/models/validations'
@@ -366,6 +392,9 @@ export default defineComponent({
     const inputCae = ref(null)
     const inputConcelho = ref(null)
 
+    const active = ref(null)
+    const pending = ref(null)
+
     const tiposProjeto = ref([])
     const concelhos = ref([])
     const empresas = ref([])
@@ -396,6 +425,10 @@ export default defineComponent({
       rowsPerPage: 10,
       rowsNumber: 10,
       sortBy: null
+    })
+
+    watch([active, pending], (_val, _old) => {
+      tableRef.value.requestServerInteraction()
     })
 
     const isNameValid = (val) => {
@@ -437,7 +470,9 @@ export default defineComponent({
           rowsPerPage,
           sortBy,
           descending,
-          filter
+          filter,
+          active: active.value,
+          pending: pending.value
         })
 
         empresas.value = result.rows
@@ -479,6 +514,8 @@ export default defineComponent({
       tab,
       loading,
       filter,
+      active,
+      pending,
       mostraEditor,
       tiposProjeto,
       concelhos,
