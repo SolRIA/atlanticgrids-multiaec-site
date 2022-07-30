@@ -214,13 +214,15 @@
             {{ $t('html.index.associate.description') }}
           </p>
 
-          <q-btn
-            rounded
-            href="/login/registo-parceiro"
-            class="text-white action-btn"
-            color="primary"
-            :label="$t('html.index.partner.register')"
-          />
+          <div class="row justify-center">
+            <q-btn
+              rounded
+              href="/login/registo-parceiro"
+              class="text-white action-btn"
+              color="primary"
+              :label="$t('html.index.partner.register')"
+            />
+          </div>
         </div>
       </div>
 
@@ -231,13 +233,15 @@
             {{ $t('html.index.partner.description') }}
           </p>
 
-          <q-btn
-            rounded
-            href="/login/registo"
-            class="text-white action-btn"
-            color="primary"
-            :label="$t('html.index.partner.register')"
-          />
+          <div class="row justify-center">
+            <q-btn
+              rounded
+              href="/login/registo"
+              class="text-white action-btn"
+              color="primary"
+              :label="$t('html.index.partner.register')"
+            />
+          </div>
         </div>
 
         <div class="col-xs-12 col-md-6">

@@ -12,7 +12,7 @@ export function isNifPt(nif) {
     i = 0
 
   if (nif !== null && nif.length === 9) {
-    firstDigit = parseInt(val.charAt(0))
+    firstDigit = parseInt(nif.charAt(0))
     checkDigit = firstDigit * 9
     for (i = 2; i <= 8; i++) {
       checkDigit += parseInt(nif.charAt(i - 1)) * (10 - i)
