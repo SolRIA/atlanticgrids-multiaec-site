@@ -80,13 +80,30 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
-          <q-btn
-            dense
-            flat
-            color="positive"
-            :icon="mdiPencil"
-            @click="onEdit(props.row)"
-          />
+          <q-btn dense flat color="positive" :icon="mdiDotsVertical">
+            <q-menu>
+              <q-list style="min-width: 100px">
+                <q-item clickable v-close-popup @click="onEdit(props.row)">
+                  <q-item-section avatar>
+                    <q-icon :name="mdiPencil" color="positive" />
+                  </q-item-section>
+                  <q-item-section>Editar</q-item-section>
+                </q-item>
+
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="onApprove(props.row)"
+                  v-if="props.row.pendente"
+                >
+                  <q-item-section avatar>
+                    <q-icon :name="mdiCheckCircleOutline" color="positive" />
+                  </q-item-section>
+                  <q-item-section>Aprovar</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-td>
       </template>
     </q-table>
@@ -225,11 +242,6 @@
                   label="Ativo"
                   class="col-xs-3"
                 />
-                <q-checkbox
-                  v-model="empresa.pendente"
-                  label="Pendente"
-                  class="col-xs-3"
-                />
               </div>
             </q-tab-panel>
 
@@ -331,6 +343,7 @@ import {
   mdiWindowClose,
   mdiPlusBoxOutline,
   mdiPencil,
+  mdiCheckCircleOutline,
   mdiHandshakeOutline,
   mdiWeb,
   mdiFacebook,
@@ -339,7 +352,8 @@ import {
   mdiImageSearchOutline,
   mdiBadgeAccountHorizontalOutline,
   mdiFileDocumentEditOutline,
-  mdiFilterOutline
+  mdiFilterOutline,
+  mdiDotsVertical
 } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted, watch } from 'vue'
 import { get, postFormAuth, apiPublicUrl, postAuth } from 'boot/api'
@@ -467,6 +481,7 @@ export default defineComponent({
       mdiWindowClose,
       mdiPlusBoxOutline,
       mdiPencil,
+      mdiCheckCircleOutline,
       mdiHandshakeOutline,
       mdiWeb,
       mdiFacebook,
@@ -476,6 +491,7 @@ export default defineComponent({
       mdiBadgeAccountHorizontalOutline,
       mdiFileDocumentEditOutline,
       mdiFilterOutline,
+      mdiDotsVertical,
       tableRef,
       tab,
       inputEmail,
@@ -589,6 +605,27 @@ export default defineComponent({
         } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
+      },
+      onApprove: (row) => {
+        $q.dialog({
+          title: 'Aprovar parceiro local',
+          message: `Quer aprovar o parceiro ${row.nome}?`,
+          cancel: true,
+          persistent: true
+        }).onOk(async () => {
+          try {
+            const result = await postAuth('empresas/aprovar-parceiro.php', {
+              id: row.id
+            })
+            tableRef.value.requestServerInteraction()
+
+            if (result.ok)
+              $q.notify({ message: 'Aprovação concluída com sucesso' })
+            else $q.notify({ message: result.message, type: 'warning' })
+          } catch {
+            $q.notify({ message: 'Não foi possível aprovar', type: 'warning' })
+          }
+        })
       }
     }
   }
