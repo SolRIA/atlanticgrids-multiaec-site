@@ -347,6 +347,7 @@ export default defineComponent({
     const inputUserName = ref(null)
     const inputPassword = ref(null)
     const inputName = ref(null)
+    const inputEmail = ref(null)
     const inputCountry = ref(null)
     const tiposProjeto = ref([])
     const isPwd = ref(true)
@@ -380,6 +381,7 @@ export default defineComponent({
         inputUserName.value.validate() &&
         inputPassword.value.validate() &&
         inputName.value.validate() &&
+        inputEmail.value.validate() &&
         inputCountry.value.validate()
       ) {
         onCreatingAcount.value = true
@@ -449,6 +451,7 @@ export default defineComponent({
       mdiCellphone,
       mdiPhoneClassic,
       inputName,
+      inputEmail,
       inputUserName,
       inputPassword,
       inputCountry,

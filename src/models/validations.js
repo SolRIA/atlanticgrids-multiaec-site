@@ -1,4 +1,6 @@
 export function isEmail(email) {
+  if (email === null || email.length === 0) return false
+
   return String(email)
     .toLowerCase()
     .match(

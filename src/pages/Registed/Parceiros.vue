@@ -376,7 +376,7 @@ export default defineComponent({
     const lang = ref('pt')
 
     const active = ref(null)
-    const pending = ref(null)
+    const pending = ref(true)
 
     onMounted(async () => {
       try {

@@ -177,6 +177,24 @@
                   class="col-xs-12 col-md-6"
                 />
 
+                <q-input
+                  v-model="empresa.nif"
+                  label="NIF"
+                  outlined
+                  :rules="[isNifValid]"
+                  ref="inputNif"
+                  class="col-xs-12 col-md-6"
+                />
+
+                <q-input
+                  v-model="empresa.cae"
+                  label="CAE"
+                  outlined
+                  :rules="[isCaeValid]"
+                  ref="inputCae"
+                  class="col-xs-12 col-md-6"
+                />
+
                 <TipoProjetoSelector
                   :tipos="tiposProjeto"
                   :tipo="empresa.tipos_projeto"
@@ -412,7 +430,7 @@ export default defineComponent({
     const inputConcelho = ref(null)
 
     const active = ref(null)
-    const pending = ref(null)
+    const pending = ref(true)
 
     const tiposProjeto = ref([])
     const concelhos = ref([])

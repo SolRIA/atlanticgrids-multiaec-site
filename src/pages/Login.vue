@@ -144,7 +144,7 @@ export default defineComponent({
             localStorage.setItem('login', email.value)
             localStorage.setItem('token', JSON.stringify(response))
 
-            $router.push({ path: 'registed', query: $route.query })
+            $router.push({ path: response.start, query: $route.query })
           } else {
             $q.notify({
               message: t('html.errors.invalidCredentials'),
