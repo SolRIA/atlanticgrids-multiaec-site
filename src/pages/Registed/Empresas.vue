@@ -637,6 +637,7 @@ export default defineComponent({
             data.append('grupo', empresa.value.grupo)
             data.append('nif', empresa.value.nif)
             data.append('cae', empresa.value.cae)
+            data.append('morada', empresa.value.morada)
             data.append('ativo', empresa.value.ativo)
             data.append('pendente', empresa.value.pendente)
             data.append('tipos_projeto', empresa.value.tipos_projeto)
@@ -666,7 +667,9 @@ export default defineComponent({
           persistent: true
         }).onOk(async () => {
           try {
-            await postAuth('empresas/aprovar-associado.php', { id: row.id })
+            const result = await postAuth('empresas/aprovar-associado.php', {
+              id: row.id
+            })
             tableRef.value.requestServerInteraction()
 
             if (result.ok)
