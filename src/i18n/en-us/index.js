@@ -138,7 +138,7 @@ export default {
       obj2: 'Conducting Working Visits to Multilateral Institutions;',
       obj3: 'Development of an Internationalization Plan;',
       obj4: 'Strategic Capacity Building, tender preparation and demonstration;',
-      obj5: 'Promoção Coletiva do setor AEC.'
+      obj5: 'Collective Promotion of the AEC sector.'
     },
     multiaec: {
       title: 'MULTILATERAL MARKET',
