@@ -1,13 +1,5 @@
 <template>
-  <q-select
-    v-model="locale"
-    :options="localeOptions"
-    class="q-mx-md"
-    borderless
-    map-options
-    emit-value
-    hide-dropdown-icon
-  >
+  <q-select v-model="locale" :options="localeOptions" class="q-mx-md" borderless map-options emit-value hide-dropdown-icon>
     <template v-slot:prepend>
       <q-icon :name="getlogo(localeOption.icon)" />
     </template>
@@ -33,9 +25,7 @@ import { useQuasar } from 'quasar'
 import { apiPublicUrl } from 'boot/api'
 import { defineComponent, ref, watch } from 'vue'
 
-const langList = import.meta.glob(
-  '../../node_modules/quasar/lang/(pt|en-US).mjs'
-)
+const langList = import.meta.glob('../../node_modules/quasar/lang/(pt|en-US|fr).mjs')
 
 export default defineComponent({
   name: 'LanguageSelector',
@@ -45,23 +35,16 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
 
     let currentLocale = localStorage.getItem('lang')
-    if (typeof currentLocale === 'undefined' || currentLocale === null)
-      currentLocale = $q.lang.getLocale()
+    if (typeof currentLocale === 'undefined' || currentLocale === null) currentLocale = $q.lang.getLocale()
 
     const localeOptions = [
       { value: 'pt', label: 'Português', icon: 'imagens/paises/pt.svg' },
-      { value: 'en-US', label: 'English', icon: 'imagens/paises/us.svg' }
+      { value: 'en-US', label: 'English', icon: 'imagens/paises/us.svg' },
+      { value: 'fr', label: 'Français', icon: 'imagens/paises/fr.svg' }
     ]
 
-    const localeOption = ref(
-      localeOptions.find((l) =>
-        l.value.startsWith(currentLocale.substring(0, 2))
-      )
-    )
-    if (
-      localeOption.value === null ||
-      typeof localeOption.value === 'undefined'
-    ) {
+    const localeOption = ref(localeOptions.find((l) => l.value.startsWith(currentLocale.substring(0, 2))))
+    if (localeOption.value === null || typeof localeOption.value === 'undefined') {
       localeOption.value = localeOptions[1]
     }
     locale.value = localeOption.value.value
@@ -88,12 +71,10 @@ export default defineComponent({
     const loadLanguage = (langName) => {
       // set quasar's language too!!
       try {
-        langList[`../../node_modules/quasar/lang/${langName}.mjs`]().then(
-          (language) => {
-            console.log(language.default)
-            $q.lang.set(language.default)
-          }
-        )
+        langList[`../../node_modules/quasar/lang/${langName}.mjs`]().then((language) => {
+          console.log(language.default)
+          $q.lang.set(language.default)
+        })
       } catch (error) {
         console.error(error)
       }
