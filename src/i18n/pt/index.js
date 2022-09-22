@@ -17,14 +17,9 @@ export default {
     refresh: 'Recarregar'
   },
   date: {
-    days: 'Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado'.split(
-      '_'
-    ),
+    days: 'Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado'.split('_'),
     daysShort: 'Dom_Seg_Ter_Qua_Qui_Sex_Sáb'.split('_'),
-    months:
-      'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split(
-        '_'
-      ),
+    months: 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split('_'),
     monthsShort: 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
     firstDayOfWeek: 1, // 0-6, 0 - Sunday, 1 Monday, ...
     format24h: true
@@ -34,12 +29,7 @@ export default {
     noResults: 'Não foi encontrado nenhum resultado',
     loading: 'A carregar...',
     selectedRecords: function (rows) {
-      return rows > 0
-        ? rows +
-            ' linha' +
-            (rows === 1 ? ' selecionada' : 's selecionadas') +
-            '.'
-        : 'Nenhuma linha selecionada.'
+      return rows > 0 ? rows + ' linha' + (rows === 1 ? ' selecionada' : 's selecionadas') + '.' : 'Nenhuma linha selecionada.'
     },
     recordsPerPage: 'Linhas por página:',
     allRows: 'Todas',
@@ -107,29 +97,23 @@ export default {
       search: 'Pesquisa',
       projectLc: 'Projeto',
       more: 'Ver mais',
-      multiaecDesc:
-        'O Projeto MULTI AEC é um projeto promovido pelo Cluster AEC, que visa o reforço das atividades de cooperação e parceria no sector da Arquitetura Engenharia e Construção, nos mercados das Multilaterais Financeiras.',
+      multiaecDesc: 'O Projeto MULTI AEC é um projeto promovido pelo Cluster AEC, que visa o reforço das atividades de cooperação e parceria no sector da Arquitetura Engenharia e Construção, nos mercados das Multilaterais Financeiras.',
       multiaec: 'GESTÃO INTEGRADA DAS MULTILATERAIS',
       multiaecMarket: 'Mercado das Multilaterais',
-      multiaecMarketDesc:
-        'As Multilaterais Financeiras são Instituições Financeiras Internacionais (IFI), que promovem o desenvolvimento económico e social, em países em desenvolvimento, tendo como objetivo a redução dos níveis de pobreza nos países de operação.',
+      multiaecMarketDesc: 'As Multilaterais Financeiras são Instituições Financeiras Internacionais (IFI), que promovem o desenvolvimento económico e social, em países em desenvolvimento, tendo como objetivo a redução dos níveis de pobreza nos países de operação.',
       news: 'Notícias',
-      newsDesc:
-        'Veja aqui informações e notícias sobre as atividades mais recentes dos bancos multilaterais que fazem parte  deste projeto',
+      newsDesc: 'Veja aqui informações e notícias sobre as atividades mais recentes dos bancos multilaterais que fazem parte  deste projeto',
       presentation: 'APRESENTAÇÃO',
       tutoriais: 'Tutoriais',
-      tutoriaisDesc:
-        'Aqui pode encontrar informação sobre Webinars, Videos promocionais, relatórios anuais dos bancos e documentos estratégicos, etc…',
+      tutoriaisDesc: 'Aqui pode encontrar informação sobre Webinars, Videos promocionais, relatórios anuais dos bancos e documentos estratégicos, etc…',
       partner: {
         name: 'Parceiro Local',
-        description:
-          'Registe-se a sua empresa como parceiro local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
+        description: 'Registe-se a sua empresa como parceiro local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
         register: 'Registar'
       },
       associate: {
         name: 'Associado',
-        description:
-          'Torne-se associado da Plataforma Tecnológica Portuguesa de Construção (PTPC) e conheça todas as vantagens'
+        description: 'Torne-se associado da Plataforma Tecnológica Portuguesa de Construção (PTPC) e conheça todas as vantagens'
       },
       passwordRecover: 'Recuperar password'
     },
@@ -237,20 +221,30 @@ export default {
     },
     registed: {
       invite: 'Convidar',
-      inviteMessage:
-        'Venha conhecer a plataforma de colaboração para construção'
+      inviteMessage: 'Venha conhecer a plataforma de colaboração para construção'
     },
     login: {
       registerAssociated: 'Registar Associado',
       registerPartner: 'Registar Parceiro',
-      recoverPassword: 'Recuperar senha'
+      recoverPassword: 'Recuperar senha',
+      partnerWarning: `<p>Este registo destina-se a empresas que pretendam posicionar-se como parceiros locais de empresas de construção portuguesas que se qualifiquem para processos de contratação das seguintes entidades:</p>
+      <ul>
+      <li>Banco Mundial</li>
+      <li>Banco Europeu de Reconstrução e Desenvolvimento - EBERD</li>
+      <li>Banco Interamericano de Desenvolvimento - BID</li>
+      <li>Banco Europeu de Investimento - BEI</li>
+      </ul>
+      <p>Se pretende estabelecer contacto com empresas portuguesas para contratos no seu país de origem, por favor deixe os seus contactos, dados e experiência na página seguinte.</p>
+      <p>A sua aceitação será validada pelo Cluster da Construção Portuguesa.</p>
+      <p>você será então contatado por nossas empresas interessadas.</p>`
     },
     recover: {
-      recoverMessage:
-        'Indique o utilizador para alterar a palavra-passe. Caso o utilizador esteja registado na nossa plataforma, irá receber um email onde poderá redefinir a palavra-passe.',
+      recoverMessage: 'Indique o utilizador para alterar a palavra-passe. Caso o utilizador esteja registado na nossa plataforma, irá receber um email onde poderá redefinir a palavra-passe.',
       changePasswordMessage: 'Indique a nova palavra-passe'
     },
     errors: {
+      error: 'Erro',
+      warning: 'Aviso',
       getProjectTypes: 'Não foi possível obter os tipos de projeto',
       noUsername: 'Insira o utilizador',
       noPassword: 'Insira a password',
@@ -286,8 +280,7 @@ export default {
       return: 'Voltar',
       register: 'Registar',
       error: 'Não foi possível criar a conta',
-      success:
-        'A conta foi criada com sucesso. Vai ser validada pela PTPC e será notificado por email assim que estiver ativo.'
+      success: 'A conta foi criada com sucesso. Vai ser validada pela PTPC e será notificado por email assim que estiver ativo.'
     }
   }
 }
