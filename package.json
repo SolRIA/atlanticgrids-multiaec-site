@@ -11,14 +11,14 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.15.0",
-    "quasar": "^2.7.5",
+    "@quasar/extras": "^1.15.3",
+    "quasar": "^2.8.4",
     "vue": "^3.0.0",
     "vue-i18n": "^9.1.7",
     "vue-router": "^4.0.0"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.0.5",
+    "@quasar/app-vite": "^1.1.2",
     "autoprefixer": "^10.4.2",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",

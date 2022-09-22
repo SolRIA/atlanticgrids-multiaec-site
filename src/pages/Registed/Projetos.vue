@@ -3,84 +3,22 @@
     <q-card>
       <q-card-section>
         <div class="row q-col-gutter-md">
-          <TipoProjetoSelector
-            :tipos="tipos"
-            :tipo="tipo"
-            @tipo_projeto_updated="tipoProjetoUpdated"
-            clearable
-            dense
-            class="col-xs-12 col-md-3"
-          />
+          <TipoProjetoSelector :tipos="tipos" :tipo="tipo" @tipo_projeto_updated="tipoProjetoUpdated" clearable dense class="col-xs-12 col-md-3" />
 
-          <q-select
-            v-model="pais"
-            :options="paises"
-            label="País"
-            outlined
-            dense
-            class="col-xs-12 col-md-3"
-            clearable
-          />
+          <q-select v-model="pais" :options="paises" label="País" outlined dense class="col-xs-12 col-md-3" clearable />
 
-          <BancoSelector
-            :bancos="bancos"
-            :banco="banco"
-            @banco_updated="bancoUpdated"
-            clearable
-            class="col-xs-12 col-md-3"
-          />
+          <BancoSelector :bancos="bancos" :banco="banco" @banco_updated="bancoUpdated" clearable class="col-xs-12 col-md-3" />
 
-          <q-input
-            v-model="filtroProjeto"
-            label="Projeto"
-            debounce="500"
-            outlined
-            dense
-            clearable
-            class="col-xs-12 col-md-3"
-          />
+          <q-input v-model="filtroProjeto" label="Projeto" debounce="500" outlined dense clearable class="col-xs-12 col-md-3" />
 
-          <q-input
-            v-model="filtro"
-            label="Pesquisa livre"
-            debounce="500"
-            outlined
-            dense
-            class="col-xs-12"
-          />
+          <q-input v-model="filtro" label="Pesquisa livre" debounce="500" outlined dense class="col-xs-12" />
         </div>
       </q-card-section>
     </q-card>
 
-    <q-table
-      class="q-mt-sm"
-      color="positive"
-      title="Projetos"
-      ref="tableRef"
-      selection="none"
-      no-data-label="Não existem dados"
-      no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
-      row-key="id"
-      wrap-cells
-      :rows="projetos"
-      :columns="columns"
-      :rows-per-page-options="[5, 10, 15, 20, 50]"
-      :loading="loading"
-      v-model:pagination="pagination"
-      v-model:selected="projetoEscolhido"
-      @request="onServerRequest"
-      @row-dblclick="onProjectDlbClick"
-    >
+    <q-table class="q-mt-sm" color="positive" title="Projetos" ref="tableRef" selection="none" no-data-label="Não existem dados" no-results-label="A pesquisa efetuada não devolveu qualquer resultado" row-key="id" wrap-cells :rows="projetos" :columns="columns" :rows-per-page-options="[5, 10, 15, 20, 50]" :loading="loading" v-model:pagination="pagination" v-model:selected="projetoEscolhido" @request="onServerRequest" @row-dblclick="onProjectDlbClick">
       <template v-slot:top-right>
-        <q-btn-toggle
-          v-model="actionFilterMain"
-          no-caps
-          rounded
-          clearable
-          toggle-color="positive"
-          :options="accoesCliente"
-          v-if="!permissaoEdicao"
-        >
+        <q-btn-toggle v-model="actionFilterMain" no-caps rounded clearable toggle-color="positive" :options="accoesCliente" v-if="!permissaoEdicao">
           <template v-slot:one>
             <div class="row items-center">
               <div class="col-12 text-center">Com interesse</div>
@@ -108,25 +46,14 @@
         </q-btn-toggle>
 
         <q-btn-group outline v-if="permissaoEdicao">
-          <q-btn
-            label="Novo"
-            @click="onNovo"
-            :icon="mdiPlusBoxOutline"
-            color="positive"
-          />
+          <q-btn label="Novo" @click="onNovo" :icon="mdiPlusBoxOutline" color="positive" />
           <q-btn @click="refresh" :icon="mdiRefresh" outline color="positive" />
         </q-btn-group>
       </template>
 
       <template v-slot:body-cell-referencia="props">
         <q-td :props="props">
-          <q-btn
-            :label="props.row.referencia"
-            @click="openProjectLink(props.row)"
-            flat
-            rounded
-            style="min-width: 150px"
-          />
+          <q-btn :label="props.row.referencia" @click="openProjectLink(props.row)" flat rounded style="min-width: 150px" />
         </q-td>
       </template>
 
@@ -143,6 +70,11 @@
           {{ props.row.data.substring(0, 10) }}
         </q-td>
       </template>
+      <template v-slot:body-cell-data_fecho="props">
+        <q-td :props="props">
+          {{ props.row.data.substring(0, 10) }}
+        </q-td>
+      </template>
       <template v-slot:body-cell-banco_id="props">
         <q-td :props="props" auto-width>
           {{ getBanco(props.row.banco_id) }}
@@ -151,13 +83,7 @@
 
       <template v-slot:body-cell-link="props">
         <q-td :props="props" auto-width>
-          <q-btn
-            dense
-            flat
-            color="positive"
-            :icon="mdiOpenInNew"
-            @click="openProjectLink(props.row)"
-          />
+          <q-btn dense flat color="positive" :icon="mdiOpenInNew" @click="openProjectLink(props.row)" />
         </q-td>
       </template>
       <template v-slot:body-cell-actions="props">
@@ -165,48 +91,28 @@
           <q-btn dense flat color="positive" :icon="mdiDotsVertical">
             <q-menu>
               <q-list style="min-width: 100px">
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="onEditProject(props.row)"
-                  v-if="permissaoEdicao"
-                >
+                <q-item clickable v-close-popup @click="onEditProject(props.row)" v-if="permissaoEdicao">
                   <q-item-section avatar>
                     <q-icon :name="mdiPencil" />
                   </q-item-section>
                   <q-item-section>Editar</q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="onViewProject(props.row)"
-                  v-if="!permissaoEdicao"
-                >
+                <q-item clickable v-close-popup @click="onViewProject(props.row)" v-if="!permissaoEdicao">
                   <q-item-section avatar>
                     <q-icon :name="mdiEye" />
                   </q-item-section>
                   <q-item-section>Ver detalhes</q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="getSentEmails(props.row)"
-                  v-if="permissaoEdicao"
-                >
+                <q-item clickable v-close-popup @click="getSentEmails(props.row)" v-if="permissaoEdicao">
                   <q-item-section avatar>
                     <q-icon :name="mdiEmail" />
                   </q-item-section>
                   <q-item-section>Emails Enviados</q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="getInteresses(props.row)"
-                  v-if="!permissaoEdicao"
-                >
+                <q-item clickable v-close-popup @click="getInteresses(props.row)" v-if="!permissaoEdicao">
                   <q-item-section avatar>
                     <q-icon :name="mdiCheckAll" />
                   </q-item-section>
@@ -242,32 +148,9 @@
         </q-card-section>
 
         <q-card-section class="q-pt-md">
-          <q-table
-            class="q-mt-sm"
-            color="positive"
-            title="Emails enviados"
-            ref="tableActionsRef"
-            selection="none"
-            flat
-            bordered
-            no-data-label="Não existem dados"
-            no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
-            row-key="id"
-            wrap-cells
-            :rows="emailsEnviados"
-            :columns="columnsSentEmails"
-            :rows-per-page-options="[5, 10, 15, 20, 0]"
-            :loading="loadingSentEmails"
-          >
+          <q-table class="q-mt-sm" color="positive" title="Emails enviados" ref="tableActionsRef" selection="none" flat bordered no-data-label="Não existem dados" no-results-label="A pesquisa efetuada não devolveu qualquer resultado" row-key="id" wrap-cells :rows="emailsEnviados" :columns="columnsSentEmails" :rows-per-page-options="[5, 10, 15, 20, 0]" :loading="loadingSentEmails">
             <template v-slot:top-right>
-              <q-btn-toggle
-                v-model="actionFilter"
-                no-caps
-                rounded
-                clearable
-                toggle-color="grey-8"
-                :options="accoes"
-              >
+              <q-btn-toggle v-model="actionFilter" no-caps rounded clearable toggle-color="grey-8" :options="accoes">
                 <template v-slot:one>
                   <div class="row items-center">
                     <div class="col-12 text-center">Com interesse</div>
@@ -289,10 +172,7 @@
                 <template v-slot:four>
                   <div class="row items-center">
                     <div class="col-12 text-center">Não respondeu</div>
-                    <div
-                      style="height: 4px"
-                      class="col-12 bg-blue-grey-2"
-                    ></div>
+                    <div style="height: 4px" class="col-12 bg-blue-grey-2"></div>
                   </div>
                 </template>
                 <template v-slot:five>
@@ -311,31 +191,17 @@
             </template>
             <template v-slot:body-cell-accao="props">
               <q-td :props="props" auto-width>
-                <q-btn
-                  round
-                  size="xs"
-                  class="shadow-10"
-                  :color="corAccao(props.row.accao)"
-                  @click="filtraAccao(props.row.accao)"
-                />
+                <q-btn round size="xs" class="shadow-10" :color="corAccao(props.row.accao)" @click="filtraAccao(props.row.accao)" />
               </q-td>
             </template>
             <template v-slot:body-cell-empresa_contatada="props">
               <q-td :props="props">
-                <q-checkbox
-                  v-model="props.row.empresa_contatada"
-                  color="blue"
-                  disable
-                />
+                <q-checkbox v-model="props.row.empresa_contatada" color="blue" disable />
               </q-td>
             </template>
             <template v-slot:body-cell-abriu_link_banco="props">
               <q-td :props="props">
-                <q-checkbox
-                  v-model="props.row.abriu_link_banco"
-                  color="blue"
-                  disable
-                />
+                <q-checkbox v-model="props.row.abriu_link_banco" color="blue" disable />
               </q-td>
             </template>
           </q-table>
@@ -361,23 +227,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-md">
-          <q-table
-            class="q-mt-sm"
-            color="positive"
-            title="Manifestações interesse"
-            ref="tableInteresses"
-            selection="none"
-            flat
-            bordered
-            no-data-label="Não existem dados"
-            no-results-label="A pesquisa efetuada não devolveu qualquer resultado"
-            row-key="id"
-            wrap-cells
-            :rows="manifestacoesInteresse"
-            :columns="columnsIteresses"
-            :rows-per-page-options="[5, 10, 15, 20, 0]"
-            :loading="loadingSentEmails"
-          >
+          <q-table class="q-mt-sm" color="positive" title="Manifestações interesse" ref="tableInteresses" selection="none" flat bordered no-data-label="Não existem dados" no-results-label="A pesquisa efetuada não devolveu qualquer resultado" row-key="id" wrap-cells :rows="manifestacoesInteresse" :columns="columnsIteresses" :rows-per-page-options="[5, 10, 15, 20, 0]" :loading="loadingSentEmails">
             <template v-slot:top-right>
               <div class="row items-center">
                 <div class="col-12 text-center">Com interesse</div>
@@ -386,13 +236,7 @@
             </template>
             <template v-slot:body-cell-accao="props">
               <q-td :props="props" auto-width>
-                <q-btn
-                  round
-                  size="xs"
-                  class="shadow-10"
-                  :color="corAccao(props.row.accao)"
-                  @click="filtraAccao(props.row.accao)"
-                />
+                <q-btn round size="xs" class="shadow-10" :color="corAccao(props.row.accao)" @click="filtraAccao(props.row.accao)" />
               </q-td>
             </template>
           </q-table>
@@ -407,19 +251,7 @@
 </template>
 
 <script>
-import {
-  mdiPencil,
-  mdiPlusBoxOutline,
-  mdiRefresh,
-  mdiAlertDecagram,
-  mdiGridLarge,
-  mdiOpenInNew,
-  mdiEye,
-  mdiDotsVertical,
-  mdiEmail,
-  mdiWindowClose,
-  mdiCheckAll
-} from '@quasar/extras/mdi-v6'
+import { mdiPencil, mdiPlusBoxOutline, mdiRefresh, mdiAlertDecagram, mdiGridLarge, mdiOpenInNew, mdiEye, mdiDotsVertical, mdiEmail, mdiWindowClose, mdiCheckAll } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted, watch } from 'vue'
 import { date, useQuasar } from 'quasar'
 import { get, post, postAuth, getAuth, apiPublicUrl } from 'boot/api'
@@ -678,8 +510,7 @@ export default defineComponent({
       loadingSentEmails.value = false
     }
     const filtraAccao = (accao) => {
-      if (actionFilter.value === null || actionFilter.value === 0)
-        actionFilter.value = accao
+      if (actionFilter.value === null || actionFilter.value === 0) actionFilter.value = accao
       else actionFilter.value = null
     }
     return {
