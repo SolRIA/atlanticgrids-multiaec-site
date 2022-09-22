@@ -19,10 +19,7 @@ export default {
   date: {
     days: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
     daysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
-    months:
-      'January_February_March_April_May_June_July_August_September_October_November_December'.split(
-        '_'
-      ),
+    months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
     monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
     firstDayOfWeek: 0, // 0-6, 0 - Sunday, 1 Monday, ...
     format24h: false,
@@ -32,10 +29,7 @@ export default {
     noData: 'No data available',
     noResults: 'No matching records found',
     loading: 'Loading...',
-    selectedRecords: (rows) =>
-      rows === 1
-        ? '1 record selected.'
-        : (rows === 0 ? 'No' : rows) + ' records selected.',
+    selectedRecords: (rows) => (rows === 1 ? '1 record selected.' : (rows === 0 ? 'No' : rows) + ' records selected.'),
     recordsPerPage: 'Records per page:',
     allRows: 'All',
     pagination: (start, end, total) => start + '-' + end + ' of ' + total,
@@ -100,29 +94,23 @@ export default {
       search: 'Search',
       projectLc: 'Project',
       more: 'View more',
-      multiaecDesc:
-        'The MULTI AEC Project is a project promoted by the AEC Cluster, which aims to strengthen cooperation and partnership activities in the Architecture, Engineering and Construction sector, in the Financial Multilateral markets.',
+      multiaecDesc: 'The MULTI AEC Project is a project promoted by the AEC Cluster, which aims to strengthen cooperation and partnership activities in the Architecture, Engineering and Construction sector, in the Financial Multilateral markets.',
       multiaec: 'INTEGRATED MULTILATERAL MANAGEMENT',
       multiaecMarket: 'Multilateral Market',
-      multiaecMarketDesc:
-        'Financial Multilaterals are International Financial Institutions (IFIs), which promote economic and social development in developing countries, with the objective of reducing poverty levels in the countries of operation.',
+      multiaecMarketDesc: 'Financial Multilaterals are International Financial Institutions (IFIs), which promote economic and social development in developing countries, with the objective of reducing poverty levels in the countries of operation.',
       news: 'News',
-      newsDesc:
-        'See here information and news about the most recent activities of the multilateral banks that are part of this project',
+      newsDesc: 'See here information and news about the most recent activities of the multilateral banks that are part of this project',
       tutoriais: 'Tutorials',
-      tutoriaisDesc:
-        'Here you can find information about Webinars, Promotional Videos, Bank Annual Reports and Strategic Documents, etc…',
+      tutoriaisDesc: 'Here you can find information about Webinars, Promotional Videos, Bank Annual Reports and Strategic Documents, etc…',
       presentation: 'PRESENTATION',
       partner: {
         name: 'Local Partner',
-        description:
-          'Register your company as a local partner of the associate companies of the Portuguese Construction Technological Platform',
+        description: 'Register your company as a local partner of the associate companies of the Portuguese Construction Technological Platform',
         register: 'Register'
       },
       associate: {
         name: 'Associate',
-        description:
-          'Become a member of the Portuguese Construction Technological Platform (PTPC) and discover all the advantages'
+        description: 'Become a member of the Portuguese Construction Technological Platform (PTPC) and discover all the advantages'
       },
       passwordRecover: 'Password recovery'
     },
@@ -230,20 +218,31 @@ export default {
     },
     registed: {
       invite: 'Invite',
-      inviteMessage:
-        'Come and discover the collaboration platform for construction'
+      inviteMessage: 'Come and discover the collaboration platform for construction'
     },
     login: {
       registerAssociated: 'Register Associate',
       registerPartner: 'Register Partner',
-      recoverPassword: 'Recover Password'
+      recoverPassword: 'Recover Password',
+      partnerWarning: `
+      <p>This registration is for companies that wants to position themselves as local partners of Portuguese construction Companies which qualify themselves to procurement processes of the following entities:</p>
+      <ul>
+      <li>World Bank</li>
+      <li>European Bank for reconstruction and development - EBERD</li>
+      <li>Inter-American Development Bank - IBD</li>
+      <li>European Investment Bank - BEI</li>
+      </ul>
+      <p>If you want to establish contact with Portuguese companies for contracts in your home country, please leave your contacts, data, and experience on the next page.</p>
+      <p>Its acceptance will be validated by the Portuguese Construction Cluster.</p>
+      <p>You will then be contacted by our interested companies.</p>`
     },
     recover: {
-      recoverMessage:
-        'Enter the user to change the password. If you are registered on our platform, you will receive an email where you can reset your password.',
+      recoverMessage: 'Enter the user to change the password. If you are registered on our platform, you will receive an email where you can reset your password.',
       changePasswordMessage: 'Enter the new password'
     },
     errors: {
+      error: 'Error',
+      warning: 'Warning',
       getProjectTypes: 'Unable to get project types',
       noUsername: 'Enter username',
       noPassword: 'Enter the password',
@@ -279,8 +278,7 @@ export default {
       return: 'Return',
       register: 'Register',
       error: 'Unable to create account',
-      success:
-        'The account was created successfully. It will be validated by PTPC and you will be notified by email once it is active.'
+      success: 'The account was created successfully. It will be validated by PTPC and you will be notified by email once it is active.'
     }
   }
 }

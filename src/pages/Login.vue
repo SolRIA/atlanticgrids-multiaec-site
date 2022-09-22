@@ -10,80 +10,28 @@
 
         <q-card-section>
           <q-form class="q-gutter-sm">
-            <q-input
-              v-model="email"
-              outlined
-              label="utilizador"
-              :rules="[isEmailRule]"
-              ref="inputName"
-            >
+            <q-input v-model="email" outlined label="utilizador" :rules="[isEmailRule]" ref="inputName">
               <template v-if="email" v-slot:append>
-                <q-icon
-                  :name="mdiCloseCircle"
-                  @click.stop="email = null"
-                  class="cursor-pointer"
-                />
+                <q-icon :name="mdiCloseCircle" @click.stop="email = null" class="cursor-pointer" />
               </template>
             </q-input>
-            <q-input
-              v-model="password"
-              outlined
-              @keydown.enter.prevent="doLogin"
-              :type="isPwd ? 'password' : 'text'"
-              label="password"
-              :rules="[isPasswordValid]"
-              ref="inputPassword"
-            >
+            <q-input v-model="password" outlined @keydown.enter.prevent="doLogin" :type="isPwd ? 'password' : 'text'" label="password" :rules="[isPasswordValid]" ref="inputPassword">
               <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? mdiEyeOff : mdiEye"
-                  class="cursor-pointer"
-                  aria-hidden="true"
-                  @click="isPwd = !isPwd"
-                />
-                <q-icon
-                  v-if="password"
-                  :name="mdiCloseCircle"
-                  @click.stop="password = null"
-                  class="cursor-pointer"
-                />
+                <q-icon :name="isPwd ? mdiEyeOff : mdiEye" class="cursor-pointer" aria-hidden="true" @click="isPwd = !isPwd" />
+                <q-icon v-if="password" :name="mdiCloseCircle" @click.stop="password = null" class="cursor-pointer" />
               </template>
             </q-input>
           </q-form>
         </q-card-section>
 
         <q-card-actions align="center">
-          <q-btn
-            rounded
-            color="primary"
-            class="text-white action-btn"
-            size="lg"
-            label="Login"
-            :icon="mdiLogin"
-            @click="doLogin"
-            :loading="onLogin"
-          />
+          <q-btn rounded color="primary" class="text-white action-btn" size="lg" label="Login" :icon="mdiLogin" @click="doLogin" :loading="onLogin" />
         </q-card-actions>
         <q-card-section class="q-pa-none">
           <q-btn-group spread>
-            <q-btn
-              :label="$t('html.login.registerAssociated')"
-              type="reset"
-              flat
-              to="/login/registo"
-            />
-            <q-btn
-              :label="$t('html.login.registerPartner')"
-              type="reset"
-              flat
-              to="/login/registo-parceiro"
-            />
-            <q-btn
-              :label="$t('html.login.recoverPassword')"
-              type="reset"
-              flat
-              to="/login/recuperarPassword"
-            />
+            <q-btn :label="$t('html.login.registerAssociated')" type="reset" flat to="/login/registo" />
+            <q-btn :label="$t('html.login.registerPartner')" type="reset" flat to="/login/registo-parceiro" />
+            <q-btn :label="$t('html.login.recoverPassword')" type="reset" flat to="/login/recuperarPassword" />
           </q-btn-group>
         </q-card-section>
       </q-card>
@@ -96,13 +44,7 @@
 </template>
 
 <script>
-import {
-  mdiEyeOff,
-  mdiEye,
-  mdiLogin,
-  mdiCloseCircle,
-  mdiHome
-} from '@quasar/extras/mdi-v6'
+import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle, mdiHome } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { post } from 'boot/api'
