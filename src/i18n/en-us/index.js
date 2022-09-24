@@ -114,6 +114,14 @@ export default {
       },
       passwordRecover: 'Password recovery'
     },
+    sideMenu: {
+      associates: 'Associates',
+      projects: 'Projects',
+      project: 'Project',
+      multiAEC: 'Multilateral Market',
+      news: 'News',
+      tutoriais: 'Tutorials'
+    },
     associates: {
       title: 'ASSOCIATES',
       bigCompanies: 'Big companies',
@@ -221,8 +229,8 @@ export default {
       inviteMessage: 'Come and discover the collaboration platform for construction'
     },
     login: {
-      registerAssociated: 'Register Associate',
-      registerPartner: 'Register Partner',
+      registerAssociated: 'New PTPC Associate',
+      registerPartner: 'Local partner',
       recoverPassword: 'Recover Password',
       partnerWarning: `
       <p>This registration is for companies that wants to position themselves as local partners of Portuguese construction Companies which qualify themselves to procurement processes of the following entities:</p>

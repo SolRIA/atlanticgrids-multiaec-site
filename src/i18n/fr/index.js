@@ -122,6 +122,14 @@ export default {
       },
       passwordRecover: 'Récupération de mot de passe'
     },
+    sideMenu: {
+      associates: 'Associés',
+      projects: 'Projets',
+      project: 'Projet',
+      multiAEC: 'Marché multilatéral',
+      news: 'Nouvelles',
+      tutoriais: 'Tutoriels'
+    },
     associates: {
       title: 'ASSOCIÉS',
       bigCompanies: 'Grandes entreprises',
@@ -229,8 +237,8 @@ export default {
       inviteMessage: 'Venez découvrir la plateforme de collaboration pour la construction'
     },
     login: {
-      registerAssociated: "S'inscrire Associé",
-      registerPartner: 'Enregistrer un partenaire',
+      registerAssociated: 'Nouvel associé PTPC',
+      registerPartner: 'Partenaire local',
       recoverPassword: 'Récupérer mot de passe',
       partnerWarning: `
       <p>Cette inscription est destinée aux entreprises qui souhaitent se positionner en tant que partenaires locaux des entreprises de construction portugaises qui se qualifient pour les processus d'approvisionnement des entités suivantes :</p>

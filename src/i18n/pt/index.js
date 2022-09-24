@@ -117,6 +117,14 @@ export default {
       },
       passwordRecover: 'Recuperar password'
     },
+    sideMenu: {
+      associates: 'Associados',
+      projects: 'Projetos',
+      project: 'Projeto',
+      multiAEC: 'Mercado das Multilaterais',
+      news: 'Notícias',
+      tutoriais: 'Tutoriais'
+    },
     associates: {
       title: 'ASSOCIADOS',
       bigCompanies: 'Grandes empresas',
@@ -224,8 +232,8 @@ export default {
       inviteMessage: 'Venha conhecer a plataforma de colaboração para construção'
     },
     login: {
-      registerAssociated: 'Registar Associado',
-      registerPartner: 'Registar Parceiro',
+      registerAssociated: 'Novo Associado PTPC',
+      registerPartner: 'Parceiro local',
       recoverPassword: 'Recuperar senha',
       partnerWarning: `<p>Este registo destina-se a empresas que pretendam posicionar-se como parceiros locais de empresas de construção portuguesas que se qualifiquem para processos de contratação das seguintes entidades:</p>
       <ul>

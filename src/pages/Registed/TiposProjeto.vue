@@ -1,30 +1,9 @@
 <template>
   <q-page padding>
-    <q-table
-      class="q-mt-sm"
-      color="positive"
-      title="Tipos Projeto"
-      ref="tableRef"
-      selection="single"
-      no-data-label="Sem dados"
-      row-key="id"
-      :rows="tipos"
-      :columns="colunas"
-      :rows-per-page-options="[0, 5, 10]"
-      :loading="loading"
-      v-model:pagination="pagination"
-      v-model:selected="tipoEscolhido"
-      @request="onServerRequest"
-    >
+    <q-table class="q-mt-sm" color="positive" title="Tipos Projeto" ref="tableRef" selection="single" no-data-label="Sem dados" row-key="id" wrap-cells :rows="tipos" :columns="colunas" :rows-per-page-options="[0, 5, 10]" :loading="loading" v-model:pagination="pagination" v-model:selected="tipoEscolhido" @request="onServerRequest">
       <template v-slot:top-right>
         <q-space />
-        <q-btn
-          label="Novo"
-          color="positive"
-          @click="onNovo"
-          :icon="mdiPlusBoxOutline"
-          class="q-mr-md"
-        />
+        <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" class="q-mr-md" />
       </template>
 
       <template v-slot:body-cell-ativo="props">
@@ -35,13 +14,7 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
-          <q-btn
-            dense
-            flat
-            color="positive"
-            :icon="mdiPencil"
-            @click="onEdit(props.row)"
-          />
+          <q-btn dense flat color="positive" :icon="mdiPencil" @click="onEdit(props.row)" />
         </q-td>
       </template>
     </q-table>
@@ -57,30 +30,11 @@
 
         <q-card-section class="q-pt-md">
           <div class="row q-col-gutter-sm">
-            <q-select
-              v-model="tipo.pai_id"
-              :options="tipos_pai"
-              label="Pai"
-              option-label="nome"
-              option-value="id"
-              emit-value
-              map-options
-              outlined
-              class="col-xs-12"
-            />
+            <q-select v-model="tipo.pai_id" :options="tipos_pai" label="Pai" option-label="nome" option-value="id" emit-value map-options outlined class="col-xs-12" />
 
-            <q-input
-              v-model="tipo.nome"
-              label="Nome"
-              outlined
-              class="col-xs-12"
-            />
-            <q-input
-              v-model="tipo.nome_en"
-              label="Nome inglês"
-              outlined
-              class="col-xs-12"
-            />
+            <q-input v-model="tipo.nome" label="Nome" outlined class="col-xs-12" />
+            <q-input v-model="tipo.nome_en" label="Nome inglês" outlined class="col-xs-12" />
+            <q-input v-model="tipo.nome_fr" label="Nome francês" outlined class="col-xs-12" />
             <q-checkbox v-model="tipo.ativo" label="Ativo" />
           </div>
         </q-card-section>
@@ -95,12 +49,7 @@
 </template>
 
 <script>
-import {
-  mdiArchiveCogOutline,
-  mdiWindowClose,
-  mdiPlusBoxOutline,
-  mdiPencil
-} from '@quasar/extras/mdi-v6'
+import { mdiArchiveCogOutline, mdiWindowClose, mdiPlusBoxOutline, mdiPencil } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { get, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
@@ -127,6 +76,12 @@ export default defineComponent({
         name: 'nome_en',
         label: 'Nome inglês',
         field: 'nome_en',
+        align: 'left'
+      },
+      {
+        name: 'nome_fr',
+        label: 'Nome francês',
+        field: 'nome_fr',
         align: 'left'
       },
       { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
@@ -171,7 +126,7 @@ export default defineComponent({
       pagination,
       onServerRequest,
       onNovo: () => {
-        tipo.value = { id: 0, pai_id: 1, nome: '', nome_en: '', ativo: true }
+        tipo.value = { id: 0, pai_id: 1, nome: '', nome_en: '', nome_fr: '', ativo: true }
         mostraEditor.value = true
       },
       onEdit: (b) => {
