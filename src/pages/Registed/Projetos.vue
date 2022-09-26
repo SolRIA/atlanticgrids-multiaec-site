@@ -552,6 +552,12 @@ export default defineComponent({
       accoesCliente,
       columns: [
         {
+          name: 'nome_tipo',
+          label: 'Tipo',
+          field: 'nome_tipo',
+          align: 'center'
+        },
+        {
           name: 'referencia',
           label: 'Referência',
           field: 'referencia',
