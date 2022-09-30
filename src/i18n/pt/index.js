@@ -14,29 +14,39 @@ export default {
     create: 'Criar',
     search: 'Procurar',
     filter: 'Filtrar',
-    refresh: 'Recarregar'
+    refresh: 'Recarregar',
   },
   date: {
-    days: 'Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado'.split('_'),
+    days: 'Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado'.split(
+      '_'
+    ),
     daysShort: 'Dom_Seg_Ter_Qua_Qui_Sex_Sáb'.split('_'),
-    months: 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split('_'),
+    months:
+      'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split(
+        '_'
+      ),
     monthsShort: 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
     firstDayOfWeek: 1, // 0-6, 0 - Sunday, 1 Monday, ...
-    format24h: true
+    format24h: true,
   },
   table: {
     noData: 'Sem dados disponíveis',
     noResults: 'Não foi encontrado nenhum resultado',
     loading: 'A carregar...',
     selectedRecords: function (rows) {
-      return rows > 0 ? rows + ' linha' + (rows === 1 ? ' selecionada' : 's selecionadas') + '.' : 'Nenhuma linha selecionada.'
+      return rows > 0
+        ? rows +
+            ' linha' +
+            (rows === 1 ? ' selecionada' : 's selecionadas') +
+            '.'
+        : 'Nenhuma linha selecionada.';
     },
     recordsPerPage: 'Linhas por página:',
     allRows: 'Todas',
     pagination: function (start, end, total) {
-      return start + '-' + end + ' de ' + total
+      return start + '-' + end + ' de ' + total;
     },
-    columns: 'Colunas'
+    columns: 'Colunas',
   },
   editor: {
     url: 'URL',
@@ -81,11 +91,11 @@ export default {
     size6: 'Enorme',
     size7: 'Máximo',
     defaultFont: 'Tipo de letra padrão',
-    viewSource: 'Exibir fonte'
+    viewSource: 'Exibir fonte',
   },
   tree: {
     noNodes: 'Sem nós disponíveis',
-    noResults: 'Nenhum resultado encontrado'
+    noResults: 'Nenhum resultado encontrado',
   },
   html: {
     index: {
@@ -97,25 +107,31 @@ export default {
       search: 'Pesquisa',
       projectLc: 'Projeto',
       more: 'Ver mais',
-      multiaecDesc: 'O Projeto MULTI AEC é um projeto promovido pelo Cluster AEC, que visa o reforço das atividades de cooperação e parceria no sector da Arquitetura Engenharia e Construção, nos mercados das Multilaterais Financeiras.',
+      multiaecDesc:
+        'O Projeto MULTI AEC é um projeto promovido pelo Cluster AEC, que visa o reforço das atividades de cooperação e parceria no sector da Arquitetura Engenharia e Construção, nos mercados das Multilaterais Financeiras.',
       multiaec: 'GESTÃO INTEGRADA DAS MULTILATERAIS',
       multiaecMarket: 'Mercado das Multilaterais',
-      multiaecMarketDesc: 'As Multilaterais Financeiras são Instituições Financeiras Internacionais (IFI), que promovem o desenvolvimento económico e social, em países em desenvolvimento, tendo como objetivo a redução dos níveis de pobreza nos países de operação.',
+      multiaecMarketDesc:
+        'As Multilaterais Financeiras são Instituições Financeiras Internacionais (IFI), que promovem o desenvolvimento económico e social, em países em desenvolvimento, tendo como objetivo a redução dos níveis de pobreza nos países de operação.',
       news: 'Notícias',
-      newsDesc: 'Veja aqui informações e notícias sobre as atividades mais recentes dos bancos multilaterais que fazem parte  deste projeto',
+      newsDesc:
+        'Veja aqui informações e notícias sobre as atividades mais recentes dos bancos multilaterais que fazem parte  deste projeto',
       presentation: 'APRESENTAÇÃO',
       tutoriais: 'Tutoriais',
-      tutoriaisDesc: 'Aqui pode encontrar informação sobre Webinars, Videos promocionais, relatórios anuais dos bancos e documentos estratégicos, etc…',
+      tutoriaisDesc:
+        'Aqui pode encontrar informação sobre Webinars, Videos promocionais, relatórios anuais dos bancos e documentos estratégicos, etc…',
       partner: {
         name: 'Parceiro Local',
-        description: 'Registe-se a sua empresa como parceiro local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
-        register: 'Registar'
+        description:
+          'Registe-se a sua empresa como parceiro local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
+        register: 'Registar',
       },
       associate: {
         name: 'Associado',
-        description: 'Torne-se associado da Plataforma Tecnológica Portuguesa de Construção (PTPC) e conheça todas as vantagens'
+        description:
+          'Torne-se associado da Plataforma Tecnológica Portuguesa de Construção (PTPC) e conheça todas as vantagens',
       },
-      passwordRecover: 'Recuperar password'
+      passwordRecover: 'Recuperar password',
     },
     sideMenu: {
       associates: 'Associados',
@@ -123,7 +139,7 @@ export default {
       project: 'Projeto',
       multiAEC: 'Mercado das Multilaterais',
       news: 'Notícias',
-      tutoriais: 'Tutoriais'
+      tutoriais: 'Tutoriais',
     },
     associates: {
       title: 'ASSOCIADOS',
@@ -131,14 +147,14 @@ export default {
       sctn: 'Entidades SCTN',
       associations: 'Associações',
       public: 'Entidades administração pública',
-      pme: 'PME'
+      pme: 'PME',
     },
     projects: {
       reference: 'Referência',
       data: 'data',
       sector: 'Setor',
       country: 'País',
-      bank: 'Banco'
+      bank: 'Banco',
     },
     project: {
       title: 'PROJETO',
@@ -149,7 +165,7 @@ export default {
       obj2: 'Realização de Visitas de Trabalho às Instituições Multilaterais;',
       obj3: 'Desenvolvimento de um Plano de Internacionalização;',
       obj4: 'Capacitação Estratégica, preparação de concursos e demonstração;',
-      obj5: 'Promoção Coletiva do setor AEC.'
+      obj5: 'Promoção Coletiva do setor AEC.',
     },
     multiaec: {
       title: 'MERCADO MULTILATERAIS',
@@ -163,14 +179,14 @@ export default {
       obj6: 'Banco de Desenvolvimento da América Latina (CAF);',
       obj7: 'Banco Asiático de Desenvolvimento (BAsD);',
       obj8: 'Banco Asiático de Investimento em Infraestrutura (BAII);',
-      obj9: 'Banco de Desenvolvimento do Conselho da Europa (CEB).'
+      obj9: 'Banco de Desenvolvimento do Conselho da Europa (CEB).',
     },
     news: {
-      title: 'Notícias'
+      title: 'Notícias',
     },
     tutorials: {
       title: 'TUTORIAIS',
-      studies: 'Estudos'
+      studies: 'Estudos',
     },
     bank: {
       bm: 'Banco Mundial',
@@ -180,7 +196,7 @@ export default {
       berd: 'Banco Europeu para a Reconstrução e Desenvolvimento',
       berdInitials: 'BERD',
       bei: 'Banco Europeu de Investimento',
-      beiInitials: 'BEI'
+      beiInitials: 'BEI',
     },
     bankBei: {
       p1: 'O Banco Europeu de Investimento é um dos maiores credores multinacionais do mundo, é o braço de empréstimos da UE. O BEI atua não só na União Europeia como no resto do mundo.',
@@ -189,7 +205,7 @@ export default {
       p4: 'O BEI fornece empréstimos a clientes de todos os tamanhos, sendo a sua presença muitas vezes fundamental para atrair outros investidores.',
       p5: 'O BEI estimula e catalisa capital privado através do investimento em equity.',
       p6: 'O BEI fornece garantias que cobrem os riscos de grandes e pequenos projetos. Também disponibiliza carteiras de crédito que tornam os projetos mais atrativos para outros investidores.',
-      p7: 'O BEI oferece muitas oportunidades para fornecedores, empreiteiros e consultores em todo o mundo. A maioria dessas oportunidades de aquisição está relacionada a projetos financiados pelo BERD nas regiões onde atua. Mas há também um número limitado de oportunidades de contratos envolvendo projetos e departamentos internos do BERD.'
+      p7: 'O BEI oferece muitas oportunidades para fornecedores, empreiteiros e consultores em todo o mundo. A maioria dessas oportunidades de aquisição está relacionada a projetos financiados pelo BERD nas regiões onde atua. Mas há também um número limitado de oportunidades de contratos envolvendo projetos e departamentos internos do BERD.',
     },
     bankBerd: {
       p1: 'O Banco Europeu de Reconstrução e Desenvolvimento (BERD) foi criado para ajudar a construir uma nova era pós-Guerra Fria na Europa Central e Oriental. Desempenhou um papel histórico e ganhou experiência única na promoção de mudanças na região, tendo até ao momento investindo quase € 150 biliões em mais de 6.000 projetos.',
@@ -200,7 +216,7 @@ export default {
       obj1: 'Empréstimos',
       obj2: 'Investimentos igualitários',
       obj3: 'Garantias para promover o comércio',
-      obj4: 'Apoio a PMEs, através de assistência de intermediários financeiros.'
+      obj4: 'Apoio a PMEs, através de assistência de intermediários financeiros.',
     },
     bankBid: {
       p1: 'O Banco Interamericano de Desenvolvimento (BID) foi constituído em 1959, é a principal fonte de financiamento para o desenvolvimento da América Latina e do Caribe. Fornece empréstimos, doações e assistência técnica aos países da região e conduz diversas tipologias de pesquisas.',
@@ -211,7 +227,7 @@ export default {
       p6: 'Além das três categorias de empréstimos, o BID pode garantir empréstimos feitos por fontes financeiras privadas em projetos do setor público. As garantias visam melhorar as condições de financiamento de projetos na América Latina e no Caribe e ajudam a promover o investimento nos países mutuários. Estas garantias são ao crédito de forma parcial e garantia de risco político.',
       obj1: 'Os empréstimos para investimentos aos países membros mutuários do BID financiam bens, obras e serviços para promover o desenvolvimento social e económico. Esta categoria inclui instrumentos específicos para apoiar os países membros mutuários do BID em caso de desastre natural.',
       obj2: 'Os empréstimos baseados em políticas fornecem aos países membros mutuários do Banco financiamento para apoiar reformas de políticas e/ou mudanças institucionais num determinado setor ou subsetor.',
-      obj3: 'Os empréstimos especiais para o desenvolvimento apoiam os países mutuários durante uma crise macroeconómica e atenuam os efeitos sobre o progresso económico e social dos países.'
+      obj3: 'Os empréstimos especiais para o desenvolvimento apoiam os países mutuários durante uma crise macroeconómica e atenuam os efeitos sobre o progresso económico e social dos países.',
     },
     bankBm: {
       p1: 'O Banco Mundial é como uma cooperativa, composta por 189 países membros. Esses países membros, ou acionistas, são representados por uma Assembleia de Governadores , que são os principais responsáveis pelas políticas do Banco Mundial. Geralmente, os governadores são ministros das finanças ou ministros do desenvolvimento dos países membros. Reúnem-se uma vez por ano nas Reuniões Anuais dos Conselhos de Governadores do Grupo Banco Mundial e do Fundo Monetário Internacional.',
@@ -225,11 +241,12 @@ export default {
       obj2: 'A IDA oferece empréstimos sem juros e promove doações a países muito pobres.',
       obj3: 'A IFC é uma instituição focada exclusivamente nos sectores privados. Ajuda países em desenvolvimento a alcançar um crescimento sustentável, financiando investimentos e mobilizando capital nos mercados financeiros e prestando consultoria a empresas e Governos.',
       obj4: 'A MIGA promove o investimento estrangeiro direto nos países em desenvolvimento, fornecendo seguros contra riscos políticos (Garantias) a investidores e credores.',
-      obj5: 'O ICSID é um centro de Arbitragem para disputas de investimentos nos países de atuação do Banco Mundial.'
+      obj5: 'O ICSID é um centro de Arbitragem para disputas de investimentos nos países de atuação do Banco Mundial.',
     },
     registed: {
       invite: 'Convidar',
-      inviteMessage: 'Venha conhecer a plataforma de colaboração para construção'
+      inviteMessage:
+        'Venha conhecer a plataforma de colaboração para construção',
     },
     login: {
       registerAssociated: 'Novo Associado PTPC',
@@ -244,11 +261,12 @@ export default {
       </ul>
       <p>Se pretende estabelecer contacto com empresas portuguesas para contratos no seu país de origem, por favor deixe os seus contactos, dados e experiência na página seguinte.</p>
       <p>A sua aceitação será validada pelo Cluster da Construção Portuguesa.</p>
-      <p>você será então contatado por nossas empresas interessadas.</p>`
+      <p>Será então contatado pelos associados PTPC interessados.</p>`,
     },
     recover: {
-      recoverMessage: 'Indique o utilizador para alterar a palavra-passe. Caso o utilizador esteja registado na nossa plataforma, irá receber um email onde poderá redefinir a palavra-passe.',
-      changePasswordMessage: 'Indique a nova palavra-passe'
+      recoverMessage:
+        'Indique o utilizador para alterar a palavra-passe. Caso o utilizador esteja registado na nossa plataforma, irá receber um email onde poderá redefinir a palavra-passe.',
+      changePasswordMessage: 'Indique a nova palavra-passe',
     },
     errors: {
       error: 'Erro',
@@ -271,7 +289,7 @@ export default {
       errorLoadProjects: 'Não foi possível obter os projetos',
       errorLoadCompanies: 'Não foi possível obter as empresas',
       error: 'Não foi possível concluir o pedido',
-      noData: 'Sem dados'
+      noData: 'Sem dados',
     },
     registerPartner: {
       tabMain: 'Informação geral',
@@ -288,7 +306,8 @@ export default {
       return: 'Voltar',
       register: 'Registar',
       error: 'Não foi possível criar a conta',
-      success: 'A conta foi criada com sucesso. Vai ser validada pela PTPC e será notificado por email assim que estiver ativo.'
-    }
-  }
-}
+      success:
+        'A conta foi criada com sucesso. Vai ser validada pela PTPC e será notificado por email assim que estiver ativo.',
+    },
+  },
+};
