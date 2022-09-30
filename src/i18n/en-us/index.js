@@ -232,6 +232,14 @@ export default {
       registerAssociated: 'New PTPC Associate',
       registerPartner: 'Local partner',
       recoverPassword: 'Recover Password',
+      associateWarning: `<p>This registration is exclusively intended for Portuguese companies whose field of activity is Architecture, Engineering, Construction, and which intend to apply for membership in the AEC/PTPC cluster. To this end, they should be interested in participating in the operational network of the financial multilaterals, which will allow them to receive updated information, qualify for national consortia and partnerships in view of the international tenders taking place with the following entities:</p>
+      <ul>
+      <li>World Bank - BM</li>
+      <li>European Bank for Reconstruction and Development - EBRD</li>
+      <li>Inter-American Development Bank - IDB</li>
+      <li>European Investment Bank - EIB</li>
+      </ul>
+      <p>Your acceptance as a new member is subject to prior validation by the AEC/PTPC</p>`,
       partnerWarning: `
       <p>This registration is for companies that wants to position themselves as local partners of Portuguese construction Companies which qualify themselves to procurement processes of the following entities:</p>
       <ul>

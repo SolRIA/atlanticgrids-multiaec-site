@@ -1,17 +1,13 @@
 <template>
   <q-page-container class="col-sm-12 col-md-9">
     <q-page padding class="fit row justify-center items-center">
-      <registo-empresa
-        v-bind:p="register"
-        @canceled="returnPrevious"
-        @saved="onCreated"
-      />
+      <registo-empresa v-bind:p="register" @canceled="returnPrevious" @saved="onCreated" />
     </q-page>
   </q-page-container>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
@@ -24,6 +20,14 @@ export default defineComponent({
     const { t } = useI18n()
     const $router = useRouter()
     const register = {}
+
+    onMounted(() => {
+      $q.dialog({
+        title: t('html.errors.warning'),
+        message: t('html.login.associateWarning'),
+        html: true
+      })
+    })
 
     const onCreated = function () {
       // mostrar mensagem de registo criado

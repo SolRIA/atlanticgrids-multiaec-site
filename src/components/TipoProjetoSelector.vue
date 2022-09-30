@@ -1,11 +1,11 @@
 <template>
   <q-select v-model="projectType" :options="tipos" label="Tipos de projetos" :option-label="lang === 'pt' ? 'nome' : lang === 'fr' ? 'nome_fr' : 'nome_en'" option-value="id" multiple emit-value map-options outlined :clearable="clearable" :dense="dense">
     <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
-      <q-item v-bind="itemProps" :disable="opt.pai_id === 0" v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''">
+      <q-item v-bind="itemProps" :disable="opt.filtro === false" v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''">
         <q-item-section>
           <q-item-label>{{ lang === 'pt' ? opt.nome : opt.nome_en }}</q-item-label>
         </q-item-section>
-        <q-item-section side v-if="opt.pai_id > 0">
+        <q-item-section side v-if="opt.filtro">
           <q-checkbox :model-value="selected" @update:model-value="toggleOption(opt)" />
         </q-item-section>
       </q-item>

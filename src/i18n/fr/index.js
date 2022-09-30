@@ -240,6 +240,14 @@ export default {
       registerAssociated: 'Nouvel associé PTPC',
       registerPartner: 'Partenaire local',
       recoverPassword: 'Récupérer mot de passe',
+      associateWarning: `<p>Cette inscription est exclusivement destinée aux entreprises portugaises dont le domaine d'activité est l'Architecture, l'Ingénierie, la Construction, et qui ont l'intention de demander leur adhésion au cluster AEC/PTPC. À cette fin, ils devraient être intéressés à participer au réseau opérationnel des multilatérales financières, ce qui leur permettra de recevoir des informations actualisées, de se qualifier pour des consortiums nationaux et des partenariats en vue des appels d'offres internationaux en cours avec les entités suivantes :</p >
+      <ul>
+      <li>Banque mondiale - BM</li>
+      <li>Banque européenne pour la reconstruction et le développement - BERD</li>
+      <li>Banque interaméricaine de développement - BID</li>
+      <li>Banque européenne d'investissement - BEI</li>
+      </ul>
+      <p>Votre acceptation en tant que nouveau membre est soumise à la validation préalable de l'AEC/PTPC</p>`,
       partnerWarning: `
       <p>Cette inscription est destinée aux entreprises qui souhaitent se positionner en tant que partenaires locaux des entreprises de construction portugaises qui se qualifient pour les processus d'approvisionnement des entités suivantes :</p>
        <ul>
