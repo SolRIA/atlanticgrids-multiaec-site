@@ -2,36 +2,12 @@
   <q-page padding>
     <q-card>
       <q-card-section>
-        <BancoSelector
-          :bancos="bancos"
-          :banco="banco"
-          @banco_updated="bancoAlterado"
-        />
+        <BancoSelector :bancos="bancos" :banco="banco" @banco_updated="bancoAlterado" />
       </q-card-section>
     </q-card>
-    <q-table
-      class="q-mt-sm"
-      color="positive"
-      title="Keywords"
-      ref="tableRef"
-      selection="none"
-      no-data-label="Sem dados"
-      row-key="id"
-      wrap_cells
-      :rows="keywords"
-      :columns="colunas"
-      :rows-per-page-options="[0, 5, 10]"
-      :loading="loading"
-      v-model:pagination="pagination"
-      @request="onServerRequest"
-    >
+    <q-table class="q-mt-sm" color="positive" title="Keywords" ref="tableRef" selection="none" no-data-label="Sem dados" row-key="id" wrap_cells :rows="keywords" :columns="colunas" :rows-per-page-options="[0, 5, 10]" :loading="loading" v-model:pagination="pagination" @request="onServerRequest">
       <template v-slot:top-right>
-        <q-btn
-          label="Novo"
-          @click="onNew"
-          :icon="mdiPlusBoxOutline"
-          color="positive"
-        />
+        <q-btn label="Novo" @click="onNew" :icon="mdiPlusBoxOutline" color="positive" />
       </template>
 
       <template v-slot:body-cell-tipo_projeto_id="props">
@@ -74,36 +50,11 @@
 
         <q-card-section class="q-pt-md">
           <div class="row q-col-gutter-sm">
-            <BancoSelector
-              :bancos="bancos"
-              :banco="rowEdit.banco_id"
-              class="col-xs-12 col-md-6"
-            />
+            <BancoSelector :bancos="bancos" :banco="rowEdit.banco_id" class="col-xs-12 col-md-6" />
 
-            <q-select
-              v-model="rowEdit.tipo_projeto_id"
-              :options="tiposProjetos"
-              label="Tipos de projetos"
-              option-label="nome"
-              option-value="id"
-              @filter="filterFn"
-              use-input
-              emit-value
-              map-options
-              outlined
-              dense
-              class="col-xs-12 col-md-6"
-            />
+            <q-select v-model="rowEdit.tipo_projeto_id" :options="tiposProjetos" label="Tipos de projetos" option-label="nome" option-value="id" @filter="filterFn" use-input emit-value map-options outlined dense class="col-xs-12 col-md-6" />
 
-            <q-input
-              v-model="rowEdit.keywords"
-              label="Keywords"
-              type="textarea"
-              hint="As keywords devem ser separadas por ; e não devem conter estaços"
-              outlined
-              class="col-xs-12"
-              @banco_updated="bancoAlteradoKeyword"
-            />
+            <q-input v-model="rowEdit.keywords" label="Keywords" type="textarea" hint="As keywords devem ser separadas por ; e não devem conter estaços" outlined class="col-xs-12" @banco_updated="bancoAlteradoKeyword" />
           </div>
         </q-card-section>
 
@@ -117,13 +68,7 @@
 </template>
 
 <script>
-import {
-  mdiPencil,
-  mdiDelete,
-  mdiDotsVertical,
-  mdiWindowClose,
-  mdiPlusBoxOutline
-} from '@quasar/extras/mdi-v6'
+import { mdiPencil, mdiDelete, mdiDotsVertical, mdiWindowClose, mdiPlusBoxOutline } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { get, postAuth, getAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
@@ -147,7 +92,7 @@ export default defineComponent({
       const tipos = await get('tiposprojeto/read-ativo.php')
       bancos.value = await get('bancos/read-ativo.php')
 
-      tiposProjetosAll = Object.freeze(tipos.filter((t) => t.pai_id > 0))
+      tiposProjetosAll = Object.freeze(tipos.filter((t) => t.filtro))
       tiposProjetos.value = tiposProjetosAll
 
       banco.value = bancos.value[0]
@@ -166,9 +111,7 @@ export default defineComponent({
 
       loading.value = true
       try {
-        keywords.value = await getAuth(
-          'tiposprojeto/read-keywords.php?banco_id=' + banco.value.id
-        )
+        keywords.value = await getAuth('tiposprojeto/read-keywords.php?banco_id=' + banco.value.id)
       } catch (error) {
         console.error(error)
         $q.notify({
@@ -181,14 +124,13 @@ export default defineComponent({
     const getTipoProjeto = (id) => {
       const tipo = tiposProjetosAll.find((t) => t.id === id)
       if (tipo !== undefined && tipo !== null) {
-        return tipo.nome
+        return tipo.nome.substring(0, tipo.nome.indexOf(' - '))
       }
 
       return ''
     }
     const bancoAlterado = (b) => {
-      if (b.id !== undefined)
-        banco.value = bancos.value.find((c) => c.id === b.id)
+      if (b.id !== undefined) banco.value = bancos.value.find((c) => c.id === b.id)
       else banco.value = bancos.value.find((c) => c.id === b)
       tableRef.value.requestServerInteraction()
     }
@@ -218,9 +160,7 @@ export default defineComponent({
     const onDelete = (row) => {
       $q.dialog({
         title: 'Apagar',
-        message: `Quer apagar o registo para ${getTipoProjeto(
-          row.tipo_projeto_id
-        )}?`,
+        message: `Quer apagar o registo para ${getTipoProjeto(row.tipo_projeto_id)}?`,
         cancel: true,
         persistent: true
       }).onOk(async () => {
@@ -234,9 +174,7 @@ export default defineComponent({
           tiposProjetos.value = tiposProjetosAll
         } else {
           const needle = val.toLowerCase()
-          tiposProjetos.value = tiposProjetosAll.filter(
-            (v) => v.nome.toLowerCase().indexOf(needle) > -1
-          )
+          tiposProjetos.value = tiposProjetosAll.filter((v) => v.nome.toLowerCase().indexOf(needle) > -1)
         }
       })
     }
