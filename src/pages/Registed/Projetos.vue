@@ -145,7 +145,11 @@
       </template>
       <template v-slot:body-cell-data_fecho="props">
         <q-td :props="props">
-          {{ props.row.data_fecho.substring(0, 10) }}
+          {{
+            props.row.data_fecho !== null
+              ? props.row.data_fecho.substring(0, 10)
+              : ""
+          }}
         </q-td>
       </template>
       <template v-slot:body-cell-banco_id="props">
