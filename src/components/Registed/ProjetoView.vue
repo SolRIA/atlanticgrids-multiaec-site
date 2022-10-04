@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialogRef" persistent>
+  <q-dialog ref="dialogRef" persistent :maximized="maximized">
     <q-card :class="$q.screen.lt.md ? 'phone-dialog' : 'desktop-dialog'">
       <q-card-section class="row items-center q-pb-md bg-primary text-white">
         <div class="text-h6">
@@ -9,89 +9,32 @@
           {{ projeto.nome }}
         </div>
         <q-space />
+        <q-btn :icon="maximized ? mdiWindowRestore : mdiWindowMaximize" flat dense @click="maximized = !maximized" />
         <q-btn :icon="mdiWindowClose" flat dense v-close-popup />
       </q-card-section>
 
       <q-card-section class="q-pt-md">
         <q-scroll-area class="dialog-scroll">
           <div class="row q-col-gutter-md">
-            <q-input
-              v-model="projeto.nome"
-              label="Nome"
-              outlined
-              readonly
-              class="col-xs-12 col-md-6"
-            />
+            <q-input v-model="projeto.nome" label="Nome" outlined readonly class="col-xs-12 col-md-6" />
 
-            <q-input
-              v-model="projeto.data"
-              label="Data"
-              outlined
-              readonly
-              class="col-xs-12 col-md-6"
-            />
+            <q-input v-model="projeto.data" label="Data" outlined readonly class="col-xs-12 col-md-6" />
 
-            <q-select
-              v-model="projeto.tipos"
-              :options="tipos"
-              readonly
-              label="Tipos de projetos"
-              option-label="nome"
-              option-value="id"
-              class="col-xs-12 col-md-4"
-              multiple
-              emit-value
-              map-options
-              outlined
-            />
+            <q-select v-model="projeto.tipos" :options="tipos" readonly label="Tipos de projetos" option-label="nome" option-value="id" class="col-xs-12 col-md-4" multiple emit-value map-options outlined />
 
-            <q-select
-              label="País"
-              outlined
-              v-model="projeto.pais"
-              :options="paises"
-              readonly
-              class="col-xs-12 col-md-4"
-              option-value="nome"
-              option-label="nome"
-              emit-value
-              map-options
-              clearable
-            />
+            <q-select label="País" outlined v-model="projeto.pais" :options="paises" readonly class="col-xs-12 col-md-4" option-value="nome" option-label="nome" emit-value map-options clearable />
 
-            <q-select
-              label="Banco"
-              outlined
-              v-model="projeto.banco_id"
-              :options="bancos"
-              readonly
-              class="col-xs-12 col-md-4"
-              option-value="id"
-              option-label="nome"
-              emit-value
-              map-options
-            />
+            <q-select label="Banco" outlined v-model="projeto.banco_id" :options="bancos" readonly class="col-xs-12 col-md-4" option-value="id" option-label="nome" emit-value map-options />
 
             <div v-html="projeto.descricao"></div>
           </div>
         </q-scroll-area>
       </q-card-section>
 
-      <q-card-section
-        v-if="mostraAccoes"
-        style="height: 200px; background-color: #efefef; padding: 0px"
-      >
+      <q-card-section v-if="mostraAccoes" style="height: 200px; background-color: #efefef; padding: 0px">
         <h6 style="margin: 10px; padding: 10px">Indique o seu interesse</h6>
         <div class="flex flex-center">
-          <q-btn-toggle
-            v-model="accao"
-            no-caps
-            rounded
-            size="lg"
-            toggle-color="grey-8"
-            :options="accoesCliente"
-            @update:model-value="atualizaAccao"
-          >
+          <q-btn-toggle v-model="accao" no-caps rounded size="lg" toggle-color="grey-8" :options="accoesCliente" @update:model-value="atualizaAccao">
             <template v-slot:one>
               <div class="row items-center">
                 <div class="col-12 text-center">Com interesse</div>
@@ -137,7 +80,7 @@
 </style>
 
 <script>
-import { mdiWindowClose, mdiCalendarMonth } from '@quasar/extras/mdi-v6'
+import { mdiWindowClose, mdiCalendarMonth, mdiWindowMaximize, mdiWindowRestore } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
 import { postAuth, getAuth } from 'boot/api'
@@ -162,6 +105,8 @@ export default defineComponent({
 
     const { dialogRef } = useDialogPluginComponent()
     const loading = ref(false)
+    const maximized = ref(false)
+
     const accao = ref(null)
     const projeto = ref(
       Object.assign(
@@ -185,9 +130,7 @@ export default defineComponent({
         loading.value = true
         try {
           // projeto
-          projeto.value = await getAuth(
-            'projetos/read-single.php?id=' + projeto.value.id
-          )
+          projeto.value = await getAuth('projetos/read-single.php?id=' + projeto.value.id)
           accao.value = projeto.value.accao
         } catch {
           $q.notify({
@@ -209,7 +152,10 @@ export default defineComponent({
     return {
       mdiWindowClose,
       mdiCalendarMonth,
+      mdiWindowMaximize,
+      mdiWindowRestore,
       loading,
+      maximized,
       projeto,
       accao,
       accoesCliente,
