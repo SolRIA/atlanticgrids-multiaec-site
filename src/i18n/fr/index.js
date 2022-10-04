@@ -257,7 +257,6 @@ export default {
        <li>Banque européenne d'investissement - BEI</li>
        </ul>
        <p>Si vous souhaitez entrer en contact avec des entreprises portugaises pour des contrats dans votre pays d'origine, veuillez laisser vos contacts, données et expérience sur la page suivante.</p>
-       <p>Son acceptation sera validée par le cluster portugais de la construction.</p>
        <p>Vous serez ensuite contacté par nos entreprises intéressées.</p>`
     },
     recover: {
@@ -302,7 +301,7 @@ export default {
       return: 'Revenir',
       register: "S'inscrire",
       error: 'Impossible de créer un compte',
-      success: "Le compte a été créé avec succès. Il sera validé par PTPC et vous serez notifié par email dès qu'il sera actif."
+      success: 'Le compte a été créé avec succès.'
     }
   }
 }

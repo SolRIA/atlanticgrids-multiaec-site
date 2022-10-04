@@ -162,6 +162,7 @@ export default defineComponent({
       username: '',
       password: '',
       perfil: '',
+      empresa_id: 0,
       parceiro_id: 0
     })
     const empresa = ref({
@@ -188,7 +189,7 @@ export default defineComponent({
           type: 'warning'
         })
       }
-      if (typeof utilizador.value.empresa_id !== 'undefined' && utilizador.value.empresa_id > 0) {
+      if (typeof utilizador.value.parceiro_id !== 'undefined' && utilizador.value.parceiro_id > 0) {
         // tipos de projeto
         try {
           tiposProjeto.value = await get('tiposprojeto/read-ativo.php')

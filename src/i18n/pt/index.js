@@ -251,7 +251,6 @@ export default {
       <li>Banco Europeu de Investimento - BEI</li>
       </ul>
       <p>Se pretende estabelecer contacto com empresas portuguesas para contratos no seu país de origem, por favor deixe os seus contactos, dados e experiência na página seguinte.</p>
-      <p>A sua aceitação será validada pelo Cluster da Construção Portuguesa.</p>
       <p>Será então contatado pelos associados PTPC interessados.</p>`
     },
     recover: {
@@ -296,7 +295,7 @@ export default {
       return: 'Voltar',
       register: 'Registar',
       error: 'Não foi possível criar a conta',
-      success: 'A conta foi criada com sucesso. Vai ser validada pela PTPC e será notificado por email assim que estiver ativo.'
+      success: 'A conta foi criada com sucesso.'
     }
   }
 }
