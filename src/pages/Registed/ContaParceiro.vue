@@ -270,7 +270,7 @@ export default defineComponent({
           })
           return
         }
-        if (typeof utilizador.value.empresa_id !== 'undefined' && utilizador.value.empresa_id > 0) {
+        if (typeof utilizador.value.parceiro_id !== 'undefined' && utilizador.value.parceiro_id > 0) {
           // guardar os dados da empresa
           await postAuth('empresas/update-self-parceiro.php', empresa.value)
           //guardar o logotipo
