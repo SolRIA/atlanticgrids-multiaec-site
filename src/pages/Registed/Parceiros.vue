@@ -41,6 +41,13 @@
         </q-td>
       </template>
 
+      <template v-slot:body-cell-avg_avaliacao="props">
+        <q-td :props="props">
+          <q-rating v-model="props.row.avg_avaliacao" readonly size="3em" color="primary" :icon="mdiStarOutline" :icon-selected="mdiStar" :icon-half="mdiStarHalfFull" />
+          {{ props.row.avg_avaliacao }} de 5
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" auto-width>
           <q-btn dense flat color="positive" :icon="mdiDotsVertical">
@@ -50,14 +57,21 @@
                   <q-item-section avatar>
                     <q-icon :name="mdiPencil" color="positive" />
                   </q-item-section>
-                  <q-item-section>Editar</q-item-section>
+                  <q-item-section>Ver</q-item-section>
                 </q-item>
 
-                <q-item clickable v-close-popup @click="onApprove(props.row)" v-if="props.row.pendente">
+                <q-item clickable v-close-popup @click="onApprove(props.row)" v-if="permissaoEdicao && props.row.pendente">
                   <q-item-section avatar>
                     <q-icon :name="mdiCheckCircleOutline" color="positive" />
                   </q-item-section>
                   <q-item-section>Aprovar</q-item-section>
+                </q-item>
+
+                <q-item clickable v-close-popup @click="onMostraEditorAvalicao(props.row)">
+                  <q-item-section avatar>
+                    <q-icon :name="mdiStar" color="positive" />
+                  </q-item-section>
+                  <q-item-section>Avaliação</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -79,6 +93,7 @@
           <q-tabs v-model="tab" outside-arrows inline-label mobile-arrows dense align="center" narrow-indicator>
             <q-tab name="geral" :icon="mdiBadgeAccountHorizontalOutline" label="Geral" />
             <q-tab name="descricao" :icon="mdiFileDocumentEditOutline" label="Descrição" />
+            <q-tab name="avaliacoes" :icon="mdiStar" label="Avaliações" />
           </q-tabs>
 
           <q-separator />
@@ -86,54 +101,55 @@
           <q-tab-panels v-model="tab">
             <q-tab-panel name="geral">
               <div class="row q-col-gutter-md">
-                <q-input v-model="empresa.nome" label="Nome" :rules="[isNameValid]" ref="inputName" outlined class="col-xs-12 col-md-6" />
-                <q-input v-model="empresa.email" label="Email" :rules="[isEmailRule]" ref="inputEmail" outlined class="col-xs-12 col-md-6" />
+                <q-input v-model="empresa.nome" label="Nome" :rules="[isNameValid]" ref="inputName" outlined :readonly="!permissaoEdicao" class="col-xs-12 col-md-6" />
+                <q-input v-model="empresa.email" label="Email" :rules="[isEmailRule]" ref="inputEmail" outlined :readonly="!permissaoEdicao" class="col-xs-12 col-md-6" />
 
-                <TipoProjetoSelector :tipos="tiposProjeto" :tipo="empresa.tipos_projeto" @tipo_projeto_updated="tipoProjetoUpdated" class="col-xs-12" />
+                <TipoProjetoSelector :tipos="tiposProjeto" :tipo="empresa.tipos_projeto" @tipo_projeto_updated="tipoProjetoUpdated" :readonly="!permissaoEdicao" class="col-xs-12" />
 
-                <q-select v-model="empresa.pais_id" :options="paises" :label="$t('html.registerPartner.country')" :option-label="lang === 'pt' ? 'nome' : lang === 'fr' ? 'nome_fr' : 'nome_en'" option-value="id" @filter="filterFn" :rules="[isCountryValid]" ref="inputCountry" use-input emit-value map-options outlined class="col-xs-12" />
+                <q-select v-model="empresa.pais_id" :options="paises" :label="$t('html.registerPartner.country')" :readonly="!permissaoEdicao" :option-label="lang === 'pt' ? 'nome' : lang === 'fr' ? 'nome_fr' : 'nome_en'" option-value="id" @filter="filterFn" :rules="[isCountryValid]" ref="inputCountry" use-input emit-value map-options outlined class="col-xs-12" />
 
-                <q-input v-model="empresa.telefone" label="Telefone" outlined clearable class="col-xs-12 col-md-6">
+                <q-input v-model="empresa.telefone" label="Telefone" outlined clearable :readonly="!permissaoEdicao" class="col-xs-12 col-md-6">
                   <template v-slot:append>
                     <q-icon :name="mdiPhoneClassic" color="primary" />
                   </template>
                 </q-input>
-                <q-input v-model="empresa.website" label="Web" outlined clearable class="col-xs-12 col-md-6">
+                <q-input v-model="empresa.website" label="Web" outlined clearable :readonly="!permissaoEdicao" class="col-xs-12 col-md-6">
                   <template v-slot:append>
                     <q-icon :name="mdiWeb" color="primary" />
                   </template>
                 </q-input>
-                <q-input v-model="empresa.facebook" label="Facebook" outlined clearable class="col-xs-12 col-md-4">
+                <q-input v-model="empresa.facebook" label="Facebook" outlined clearable :readonly="!permissaoEdicao" class="col-xs-12 col-md-4">
                   <template v-slot:append>
                     <q-icon :name="mdiFacebook" color="primary" />
                   </template>
                 </q-input>
-                <q-input v-model="empresa.twitter" label="Twitter" outlined clearable class="col-xs-12 col-md-4">
+                <q-input v-model="empresa.twitter" label="Twitter" outlined clearable :readonly="!permissaoEdicao" class="col-xs-12 col-md-4">
                   <template v-slot:append>
                     <q-icon :name="mdiTwitter" color="primary" />
                   </template>
                 </q-input>
-                <q-input v-model="empresa.linkedin" label="LinkedIn" outlined clearable class="col-xs-12 col-md-4">
+                <q-input v-model="empresa.linkedin" label="LinkedIn" outlined clearable :readonly="!permissaoEdicao" class="col-xs-12 col-md-4">
                   <template v-slot:append>
                     <q-icon :name="mdiLinkedin" color="primary" />
                   </template>
                 </q-input>
 
                 <div class="col-xs-12 col-md-6">
-                  <q-file outlined v-model="logo" label="Logotipo">
+                  <q-file outlined v-model="logo" label="Logotipo" :readonly="!permissaoEdicao">
                     <template v-slot:prepend>
                       <q-icon :name="mdiImageSearchOutline" />
                     </template>
                   </q-file>
                 </div>
 
-                <q-checkbox v-model="empresa.ativo" label="Ativo" class="col-xs-3" />
+                <q-checkbox v-model="empresa.ativo" label="Ativo" class="col-xs-3" :readonly="permissaoEdicao" />
               </div>
             </q-tab-panel>
 
             <q-tab-panel name="descricao">
               <q-editor
                 v-model="empresa.descricao"
+                :readonly="!permissaoEdicao"
                 :toolbar="[
                   [
                     {
@@ -187,12 +203,45 @@
                 }"
               />
             </q-tab-panel>
+
+            <q-tab-panel name="avaliacoes">
+              <q-table class="q-mt-sm" color="positive" ref="tableAvaliacoes" selection="none" no-data-label="Sem dados" row-key="id" :rows="avaliacoes" :columns="colunasAvaliacoes">
+                <template v-slot:body-cell-avaliacao="props">
+                  <q-td :props="props">
+                    <q-rating v-model="props.row.avaliacao" size="3em" color="primary" :icon="mdiStarOutline" :icon-selected="mdiStar" readonly />
+                  </q-td>
+                </template>
+              </q-table>
+            </q-tab-panel>
           </q-tab-panels>
         </q-card-section>
 
         <q-card-actions align="right">
+          <q-btn label="Fechar" flat v-close-popup />
+          <q-btn label="Guardar" color="primary" @click="onOk" v-if="permissaoEdicao" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog persistent v-model="mostraAvalicacoes">
+      <q-card style="min-width: 60vw">
+        <q-card-section class="row items-center q-pb-md bg-primary text-white">
+          <q-icon :name="mdiStar" left size="2rem" />
+          <div class="text-h6">Avaliação</div>
+          <q-space />
+          <q-btn :icon="mdiWindowClose" flat dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <div class="row q-col-gutter-md justify-center">
+            <q-rating v-model="avaliacao.avaliacao" size="5em" color="primary" :icon="mdiStarOutline" :icon-selected="mdiStar" />
+            <q-input v-model="avaliacao.descricao" label="Descrição" outlined autogrow class="col-xs-12" />
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
           <q-btn label="Cancelar" flat v-close-popup />
-          <q-btn label="Guardar" color="primary" @click="onOk" />
+          <q-btn label="Guardar" color="primary" @click="onGravaAvaliacao" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -200,9 +249,9 @@
 </template>
 
 <script>
-import { mdiWindowClose, mdiPlusBoxOutline, mdiPencil, mdiCheckCircleOutline, mdiHandshakeOutline, mdiPhoneClassic, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiImageSearchOutline, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiFilterOutline, mdiDotsVertical } from '@quasar/extras/mdi-v6'
+import { mdiWindowClose, mdiPlusBoxOutline, mdiPencil, mdiStar, mdiStarOutline, mdiStarHalfFull, mdiCheckCircleOutline, mdiHandshakeOutline, mdiPhoneClassic, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiImageSearchOutline, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiFilterOutline, mdiDotsVertical } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted, watch } from 'vue'
-import { get, postFormAuth, apiPublicUrl, postAuth } from 'boot/api'
+import { get, postFormAuth, apiPublicUrl, postAuth, getAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
 import { isEmail } from '/src/models/validations'
 import TipoProjetoSelector from 'src/components/TipoProjetoSelector.vue'
@@ -214,15 +263,25 @@ export default defineComponent({
 
     const loading = ref(false)
     const mostraEditor = ref(false)
+    const mostraAvalicacoes = ref(false)
     const tableRef = ref(null)
     const tab = ref('geral')
     const inputName = ref(null)
     const inputEmail = ref(null)
     const inputCountry = ref(null)
     const lang = ref('pt')
+    const permissaoEdicao = ref(false)
+
+    const avaliacao = ref({
+      id: 0,
+      avaliacao: 0,
+      descricao: '',
+      parceiro_id: 0,
+      empresa_id: 0
+    })
 
     const active = ref(null)
-    const pending = ref(true)
+    const pending = ref(null)
 
     onMounted(async () => {
       try {
@@ -233,11 +292,17 @@ export default defineComponent({
           type: 'warning'
         })
       }
+      try {
+        const result = await getAuth('utilizadores/editor.php?m=15')
+        permissaoEdicao.value = result.editor
+      } catch {}
+
       tableRef.value.requestServerInteraction()
     })
 
     const tiposProjeto = ref([])
     const paises = ref([])
+    const avaliacoes = ref([])
     const empresas = ref([])
     const empresaEscolhida = ref([])
     const empresa = ref({
@@ -328,6 +393,9 @@ export default defineComponent({
       mdiWindowClose,
       mdiPlusBoxOutline,
       mdiPencil,
+      mdiStar,
+      mdiStarOutline,
+      mdiStarHalfFull,
       mdiCheckCircleOutline,
       mdiHandshakeOutline,
       mdiWeb,
@@ -350,12 +418,16 @@ export default defineComponent({
       active,
       pending,
       lang,
+      permissaoEdicao,
       mostraEditor,
+      mostraAvalicacoes,
+      avaliacao,
       tiposProjeto,
       paises,
       empresas,
       empresaEscolhida,
       empresa,
+      avaliacoes,
       logo,
       pagination,
       colunas: [
@@ -368,6 +440,8 @@ export default defineComponent({
         },
         { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
         { name: 'pais', label: 'País', field: 'pais', align: 'left' },
+        { name: 'avg_avaliacao', label: 'Avaliação média', field: 'avg_avaliacao', align: 'left' },
+        { name: 'num_avaliacoes', label: 'Nº avaliações', field: 'num_avaliacoes', align: 'left' },
         { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
         {
           name: 'pendente',
@@ -376,6 +450,11 @@ export default defineComponent({
           align: 'left'
         },
         { name: 'actions', label: '', field: 'actions' }
+      ],
+      colunasAvaliacoes: [
+        { name: 'avaliacao', label: '', field: 'avaliacao', align: 'left' },
+        { name: 'descricao', label: '', field: 'descricao', align: 'left' },
+        { name: 'nome_empresa', label: 'Associado', field: 'nome_empresa', align: 'left' }
       ],
       onServerRequest,
       apiPublicUrl,
@@ -405,6 +484,7 @@ export default defineComponent({
       },
       onEdit: async (b) => {
         empresa.value = await get('empresas/read-single-parceiro.php?id=' + b.id)
+        avaliacoes.value = await getAuth('empresas/read-avaliacoes.php?id=' + b.id)
         // paises
         try {
           if (empresa.value.pais_id > 0) {
@@ -421,6 +501,8 @@ export default defineComponent({
         mostraEditor.value = true
       },
       onOk: async () => {
+        if (permissaoEdicao.value === false) return
+
         try {
           if (inputName.value.validate() && inputEmail.value.validate() && inputCountry.value.validate()) {
             const data = new FormData()
@@ -445,6 +527,24 @@ export default defineComponent({
         } catch {
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
+      },
+      onMostraEditorAvalicao: async (row) => {
+        empresa.value = row
+
+        //ler avaliacao atual do servidor
+        try {
+          avaliacao.value = await getAuth('empresas/read-avaliacao.php?id=' + row.id)
+          mostraAvalicacoes.value = true
+        } catch {}
+      },
+      onGravaAvaliacao: async () => {
+        try {
+          avaliacao.value.parceiro_id = empresa.value.id
+          await postAuth('empresas/update-avaliacao.php', avaliacao.value)
+          mostraAvalicacoes.value = false
+
+          tableRef.value.requestServerInteraction()
+        } catch {}
       },
       onApprove: (row) => {
         $q.dialog({

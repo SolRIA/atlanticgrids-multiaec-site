@@ -1,5 +1,5 @@
 <template>
-  <q-select v-model="projectType" :options="tipos" label="Tipos de projetos" :option-label="lang === 'pt' ? 'nome' : lang === 'fr' ? 'nome_fr' : 'nome_en'" option-value="id" multiple emit-value map-options outlined :clearable="clearable" :dense="dense">
+  <q-select v-model="projectType" :options="tipos" label="Tipos de projetos" :option-label="lang === 'pt' ? 'nome' : lang === 'fr' ? 'nome_fr' : 'nome_en'" option-value="id" multiple emit-value map-options outlined :readonly="readonly" :clearable="clearable" :dense="dense">
     <template v-slot:option="{ itemProps, opt, selected, toggleOption }">
       <q-item v-bind="itemProps" :disable="opt.filtro === false" v-bind:class="opt.pai_id === 0 ? 'header-filter-type' : ''">
         <q-item-section>
@@ -27,6 +27,10 @@ export default defineComponent({
       required: true
     },
     clearable: {
+      type: Boolean,
+      required: false
+    },
+    readonly: {
       type: Boolean,
       required: false
     },
