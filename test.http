@@ -1,0 +1,9 @@
+###
+GET https://www.ptpc.pt/index.html
+
+###
+GET https://multiaec.ptpc.pt/index.html
+
+###
+GET https://multiaecapi.ptpc.pt/index.php
+
