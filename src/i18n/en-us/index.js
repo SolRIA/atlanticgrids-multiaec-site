@@ -293,7 +293,7 @@ export default {
       return: 'Return',
       register: 'Register',
       error: 'Unable to create account',
-      success: 'The account was created successfully.'
+      success: 'The account was created successfully. It will be validated by PTPC and you will be notified by email once it is active.'
     }
   }
 }

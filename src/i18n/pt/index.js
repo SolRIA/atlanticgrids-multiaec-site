@@ -108,7 +108,7 @@ export default {
       tutoriaisDesc: 'Aqui pode encontrar informação sobre Webinars, Videos promocionais, relatórios anuais dos bancos e documentos estratégicos, etc…',
       partner: {
         name: 'Parceiro Local',
-        description: 'Registe-se a sua empresa como parceiro local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
+        description: 'Registe a sua empresa como parceiro local das empresas sócias da Plataforma Tecnológica Portuguesa da Construção',
         register: 'Registar'
       },
       associate: {
@@ -295,7 +295,7 @@ export default {
       return: 'Voltar',
       register: 'Registar',
       error: 'Não foi possível criar a conta',
-      success: 'A conta foi criada com sucesso.'
+      success: 'A conta foi criada com sucesso. Vai ser validada pela PTPC e será notificado por email assim que estiver ativo.'
     }
   }
 }

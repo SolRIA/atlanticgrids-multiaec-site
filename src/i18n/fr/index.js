@@ -301,7 +301,7 @@ export default {
       return: 'Revenir',
       register: "S'inscrire",
       error: 'Impossible de créer un compte',
-      success: 'Le compte a été créé avec succès.'
+      success: `Le compte a été créé avec succès. Il sera validé par PTPC et vous serez notifié par email dès qu'il sera actif.`
     }
   }
 }
