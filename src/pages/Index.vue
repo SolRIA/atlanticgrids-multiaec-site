@@ -147,21 +147,20 @@
       </div>
     </div>
 
-    <q-toolbar class="flex flex-center text-white" style="background-color: #a6b3bf">
+    <!-- <q-toolbar class="flex flex-center text-white" style="background-color: #a6b3bf">
       <div class="q-pa-sm q-gutter-sm">
         <q-btn round type="a" href="https://twitter.com/" class="text-white" color="secondary" :icon="mdiTwitter" />
         <q-btn round type="a" href="https://facebook.com/solriaerp" class="text-white" color="secondary" :icon="mdiFacebook" />
         <q-btn round type="a" href="https://www.instagram.com/" class="text-white" color="secondary" :icon="mdiInstagram" />
         <q-btn round type="a" href="https://www.youtube.com/" class="text-white" color="secondary" :icon="mdiYoutube" />
-        <q-btn round type="a" href="https://github.com/" class="text-white" color="secondary" :icon="mdiGithub" />
         <q-btn round type="a" href="mailto:suporte@solria.pt" class="text-white" color="secondary" :icon="mdiEmail" />
       </div>
-    </q-toolbar>
+    </q-toolbar> -->
   </q-page>
 </template>
 
 <script>
-import { mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiGithub, mdiEmail, mdiInformationOutline, mdiNewspaperVariantOutline, mdiAccountSchoolOutline, mdiAlphaMCircleOutline } from '@quasar/extras/mdi-v6'
+import { mdiSend, mdiTwitter, mdiFacebook, mdiInstagram, mdiYoutube, mdiEmail, mdiInformationOutline, mdiNewspaperVariantOutline, mdiAccountSchoolOutline, mdiAlphaMCircleOutline } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref } from 'vue'
 import Section from 'src/components/Section.vue'
 import SimpleSeparator from 'src/components/SimpleSeparator.vue'
@@ -177,7 +176,6 @@ export default defineComponent({
       mdiFacebook,
       mdiInstagram,
       mdiYoutube,
-      mdiGithub,
       mdiEmail,
       mdiInformationOutline,
       mdiNewspaperVariantOutline,

@@ -229,7 +229,7 @@ export default {
     },
     registed: {
       invite: 'Convidar',
-      inviteMessage: 'Venha conhecer a plataforma de colaboração para construção'
+      inviteMessage: 'Venha conhecer a plataforma Multi AEC onde se pode registar e encontrar projetos no âmbito das multilaterais financeiras e fazer parte de uma rede alargada de empresas portuguesas com experiência neste sector. https://multiaec.ptpc.pt '
     },
     login: {
       registerAssociated: 'Novo Associado PTPC',

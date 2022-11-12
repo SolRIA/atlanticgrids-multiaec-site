@@ -226,7 +226,7 @@ export default {
     },
     registed: {
       invite: 'Invite',
-      inviteMessage: 'Come and discover the collaboration platform for construction'
+      inviteMessage: 'Come and discover the Multi AEC platform where you can register and find projects within the scope of financial multilaterals and be part of a wide network of Portuguese companies with experience in this sector. https://multiaec.ptpc.pt '
     },
     login: {
       registerAssociated: 'New PTPC Associate',
