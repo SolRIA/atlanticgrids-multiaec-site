@@ -2,18 +2,14 @@ import { Notify } from 'quasar'
 import { route } from 'quasar/wrappers'
 
 export function apiBaseUrl() {
-  return process.env.DEV
-    ? 'http://localhost:8000/api/'
-    : 'https://multiaecapi.idealkids.pt/api/'
+  return process.env.DEV ? 'http://localhost:8000/api/' : 'https://multiaecapi.ptpc.pt/api/'
 }
 
 export function apiPublicUrl(name) {
   if (typeof name === 'undefined' || name === null) {
     return null
   }
-  return process.env.DEV
-    ? `http://localhost:8000/public/${name}`
-    : `https://multiaecapi.idealkids.pt/public/${name}`
+  return process.env.DEV ? `http://localhost:8000/public/${name}` : `https://multiaecapi.ptpc.pt/public/${name}`
 }
 
 export function createQueryParameters(data) {
@@ -26,21 +22,11 @@ export function getAuthToken() {
 }
 
 export async function deleteAuth(url, data) {
-  return await baseApiAuth(
-    'DELETE',
-    url,
-    JSON.stringify(data),
-    'application/json'
-  )
+  return await baseApiAuth('DELETE', url, JSON.stringify(data), 'application/json')
 }
 
 export async function postAuth(url, data) {
-  return await baseApiAuth(
-    'POST',
-    url,
-    JSON.stringify(data),
-    'application/json'
-  )
+  return await baseApiAuth('POST', url, JSON.stringify(data), 'application/json')
 }
 
 export async function postFormAuth(url, data) {
@@ -72,9 +58,7 @@ function download(method, url, filename, data, mimeType, elementid) {
 
     fetch(apiBaseUrl() + url, config)
       .then((response) => {
-        const url = window.URL.createObjectURL(
-          new Blob([response.data], { type: mimeType })
-        )
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: mimeType }))
         const link = document.getElementById(elementid)
         link.href = url
         link.setAttribute('download', filename)
@@ -82,12 +66,7 @@ function download(method, url, filename, data, mimeType, elementid) {
       })
       .catch((error) => {
         let message = 'Não foi possível concluir o pedido'
-        if (
-          typeof error !== 'undefined' &&
-          typeof error.response !== 'undefined' &&
-          typeof error.response.data !== 'undefined' &&
-          typeof error.response.data.message !== 'undefined'
-        ) {
+        if (typeof error !== 'undefined' && typeof error.response !== 'undefined' && typeof error.response.data !== 'undefined' && typeof error.response.data.message !== 'undefined') {
           message = error.response.data.message
         }
         Notify.create({ message: message, type: 'negative' })
@@ -120,12 +99,7 @@ export async function baseApiAuth(method, url, data, contentType) {
   } catch (error) {
     console.error(error)
     let message = 'Não foi possível concluir o pedido'
-    if (
-      typeof error !== 'undefined' &&
-      typeof error.response !== 'undefined' &&
-      typeof error.response.data !== 'undefined' &&
-      typeof error.response.data.message !== 'undefined'
-    ) {
+    if (typeof error !== 'undefined' && typeof error.response !== 'undefined' && typeof error.response.data !== 'undefined' && typeof error.response.data.message !== 'undefined') {
       message = error.response.data.message
     }
     Notify.create({ message: message, type: 'negative' })
