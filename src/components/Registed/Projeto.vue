@@ -53,6 +53,10 @@
             <q-select label="Banco" outlined v-model="projeto.banco_id" :options="bancos" class="col-xs-12 col-md-4" option-value="id" option-label="nome" emit-value map-options />
 
             <div class="col-xs-12">
+              Keyword: <em>{{ projeto.keyword }}</em>
+            </div>
+
+            <div class="col-xs-12">
               <q-editor
                 v-model="projeto.descricao"
                 :toolbar="[
