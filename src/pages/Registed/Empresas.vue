@@ -1,51 +1,18 @@
 <template>
   <q-page padding>
-    <q-table
-      class="q-mt-sm"
-      color="positive"
-      title="Empresas"
-      ref="tableRef"
-      selection="single"
-      no-data-label="Sem dados"
-      row-key="id"
-      :rows="empresas"
-      :columns="colunas"
-      :rows-per-page-options="[0, 5, 10]"
-      :loading="loading"
-      :filter="filter"
-      v-model:pagination="pagination"
-      v-model:selected="empresaEscolhida"
-      @request="onServerRequest"
-    >
+    <q-table class="q-mt-sm" color="positive" title="Empresas" ref="tableRef" selection="single" no-data-label="Sem dados" row-key="id" :rows="empresas" :columns="colunas" :rows-per-page-options="[0, 5, 10]" :loading="loading" :filter="filter" v-model:pagination="pagination" v-model:selected="empresaEscolhida" @request="onServerRequest">
       <template v-slot:top-right>
         <div class="row q-col-gutter-sm justify-end">
           <div class="col-sm-12 col-md-4">
-            <q-toggle
-              toggle-indeterminate
-              v-model="active"
-              :label="
-                active === null ? 'Todas' : active ? 'Ativas' : 'Inativas'
-              "
-            />
+            <q-toggle toggle-indeterminate v-model="active" :label="active === null ? 'Todas' : active ? 'Ativas' : 'Inativas'" />
           </div>
 
           <div class="col-sm-12 col-md-4">
-            <q-toggle
-              toggle-indeterminate
-              v-model="pending"
-              :label="
-                pending === null ? 'Todas' : pending ? 'Pendentes' : 'Aprovadas'
-              "
-            />
+            <q-toggle toggle-indeterminate v-model="pending" :label="pending === null ? 'Todas' : pending ? 'Pendentes' : 'Aprovadas'" />
           </div>
 
           <div class="col-sm-12 col-md-4">
-            <q-btn
-              label="Novo"
-              color="positive"
-              @click="onNovo"
-              :icon="mdiPlusBoxOutline"
-            />
+            <q-btn label="Novo" color="positive" @click="onNovo" :icon="mdiPlusBoxOutline" />
           </div>
 
           <div class="col-sm-12">
@@ -72,11 +39,7 @@
 
       <template v-slot:body-cell-logo="props">
         <q-td :props="props">
-          <q-img
-            :src="apiPublicUrl(props.row.logo)"
-            style="height: 50px"
-            fit="scale-down"
-          />
+          <q-img :src="apiPublicUrl(props.row.logo)" style="height: 50px" fit="scale-down" />
         </q-td>
       </template>
 
@@ -92,12 +55,7 @@
                   <q-item-section>Editar</q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="onApprove(props.row)"
-                  v-if="props.row.pendente"
-                >
+                <q-item clickable v-close-popup @click="onApprove(props.row)" v-if="props.row.pendente">
                   <q-item-section avatar>
                     <q-icon :name="mdiCheckCircleOutline" color="positive" />
                   </q-item-section>
@@ -120,25 +78,9 @@
         </q-card-section>
 
         <q-card-section>
-          <q-tabs
-            v-model="tab"
-            outside-arrows
-            inline-label
-            mobile-arrows
-            dense
-            align="center"
-            narrow-indicator
-          >
-            <q-tab
-              name="geral"
-              :icon="mdiBadgeAccountHorizontalOutline"
-              label="Geral"
-            />
-            <q-tab
-              name="descricao"
-              :icon="mdiFileDocumentEditOutline"
-              label="Descrição"
-            />
+          <q-tabs v-model="tab" outside-arrows inline-label mobile-arrows dense align="center" narrow-indicator>
+            <q-tab name="geral" :icon="mdiBadgeAccountHorizontalOutline" label="Geral" />
+            <q-tab name="descricao" :icon="mdiFileDocumentEditOutline" label="Descrição" />
           </q-tabs>
 
           <q-separator />
@@ -146,118 +88,35 @@
           <q-tab-panels v-model="tab">
             <q-tab-panel name="geral">
               <div class="row q-col-gutter-md">
-                <q-input
-                  v-model="empresa.titulo"
-                  label="Título"
-                  outlined
-                  class="col-xs-12 col-md-6"
-                />
-                <q-input
-                  v-model="empresa.nome"
-                  label="Nome Fiscal"
-                  ref="inputName"
-                  :rules="[isNameValid]"
-                  outlined
-                  class="col-xs-12 col-md-6"
-                />
-                <q-input
-                  v-model="empresa.email"
-                  label="Email"
-                  outlined
-                  :rules="[isEmailRule]"
-                  ref="inputEmail"
-                  class="col-xs-12 col-md-6"
-                />
-                <q-select
-                  v-model="empresa.grupo"
-                  :options="grupos"
-                  label="Grupo"
-                  outlined
-                  clearable
-                  class="col-xs-12 col-md-6"
-                />
+                <q-input v-model="empresa.titulo" label="Título" outlined class="col-xs-12 col-md-6" />
+                <q-input v-model="empresa.nome" label="Nome Fiscal" ref="inputName" :rules="[isNameValid]" outlined class="col-xs-12 col-md-6" />
+                <q-input v-model="empresa.email" label="Email" outlined :rules="[isEmailRule]" ref="inputEmail" class="col-xs-12 col-md-6" />
+                <q-select v-model="empresa.grupo" :options="grupos" label="Grupo" outlined clearable class="col-xs-12 col-md-6" />
 
-                <q-input
-                  v-model="empresa.nif"
-                  label="NIF"
-                  outlined
-                  :rules="[isNifValid]"
-                  ref="inputNif"
-                  class="col-xs-12 col-md-6"
-                />
+                <q-input v-model="empresa.nif" label="NIF" outlined clearable :rules="[isNifValid]" ref="inputNif" class="col-xs-12 col-md-6" />
 
-                <q-input
-                  v-model="empresa.cae"
-                  label="CAE"
-                  outlined
-                  :rules="[isCaeValid]"
-                  ref="inputCae"
-                  class="col-xs-12 col-md-6"
-                />
+                <q-input v-model="empresa.cae" label="CAE" outlined clearable :rules="[isCaeValid]" ref="inputCae" class="col-xs-12 col-md-6" />
 
-                <TipoProjetoSelector
-                  :tipos="tiposProjeto"
-                  :tipo="empresa.tipos_projeto"
-                  @tipo_projeto_updated="tipoProjetoUpdated"
-                  class="col-xs-12"
-                />
+                <TipoProjetoSelector :tipos="tiposProjeto" :tipo="empresa.tipos_projeto" @tipo_projeto_updated="tipoProjetoUpdated" class="col-xs-12" />
 
-                <q-select
-                  v-model="empresa.concelho_id"
-                  :options="concelhos"
-                  label="Concelho"
-                  option-label="nome"
-                  option-value="id"
-                  @filter="filterFn"
-                  use-input
-                  emit-value
-                  map-options
-                  outlined
-                  :rules="[isConcelhoValid]"
-                  ref="inputConcelho"
-                  class="col-xs-12"
-                />
+                <q-select v-model="empresa.concelho_id" :options="concelhos" label="Concelho" option-label="nome" option-value="id" @filter="filterFn" use-input emit-value map-options outlined :rules="[isConcelhoValid]" ref="inputConcelho" class="col-xs-12" />
 
-                <q-input
-                  v-model="empresa.website"
-                  label="Web"
-                  outlined
-                  clearable
-                  class="col-xs-12 col-md-3"
-                >
+                <q-input v-model="empresa.website" label="Web" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiWeb" color="primary" />
                   </template>
                 </q-input>
-                <q-input
-                  v-model="empresa.facebook"
-                  label="Facebook"
-                  outlined
-                  clearable
-                  class="col-xs-12 col-md-3"
-                >
+                <q-input v-model="empresa.facebook" label="Facebook" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiFacebook" color="primary" />
                   </template>
                 </q-input>
-                <q-input
-                  v-model="empresa.twitter"
-                  label="Twitter"
-                  outlined
-                  clearable
-                  class="col-xs-12 col-md-3"
-                >
+                <q-input v-model="empresa.twitter" label="Twitter" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiTwitter" color="primary" />
                   </template>
                 </q-input>
-                <q-input
-                  v-model="empresa.linkedin"
-                  label="LinkedIn"
-                  outlined
-                  clearable
-                  class="col-xs-12 col-md-3"
-                >
+                <q-input v-model="empresa.linkedin" label="LinkedIn" outlined clearable class="col-xs-12 col-md-3">
                   <template v-slot:append>
                     <q-icon :name="mdiLinkedin" color="primary" />
                   </template>
@@ -271,16 +130,8 @@
                   </q-file>
                 </div>
 
-                <q-checkbox
-                  v-model="empresa.ativo"
-                  label="Ativo"
-                  class="col-xs-3"
-                />
-                <q-checkbox
-                  v-model="empresa.pendente"
-                  label="Pendente"
-                  class="col-xs-3"
-                />
+                <q-checkbox v-model="empresa.ativo" label="Ativo" class="col-xs-3" />
+                <q-checkbox v-model="empresa.pendente" label="Pendente" class="col-xs-3" />
               </div>
             </q-tab-panel>
 
@@ -297,14 +148,7 @@
                     },
                     'fullscreen'
                   ],
-                  [
-                    'bold',
-                    'italic',
-                    'strike',
-                    'underline',
-                    'subscript',
-                    'superscript'
-                  ],
+                  ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
                   ['token', 'hr', 'link', 'custom_btn'],
                   [
                     {
@@ -319,32 +163,14 @@
                       fixedLabel: true,
                       fixedIcon: true,
                       list: 'no-icons',
-                      options: [
-                        'size-1',
-                        'size-2',
-                        'size-3',
-                        'size-4',
-                        'size-5',
-                        'size-6',
-                        'size-7'
-                      ]
+                      options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6', 'size-7']
                     },
                     {
                       label: $q.lang.editor.defaultFont,
                       icon: $q.iconSet.editor.font,
                       fixedIcon: true,
                       list: 'no-icons',
-                      options: [
-                        'default_font',
-                        'arial',
-                        'arial_black',
-                        'comic_sans',
-                        'courier_new',
-                        'impact',
-                        'lucida_grande',
-                        'times_new_roman',
-                        'verdana'
-                      ]
+                      options: ['default_font', 'arial', 'arial_black', 'comic_sans', 'courier_new', 'impact', 'lucida_grande', 'times_new_roman', 'verdana']
                     },
                     'removeFormat'
                   ],
@@ -378,23 +204,7 @@
 </template>
 
 <script>
-import {
-  mdiAccountTie,
-  mdiWindowClose,
-  mdiPlusBoxOutline,
-  mdiDotsVertical,
-  mdiPencil,
-  mdiCheckCircleOutline,
-  mdiAccountGroup,
-  mdiWeb,
-  mdiFacebook,
-  mdiTwitter,
-  mdiLinkedin,
-  mdiImageSearchOutline,
-  mdiBadgeAccountHorizontalOutline,
-  mdiFileDocumentEditOutline,
-  mdiFilterOutline
-} from '@quasar/extras/mdi-v6'
+import { mdiAccountTie, mdiWindowClose, mdiPlusBoxOutline, mdiDotsVertical, mdiPencil, mdiCheckCircleOutline, mdiAccountGroup, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiImageSearchOutline, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiFilterOutline } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted, watch } from 'vue'
 import { get, postFormAuth, apiPublicUrl, postAuth } from 'boot/api'
 import { useQuasar } from 'quasar'
@@ -475,9 +285,11 @@ export default defineComponent({
       return isEmail(val) || 'Insira um email válido'
     }
     const isNifValid = (val) => {
+      if (val === null) return true
       return isNifPt(val) || 'NIF inválido'
     }
     const isCaeValid = (val) => {
+      if (val === null) return true
       return isCae(val) || 'CAE inválido'
     }
     const isConcelhoValid = (val) => {
@@ -563,13 +375,7 @@ export default defineComponent({
       empresa,
       logo,
       pagination,
-      grupos: [
-        'Grandes empresas',
-        'Entidades SCTN',
-        'PME',
-        'Entidades administração pública',
-        'Associações'
-      ],
+      grupos: ['Grandes empresas', 'Entidades SCTN', 'PME', 'Entidades administração pública', 'Associações'],
       colunas: [
         {
           name: 'logo',
@@ -624,9 +430,7 @@ export default defineComponent({
         empresa.value = await get('empresas/read-single.php?id=' + b.id)
         try {
           if (empresa.value.concelho_id > 0) {
-            concelhos.value = await get(
-              'concelhos/read.php?id=' + empresa.value.concelho_id
-            )
+            concelhos.value = await get('concelhos/read.php?id=' + empresa.value.concelho_id)
           }
         } catch {
           $q.notify({
@@ -640,13 +444,7 @@ export default defineComponent({
       },
       onOk: async () => {
         try {
-          if (
-            inputName.value.validate() &&
-            inputEmail.value.validate() &&
-            inputNif.value.validate() &&
-            inputCae.value.validate() &&
-            inputConcelho.value.validate()
-          ) {
+          if (inputName.value.validate() && inputEmail.value.validate() && inputNif.value.validate() && inputCae.value.validate() && inputConcelho.value.validate()) {
             const data = new FormData()
             data.append('logo', logo.value)
             data.append('id', empresa.value.id)
@@ -690,8 +488,7 @@ export default defineComponent({
             })
             tableRef.value.requestServerInteraction()
 
-            if (result.ok)
-              $q.notify({ message: 'Aprovação concluída com sucesso' })
+            if (result.ok) $q.notify({ message: 'Aprovação concluída com sucesso' })
             else $q.notify({ message: result.message, type: 'warning' })
           } catch {
             $q.notify({ message: 'Não foi possível aprovar', type: 'warning' })

@@ -1,25 +1,9 @@
 <template>
   <q-card bordered class="card-login">
     <q-card-section>
-      <q-tabs
-        v-model="tab"
-        outside-arrows
-        inline-label
-        mobile-arrows
-        dense
-        align="center"
-        narrow-indicator
-      >
-        <q-tab
-          name="geral"
-          :icon="mdiBadgeAccountHorizontalOutline"
-          label="Geral"
-        />
-        <q-tab
-          name="descricao"
-          :icon="mdiFileDocumentEditOutline"
-          label="Descrição"
-        />
+      <q-tabs v-model="tab" outside-arrows inline-label mobile-arrows dense align="center" narrow-indicator>
+        <q-tab name="geral" :icon="mdiBadgeAccountHorizontalOutline" label="Geral" />
+        <q-tab name="descricao" :icon="mdiFileDocumentEditOutline" label="Descrição" />
       </q-tabs>
 
       <q-separator />
@@ -28,178 +12,61 @@
         <q-tab-panel name="geral">
           <div class="row q-col-gutter-md">
             <div class="text-h6 col-12">Utilizador</div>
-            <q-input
-              v-model="empresa.username"
-              outlined
-              label="Utilizador"
-              class="col-xs-12 col-md-6"
-              :rules="[isUsernamevalid]"
-              ref="inputUsername"
-            >
+            <q-input v-model="empresa.username" outlined label="Utilizador" class="col-xs-12 col-md-6" :rules="[isUsernamevalid]" ref="inputUsername">
               <template v-if="empresa.username" v-slot:append>
-                <q-icon
-                  :name="mdiCloseCircle"
-                  @click.stop="empresa.username = null"
-                  class="cursor-pointer"
-                />
+                <q-icon :name="mdiCloseCircle" @click.stop="empresa.username = null" class="cursor-pointer" />
               </template>
             </q-input>
-            <q-input
-              v-model="empresa.password"
-              outlined
-              :type="isPwd ? 'password' : 'text'"
-              label="Password"
-              class="col-xs-12 col-md-6"
-              :rules="[isPasswordValid]"
-              ref="inputPassword"
-            >
+            <q-input v-model="empresa.password" outlined :type="isPwd ? 'password' : 'text'" label="Password" class="col-xs-12 col-md-6" :rules="[isPasswordValid]" ref="inputPassword">
               <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? mdiEyeOff : mdiEye"
-                  class="cursor-pointer"
-                  aria-hidden="true"
-                  @click="isPwd = !isPwd"
-                />
-                <q-icon
-                  v-if="empresa.password"
-                  :name="mdiCloseCircle"
-                  @click.stop="empresa.password = null"
-                  class="cursor-pointer"
-                />
+                <q-icon :name="isPwd ? mdiEyeOff : mdiEye" class="cursor-pointer" aria-hidden="true" @click="isPwd = !isPwd" />
+                <q-icon v-if="empresa.password" :name="mdiCloseCircle" @click.stop="empresa.password = null" class="cursor-pointer" />
               </template>
             </q-input>
             <div class="text-h6 col-12">Empresa</div>
-            <q-input
-              v-model="empresa.nome"
-              :rules="[isNameValid]"
-              label="Nome Fiscal"
-              ref="inputName"
-              outlined
-              class="col-xs-12 col-md-6"
-            />
-            <q-input
-              v-model="empresa.titulo"
-              label="Nome"
-              outlined
-              class="col-xs-12 col-md-6"
-            />
-            <q-input
-              v-model="empresa.email"
-              label="Email"
-              :rules="[isEmailRule]"
-              ref="inputEmail"
-              outlined
-              class="col-xs-12 col-md-4"
-            />
+            <q-input v-model="empresa.nome" :rules="[isNameValid]" label="Nome Fiscal" ref="inputName" outlined class="col-xs-12 col-md-6" />
+            <q-input v-model="empresa.titulo" label="Nome" outlined class="col-xs-12 col-md-6" />
+            <q-input v-model="empresa.email" label="Email" :rules="[isEmailRule]" ref="inputEmail" outlined class="col-xs-12 col-md-4" />
 
-            <q-input
-              v-model="empresa.nif"
-              outlined
-              label="NIF"
-              :rules="[isNifValid]"
-              ref="inputNif"
-              class="col-xs-12 col-md-4"
-            />
+            <q-input v-model="empresa.nif" outlined clearable label="NIF" :rules="[isNifValid]" ref="inputNif" class="col-xs-12 col-md-4" />
 
-            <q-input
-              v-model="empresa.cae"
-              outlined
-              label="CAE"
-              :rules="[isCaeValid]"
-              ref="inputCae"
-              class="col-xs-12 col-md-4"
-            />
+            <q-input v-model="empresa.cae" outlined clearable label="CAE" :rules="[isCaeValid]" ref="inputCae" class="col-xs-12 col-md-4" />
 
-            <TipoProjetoSelector
-              :tipos="tiposProjeto"
-              :tipo="empresa.tipos_projeto"
-              @tipo_projeto_updated="tipoProjetoUpdated"
-              class="col-xs-12"
-            />
+            <TipoProjetoSelector :tipos="tiposProjeto" :tipo="empresa.tipos_projeto" @tipo_projeto_updated="tipoProjetoUpdated" class="col-xs-12" />
 
-            <q-select
-              v-model="empresa.concelho_id"
-              :options="concelhos"
-              label="Concelho"
-              option-label="nome"
-              option-value="id"
-              @filter="filterFn"
-              use-input
-              emit-value
-              map-options
-              outlined
-              :rules="[isConcelhoValid]"
-              ref="inputConcelho"
-              class="col-xs-12"
-            />
+            <q-select v-model="empresa.concelho_id" :options="concelhos" label="Concelho" option-label="nome" option-value="id" @filter="filterFn" use-input emit-value map-options outlined :rules="[isConcelhoValid]" ref="inputConcelho" class="col-xs-12" />
 
-            <q-input
-              v-model="empresa.morada"
-              outlined
-              type="textarea"
-              label="Morada"
-              class="col-xs-12"
-            />
+            <q-input v-model="empresa.morada" outlined type="textarea" label="Morada" class="col-xs-12" />
 
-            <q-input
-              v-model="empresa.telemovel"
-              outlined
-              label="Telemóvel"
-              class="col-xs-12 col-md-4"
-            >
+            <q-input v-model="empresa.telemovel" outlined label="Telemóvel" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiCellphone" color="primary" />
               </template>
             </q-input>
 
-            <q-input
-              v-model="empresa.telefone"
-              outlined
-              label="Telefone"
-              class="col-xs-12 col-md-4"
-            >
+            <q-input v-model="empresa.telefone" outlined label="Telefone" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiPhoneClassic" color="primary" />
               </template>
             </q-input>
 
-            <q-input
-              v-model="empresa.website"
-              outlined
-              label="Web"
-              class="col-xs-12 col-md-4"
-            >
+            <q-input v-model="empresa.website" outlined label="Web" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiWeb" color="primary" />
               </template>
             </q-input>
 
-            <q-input
-              v-model="empresa.facebook"
-              outlined
-              label="Facebook"
-              class="col-xs-12 col-md-4"
-            >
+            <q-input v-model="empresa.facebook" outlined label="Facebook" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiFacebook" color="primary" />
               </template>
             </q-input>
-            <q-input
-              v-model="empresa.twitter"
-              outlined
-              label="Twitter"
-              class="col-xs-12 col-md-4"
-            >
+            <q-input v-model="empresa.twitter" outlined label="Twitter" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiTwitter" color="primary" />
               </template>
             </q-input>
-            <q-input
-              v-model="empresa.linkedin"
-              outlined
-              label="LinkedIn"
-              class="col-xs-12 col-md-4"
-            >
+            <q-input v-model="empresa.linkedin" outlined label="LinkedIn" class="col-xs-12 col-md-4">
               <template v-slot:append>
                 <q-icon :name="mdiLinkedin" color="primary" />
               </template>
@@ -228,14 +95,7 @@
                 },
                 'fullscreen'
               ],
-              [
-                'bold',
-                'italic',
-                'strike',
-                'underline',
-                'subscript',
-                'superscript'
-              ],
+              ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
               ['token', 'hr', 'link', 'custom_btn'],
               [
                 {
@@ -250,32 +110,14 @@
                   fixedLabel: true,
                   fixedIcon: true,
                   list: 'no-icons',
-                  options: [
-                    'size-1',
-                    'size-2',
-                    'size-3',
-                    'size-4',
-                    'size-5',
-                    'size-6',
-                    'size-7'
-                  ]
+                  options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6', 'size-7']
                 },
                 {
                   label: $q.lang.editor.defaultFont,
                   icon: $q.iconSet.editor.font,
                   fixedIcon: true,
                   list: 'no-icons',
-                  options: [
-                    'default_font',
-                    'arial',
-                    'arial_black',
-                    'comic_sans',
-                    'courier_new',
-                    'impact',
-                    'lucida_grande',
-                    'times_new_roman',
-                    'verdana'
-                  ]
+                  options: ['default_font', 'arial', 'arial_black', 'comic_sans', 'courier_new', 'impact', 'lucida_grande', 'times_new_roman', 'verdana']
                 },
                 'removeFormat'
               ],
@@ -304,36 +146,13 @@
 
     <q-card-actions align="right">
       <q-btn label="Voltar" type="reset" rounded flat @click="onCancel" />
-      <q-btn
-        color="primary"
-        label="Criar conta"
-        rounded
-        class="text-white action-btn"
-        :icon="mdiLogin"
-        size="lg"
-        @click="onRegister"
-        :loading="onCreatingAcount"
-      />
+      <q-btn color="primary" label="Criar conta" rounded class="text-white action-btn" :icon="mdiLogin" size="lg" @click="onRegister" :loading="onCreatingAcount" />
     </q-card-actions>
   </q-card>
 </template>
 
 <script>
-import {
-  mdiEyeOff,
-  mdiEye,
-  mdiLogin,
-  mdiCloseCircle,
-  mdiWeb,
-  mdiFacebook,
-  mdiTwitter,
-  mdiLinkedin,
-  mdiBadgeAccountHorizontalOutline,
-  mdiFileDocumentEditOutline,
-  mdiImageSearchOutline,
-  mdiCellphone,
-  mdiPhoneClassic
-} from '@quasar/extras/mdi-v6'
+import { mdiEyeOff, mdiEye, mdiLogin, mdiCloseCircle, mdiWeb, mdiFacebook, mdiTwitter, mdiLinkedin, mdiBadgeAccountHorizontalOutline, mdiFileDocumentEditOutline, mdiImageSearchOutline, mdiCellphone, mdiPhoneClassic } from '@quasar/extras/mdi-v6'
 import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { get, postForm } from 'boot/api'
@@ -376,9 +195,7 @@ export default defineComponent({
         tiposProjeto.value = await get('tiposprojeto/read-ativo.php')
 
         if (empresa.value.tipos_projeto.length === 0) {
-          empresa.value.tipos_projeto = [
-            tiposProjeto.value.filter((t) => t.pai_id > 0)[0].id
-          ]
+          empresa.value.tipos_projeto = [tiposProjeto.value.filter((t) => t.pai_id > 0)[0].id]
         }
       } catch {
         $q.notify({
@@ -389,9 +206,7 @@ export default defineComponent({
 
       try {
         if (empresa.value.concelho_id > 0) {
-          concelhos.value = await get(
-            'concelhos/read.php?id=' + empresa.value.concelho_id
-          )
+          concelhos.value = await get('concelhos/read.php?id=' + empresa.value.concelho_id)
         }
       } catch {
         $q.notify({
@@ -426,9 +241,11 @@ export default defineComponent({
       return !!val || 'Insira a password'
     }
     const isNifValid = (val) => {
+      if (val === null) return true
       return isNifPt(val) || 'NIF inválido'
     }
     const isCaeValid = (val) => {
+      if (val === null) return true
       return isCae(val) || 'CAE inválido'
     }
     const isConcelhoValid = (val) => {
@@ -447,15 +264,7 @@ export default defineComponent({
     }
     const onRegister = async () => {
       // validate
-      if (
-        inputName.value.validate() &&
-        inputUsername.value.validate() &&
-        inputPassword.value.validate() &&
-        inputEmail.value.validate() &&
-        inputNif.value.validate() &&
-        inputCae.value.validate() &&
-        inputConcelho.value.validate()
-      ) {
+      if (inputName.value.validate() && inputUsername.value.validate() && inputPassword.value.validate() && inputEmail.value.validate() && inputNif.value.validate() && inputCae.value.validate() && inputConcelho.value.validate()) {
         onCreatingAcount.value = true
         // account has been created,
         const data = new FormData()
