@@ -141,7 +141,7 @@
           <div class="q-pt-xl">
             <q-img src="/images/logo-ptpc.png" style="width: 160px" />
             <q-img src="/images/logo-aec.png" style="width: 160px" />
-            <q-img src="/images/pt2020.svg" style="width: 180px" class="q-mx-md" />
+            <q-img src="/images/compete-FEEI.png" style="width: 320px" class="q-mx-md" />
           </div>
         </div>
       </div>
