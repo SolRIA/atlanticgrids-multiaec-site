@@ -285,11 +285,11 @@ export default defineComponent({
       return isEmail(val) || 'Insira um email válido'
     }
     const isNifValid = (val) => {
-      if (val === null) return true
+      if (val === null || val.length === 0) return true
       return isNifPt(val) || 'NIF inválido'
     }
     const isCaeValid = (val) => {
-      if (val === null) return true
+      if (val === null || val.length === 0) return true
       return isCae(val) || 'CAE inválido'
     }
     const isConcelhoValid = (val) => {
@@ -430,7 +430,7 @@ export default defineComponent({
         empresa.value = await get('empresas/read-single.php?id=' + b.id)
         try {
           if (empresa.value.concelho_id > 0) {
-            concelhos.value = await get('concelhos/read.php?id=' + empresa.value.concelho_id)
+            concelhos.value = await get('concelhos/read.php?id=' + empresa.value.concelho_id + '&filtro=')
           }
         } catch {
           $q.notify({

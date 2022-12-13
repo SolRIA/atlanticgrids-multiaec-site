@@ -73,6 +73,15 @@
       </q-carousel-slide>
     </q-carousel>
 
+    <div class="row flex flex-center text-center">
+      <q-card flat>
+        <q-card-item>
+          <q-img src="/images/ptpc_logo_2022.png" style="width: 320px" alt="logo ptpc" class="q-ma-md" />
+          <q-img src="/images/compete-FEDER.png" style="width: 320px" alt="logo compete" class="q-mx-md" />
+        </q-card-item>
+      </q-card>
+    </div>
+
     <SimpleSeparator />
 
     <div class="q-ma-lg" style="margin-top: 80px">
@@ -99,24 +108,25 @@
       </div>
     </div>
 
-    <div id="register" class="q-pa-lg">
-      <h4 class="text-center">{{ $t('html.index.associate.name') }}</h4>
-      <div class="row q-col-gutter-lg q-ma-md">
-        <div class="col-xs-12 col-md-6">
-          <q-img src="/images/associates.jpg" fit="scale-down" />
-        </div>
+    <div id="register">
+      <div style="background-color: #a6b3bf !important" class="q-pa-lg">
+        <h4 class="text-center">{{ $t('html.index.associate.name') }}</h4>
+        <div class="row q-col-gutter-lg q-ma-md">
+          <div class="col-xs-12 col-md-6">
+            <q-img src="/images/associates.jpg" fit="scale-down" />
+          </div>
 
-        <div class="col-xs-12 col-md-6 self-center">
-          <p class="text-body1">
-            {{ $t('html.index.associate.description') }}
-          </p>
+          <div class="col-xs-12 col-md-6 self-center">
+            <p class="text-body1">
+              {{ $t('html.index.associate.description') }}
+            </p>
 
-          <div class="row justify-center">
-            <q-btn rounded href="/login/registo" class="text-white action-btn" color="primary" :label="$t('html.index.partner.register')" />
+            <div class="row justify-center">
+              <q-btn rounded href="/login/registo" class="text-white action-btn" color="primary" :label="$t('html.index.partner.register')" />
+            </div>
           </div>
         </div>
       </div>
-
       <h4 class="text-center">{{ $t('html.index.partner.name') }}</h4>
       <div class="row q-col-gutter-lg q-ma-md">
         <div class="col-xs-12 col-md-6 self-center">
@@ -138,10 +148,13 @@
     <div class="contact_us" id="id_contact_us">
       <div style="background-color: #a6b3bf !important">
         <div class="row flex flex-center text-center q-pb-xl q-mt-xl">
-          <div class="q-pt-xl">
-            <q-img src="/images/logo-ptpc.png" style="width: 160px" />
-            <q-img src="/images/logo-aec.png" style="width: 160px" />
-            <q-img src="/images/compete-FEEI.png" style="width: 320px" class="q-mx-md" />
+          <div class="q-pa-md">
+            <q-card>
+              <q-card-item>
+                <q-img src="/images/ptpc_logo_2022.png" style="width: 320px" alt="logo ptpc" class="q-ma-md" />
+                <q-img src="/images/compete-FEDER.png" style="width: 320px" alt="logo compete" class="q-mx-md" />
+              </q-card-item>
+            </q-card>
           </div>
         </div>
       </div>
