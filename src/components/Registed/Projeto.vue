@@ -46,7 +46,7 @@
               </template>
             </q-input>
 
-            <TipoProjetoSelector :tipos="tipos" :tipo="projeto.tipos" class="col-xs-12 col-md-4" />
+            <TipoProjetoSelector :tipos="tipos" :tipo="projeto.tipos" @tipo_projeto_updated="tipoProjetoUpdated" class="col-xs-12 col-md-4" />
 
             <q-select label="País" outlined v-model="projeto.pais" :options="paises" clearable class="col-xs-12 col-md-4" />
 
@@ -198,6 +198,11 @@ export default defineComponent({
         loading.value = false
       }
     })
+
+    const tipoProjetoUpdated = (e) => {
+      projeto.value.tipos = e
+    }
+
     return {
       mdiWindowClose,
       mdiCalendarMonth,
@@ -207,6 +212,7 @@ export default defineComponent({
       maximized,
       projeto,
       dialogRef,
+      tipoProjetoUpdated,
       onOKClick: async () => {
         try {
           await postAuth('projetos/update.php', projeto.value)
