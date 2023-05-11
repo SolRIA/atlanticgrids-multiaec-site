@@ -251,6 +251,8 @@ export default defineComponent({
       nome: '',
       titulo: '',
       grupo: '',
+      nif: null,
+      cae: null,
       ativo: true,
       pendente: true,
       tipos_projeto: [],
@@ -410,6 +412,8 @@ export default defineComponent({
           nome: '',
           titulo: '',
           grupo: '',
+          nif: null,
+          cae: null,
           ativo: true,
           pendente: true,
           tipos_projeto: [],
@@ -471,7 +475,8 @@ export default defineComponent({
             mostraEditor.value = false
             tableRef.value.requestServerInteraction()
           }
-        } catch {
+        } catch (e) {
+          console.error(e)
           $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
         }
       },
