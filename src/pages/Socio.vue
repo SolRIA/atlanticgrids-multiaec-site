@@ -14,13 +14,13 @@
         </q-card-section>
 
         <q-card-section>
-          <h6>{{ empresa.titulo }}</h6>
+          <h6>{{ empresa.nome }}</h6>
           <p>
             <span v-html="empresa.descricao"></span>
           </p>
         </q-card-section>
 
-        <q-card-actions align="right">
+        <q-card-actions>
           <q-btn
             rounded
             outline
@@ -28,14 +28,73 @@
             class="action-btn btn-white"
             to="/associados"
           />
+          <q-space />
           <q-btn
-            rounded
-            outline
-            label="Website"
-            class="action-btn btn-white"
-            target="_blank"
-            :icon="mdiOpenInNew"
+            flat
+            round
+            :icon="mdiWeb"
             :href="empresa.website"
+            v-if="empresa.website"
+            color="red"
+            size="lg"
+            target="_blank"
+          />
+          <q-btn
+            flat
+            round
+            :icon="mdiEmail"
+            :href="'mailto:' + empresa.email_publico"
+            v-if="empresa.email_publico"
+            color="red"
+            size="lg"
+            target="_blank"
+          />
+          <q-btn
+            flat
+            round
+            :icon="mdiCellphone"
+            :href="'tel:' + empresa.telemovel"
+            v-if="empresa.telemovel"
+            color="red"
+            size="lg"
+            target="_blank"
+          />
+          <q-btn
+            flat
+            round
+            :icon="mdiPhoneClassic"
+            :href="'tel:' + empresa.telefone"
+            v-if="empresa.telefone"
+            color="red"
+            size="lg"
+            target="_blank"
+          />
+          <q-btn
+            flat
+            round
+            :icon="mdiFacebook"
+            :href="empresa.facebook"
+            color="red"
+            size="lg"
+            v-if="empresa.facebook"
+          />
+          <q-btn
+            flat
+            round
+            :icon="mdiTwitter"
+            :href="empresa.twitter"
+            color="red"
+            size="lg"
+            v-if="empresa.twitter"
+          />
+          <q-btn
+            flat
+            round
+            :icon="mdiLinkedin"
+            :href="empresa.linkedin"
+            color="red"
+            size="lg"
+            v-if="empresa.linkedin"
           />
         </q-card-actions>
       </q-card>
@@ -47,7 +106,15 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { get, apiPublicUrl } from "boot/api";
-import { mdiOpenInNew } from "@quasar/extras/mdi-v6";
+import {
+  mdiWeb,
+  mdiCellphone,
+  mdiPhoneClassic,
+  mdiEmail,
+  mdiFacebook,
+  mdiTwitter,
+  mdiLinkedin,
+} from "@quasar/extras/mdi-v6";
 
 export default defineComponent({
   setup() {
@@ -65,7 +132,13 @@ export default defineComponent({
     };
 
     return {
-      mdiOpenInNew,
+      mdiWeb,
+      mdiCellphone,
+      mdiPhoneClassic,
+      mdiEmail,
+      mdiFacebook,
+      mdiTwitter,
+      mdiLinkedin,
       empresa,
       logoEmpresa,
     };
