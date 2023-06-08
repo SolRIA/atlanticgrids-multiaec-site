@@ -104,7 +104,7 @@ function download(method, url, filename, data, mimeType, elementid) {
 export async function baseApiAuth(method, url, data, contentType) {
   var headers = new Headers();
   headers.append('Access-Control-Allow-Credentials', 'true');
-  headers.append('X_API_KEY', getAuthToken());
+  headers.append('X-API', getAuthToken());
   if (typeof contentType !== 'undefined' && contentType !== null) {
     headers.append('Content-Type', contentType);
   }
