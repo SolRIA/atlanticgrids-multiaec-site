@@ -7,7 +7,7 @@
       <SimpleSeparator />
     </q-card>
 
-    <q-list bordered class="rounded-borders">
+    <q-list bordered class="rounded-borders q-my-lg">
       <q-expansion-item
         :content-inset-level="0.5"
         expand-separator
@@ -28,7 +28,7 @@
           </q-card-section>
           <q-card-section>
             <q-img
-              src="/faqs/ecra_00.png"
+              src="/images/faqs/ecra_00.png"
               fit="scale-down"
               style="max-height: 250px"
             />
@@ -88,7 +88,7 @@
           </q-card-section>
           <q-card-section>
             <q-img
-              src="/faqs/ecra_01.png"
+              src="/images/faqs/ecra_01.png"
               fit="scale-down"
               style="max-height: 250px"
             />
@@ -110,7 +110,7 @@
           </q-card-section>
           <q-card-section>
             <q-img
-              src="/faqs/email.png"
+              src="/images/faqs/email.png"
               fit="scale-down"
               style="max-height: 250px"
             />
@@ -122,7 +122,7 @@
           </q-card-section>
           <q-card-section>
             <q-img
-              src="/faqs/ecra_01_01.png"
+              src="/images/faqs/ecra_01_01.png"
               fit="scale-down"
               style="max-height: 250px"
             />
@@ -133,7 +133,7 @@
           </q-card-section>
           <q-card-section>
             <q-img
-              src="/faqs/ecra_01_02.png"
+              src="/images/faqs/ecra_01_02.png"
               fit="scale-down"
               style="max-height: 450px"
             />
@@ -147,14 +147,14 @@
           </q-card-section>
           <q-card-section>
             <q-img
-              src="/faqs/ecra_03.png"
+              src="/images/faqs/ecra_03.png"
               fit="scale-down"
               style="max-height: 250px"
             />
             <br />
             <br />
             <q-img
-              src="/faqs/ecra_04.png"
+              src="/images/faqs/ecra_04.png"
               fit="scale-down"
               style="max-height: 250px"
             />
