@@ -14,29 +14,30 @@ const routes = [
       { path: 'associado', component: () => import('src/pages/Socio.vue') },
       {
         path: 'banco-bm',
-        component: () => import('src/pages/BancoBM.vue')
+        component: () => import('src/pages/BancoBM.vue'),
       },
       {
         path: 'banco-bid',
-        component: () => import('src/pages/BancoBID.vue')
+        component: () => import('src/pages/BancoBID.vue'),
       },
       {
         path: 'banco-berd',
-        component: () => import('src/pages/BancoBERD.vue')
+        component: () => import('src/pages/BancoBERD.vue'),
       },
       {
         path: 'banco-bei',
-        component: () => import('src/pages/BancoBEI.vue')
+        component: () => import('src/pages/BancoBEI.vue'),
       },
+      { path: 'faqs', component: () => import('src/pages/Faqs.vue') },
       { path: 'noticias', component: () => import('src/pages/Noticias.vue') },
       { path: 'tutoriais', component: () => import('src/pages/Tutoriais.vue') },
       { path: 'projeto', component: () => import('src/pages/Projeto.vue') },
       { path: 'mercado', component: () => import('src/pages/Mercado.vue') },
       {
         path: 'accao',
-        component: () => import('src/pages/RegistarAccaoProjeto.vue')
-      }
-    ]
+        component: () => import('src/pages/RegistarAccaoProjeto.vue'),
+      },
+    ],
   },
   {
     path: '/login',
@@ -46,17 +47,17 @@ const routes = [
       { path: 'registo', component: () => import('pages/Register.vue') },
       {
         path: 'registo-parceiro',
-        component: () => import('pages/RegisterPartner.vue')
+        component: () => import('pages/RegisterPartner.vue'),
       },
       {
         path: 'recuperarPassword',
-        component: () => import('pages/PasswordRecover.vue')
+        component: () => import('pages/PasswordRecover.vue'),
       },
       {
         path: 'alterarPassword',
-        component: () => import('pages/PasswordChange.vue')
-      }
-    ]
+        component: () => import('pages/PasswordChange.vue'),
+      },
+    ],
   },
   {
     path: '/registed',
@@ -65,61 +66,61 @@ const routes = [
       { path: '', component: () => import('src/pages/Registed/Projetos.vue') },
       {
         path: 'keywords',
-        component: () => import('src/pages/Registed/ProjetosKeywords.vue')
+        component: () => import('src/pages/Registed/ProjetosKeywords.vue'),
       },
       {
         path: 'accoes',
-        component: () => import('src/pages/Registed/EmailActions.vue')
+        component: () => import('src/pages/Registed/EmailActions.vue'),
       },
       {
         path: 'bancos',
-        component: () => import('src/pages/Registed/Bancos.vue')
+        component: () => import('src/pages/Registed/Bancos.vue'),
       },
       {
         path: 'conta',
-        component: () => import('src/pages/Registed/Conta.vue')
+        component: () => import('src/pages/Registed/Conta.vue'),
       },
       {
         path: 'contaparceiro',
-        component: () => import('src/pages/Registed/ContaParceiro.vue')
+        component: () => import('src/pages/Registed/ContaParceiro.vue'),
       },
       {
         path: 'empresas',
-        component: () => import('src/pages/Registed/Empresas.vue')
+        component: () => import('src/pages/Registed/Empresas.vue'),
       },
       {
         path: 'parceiros',
-        component: () => import('src/pages/Registed/Parceiros.vue')
+        component: () => import('src/pages/Registed/Parceiros.vue'),
       },
       {
         path: 'utilizadores',
-        component: () => import('src/pages/Registed/Utilizadores.vue')
+        component: () => import('src/pages/Registed/Utilizadores.vue'),
       },
       {
         path: 'tiposprojeto',
-        component: () => import('src/pages/Registed/TiposProjeto.vue')
+        component: () => import('src/pages/Registed/TiposProjeto.vue'),
       },
       {
         path: 'emails',
-        component: () => import('src/pages/Registed/Emails.vue')
+        component: () => import('src/pages/Registed/Emails.vue'),
       },
       {
         path: 'noticias',
-        component: () => import('src/pages/Registed/Noticias.vue')
+        component: () => import('src/pages/Registed/Noticias.vue'),
       },
       {
         path: 'tutoriais',
-        component: () => import('src/pages/Registed/Tutoriais.vue')
-      }
-    ]
+        component: () => import('src/pages/Registed/Tutoriais.vue'),
+      },
+    ],
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue')
-  }
-]
+    component: () => import('pages/Error404.vue'),
+  },
+];
 
-export default routes
+export default routes;

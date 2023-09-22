@@ -20,17 +20,8 @@
         <q-space></q-space>
         <LanguageSelector />
 
-        <!-- <router-link to="/Projetos">
-          <p class="hover-underline-animation">Bancos</p>
-        </router-link>
-        <router-link to="/associados" class="desktop-only">
-          <p class="hover-underline-animation">Associados</p>
-        </router-link>
-        <router-link to="/projetos" class="desktop-only">
-          <p class="hover-underline-animation">Projetos</p>
-        </router-link> -->
         <q-btn
-          label="Associados"
+          :label="$t('html.sideMenu.associates')"
           to="/associados"
           flat
           no-caps
@@ -38,15 +29,33 @@
           class="toolbar-btn"
         />
         <q-btn
-          label="Projetos"
+          :label="$t('html.sideMenu.projects')"
           to="/projetos"
           flat
           no-caps
           stretch
           class="toolbar-btn"
         />
+
         <q-btn
-          label="Login"
+          :label="$t('html.sideMenu.tutoriais')"
+          to="/tutoriais"
+          flat
+          no-caps
+          stretch
+          class="toolbar-btn"
+        />
+
+        <q-btn
+          :label="$t('html.sideMenu.faqs')"
+          to="/faqs"
+          flat
+          no-caps
+          stretch
+          class="toolbar-btn"
+        />
+        <q-btn
+          :label="$t('html.sideMenu.login')"
           to="/login"
           flat
           no-caps
@@ -82,37 +91,44 @@
   </q-layout>
 </template>
 
-<style scoped>
-.toolbar-btn {
-  color: black;
-  font-size: 20px;
-}
-/* .hover-underline-animation {
-  display: inline-block;
-  position: relative;
-  color: black;
-  font-size: 22px;
-  margin-right: 20px;
-  margin-top: 10px;
-}
+<style scoped lang="sass">
+.toolbar-btn
+  color: black
+  font-size: 20px
 
-.hover-underline-animation:after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: #ec1c23;
-  transform-origin: bottom right;
-  transition: transform 0.25s ease-out;
-}
+.q-router-link--exact-active
+  background: $primary
 
-.hover-underline-animation:hover:after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-} */
+.menu-list .q-item
+  border-radius: 4px
+  margin: 3px
+
+// .hover-underline-animation {
+//   display: inline-block;
+//   position: relative;
+//   color: black;
+//   font-size: 22px;
+//   margin-right: 20px;
+//   margin-top: 10px;
+// }
+
+// .hover-underline-animation:after {
+//   content: '';
+//   position: absolute;
+//   width: 100%;
+//   transform: scaleX(0);
+//   height: 2px;
+//   bottom: 0;
+//   left: 0;
+//   background-color: #ec1c23;
+//   transform-origin: bottom right;
+//   transition: transform 0.25s ease-out;
+// }
+
+// .hover-underline-animation:hover:after {
+//   transform: scaleX(1);
+//   transform-origin: bottom left;
+// }
 </style>
 
 <script>

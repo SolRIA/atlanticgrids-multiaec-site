@@ -16,32 +16,41 @@ export default {
     filter: 'Filtrer',
     refresh: 'Rafraîchir',
     expand: (label) => (label ? `Développer "${label}"` : 'Développer'),
-    collapse: (label) => (label ? `Réduire "${label}"` : 'Effondrement')
+    collapse: (label) => (label ? `Réduire "${label}"` : 'Effondrement'),
   },
   date: {
     days: 'Dimanche_Lundi_Mardi_Mercredi_Jeudi_Vendredi_Samedi'.split('_'),
     daysShort: 'Dim_Lun_Mar_Mer_Jeu_Ven_Sam'.split('_'),
-    months: 'Janvier_Février_Mars_Avril_Mai_Juin_Juillet_Août_Septembre_Octobre_Novembre_Décembre'.split('_'),
+    months:
+      'Janvier_Février_Mars_Avril_Mai_Juin_Juillet_Août_Septembre_Octobre_Novembre_Décembre'.split(
+        '_'
+      ),
     monthsShort: 'Jan_Fev_Mar_Avr_Mai_Juin_Jui_Aou_Sep_Oct_Nov_Dec'.split('_'),
     headerTitle: (date) =>
       new Intl.DateTimeFormat('fr', {
         weekday: 'short',
         day: 'numeric',
-        month: 'short'
+        month: 'short',
       }).format(date),
     firstDayOfWeek: 1, // 0-6, 0 - Sunday, 1 Monday, ...
     format24h: true,
-    pluralDay: 'jours'
+    pluralDay: 'jours',
   },
   table: {
     noData: 'Aucune donnée à afficher',
     noResults: 'Aucune donnée trouvée',
     loading: 'Chargement...',
-    selectedRecords: (rows) => (rows > 0 ? rows + ' ' + (rows === 1 ? 'ligne sélectionnée' : 'lignes sélectionnées') + '.' : 'Aucune ligne sélectionnée.'),
+    selectedRecords: (rows) =>
+      rows > 0
+        ? rows +
+          ' ' +
+          (rows === 1 ? 'ligne sélectionnée' : 'lignes sélectionnées') +
+          '.'
+        : 'Aucune ligne sélectionnée.',
     recordsPerPage: 'Lignes par page :',
     allRows: 'Tous',
     pagination: (start, end, total) => start + '-' + end + ' sur ' + total,
-    columns: 'Colonnes'
+    columns: 'Colonnes',
   },
   editor: {
     url: 'URL',
@@ -86,11 +95,11 @@ export default {
     size6: 'Très grand',
     size7: 'Maximum',
     defaultFont: 'Police par défaut',
-    viewSource: 'Voir la source'
+    viewSource: 'Voir la source',
   },
   tree: {
     noData: 'Aucun nœud à afficher',
-    noResults: 'Aucun nœud trouvé'
+    noResults: 'Aucun nœud trouvé',
   },
   html: {
     index: {
@@ -107,43 +116,49 @@ export default {
       multiaecMarket: 'Marché multilatéral',
       multiaecMarketDesc: `Les institutions financières multilatérales sont des institutions financières internationales (IFI) qui promeuvent le développement économique et social dans les pays en développement, dans le but de réduire les niveaux de pauvreté dans les pays d'opération.`,
       news: 'Actualités',
-      newsDesc: 'Voir ici des informations et des nouvelles sur les activités les plus récentes des banques multilatérales qui font partie de ce projet',
+      newsDesc:
+        'Voir ici des informations et des nouvelles sur les activités les plus récentes des banques multilatérales qui font partie de ce projet',
       tutoriais: 'Tutoriels',
-      tutoriaisDesc: 'Vous trouverez ici des informations sur les webinaires, les vidéos promotionnelles, les rapports annuels et les documents stratégiques de la Banque, etc…',
+      tutoriaisDesc:
+        'Vous trouverez ici des informations sur les webinaires, les vidéos promotionnelles, les rapports annuels et les documents stratégiques de la Banque, etc…',
       presentation: 'PRÉSENTATION',
       partner: {
         name: 'Partenaire local',
-        description: 'Enregistrez votre entreprise en tant que partenaire local des entreprises associées de la plate-forme technologique portugaise de construction',
-        register: `S'inscrire`
+        description:
+          'Enregistrez votre entreprise en tant que partenaire local des entreprises associées de la plate-forme technologique portugaise de construction',
+        register: `S'inscrire`,
       },
       associate: {
         name: 'Associé',
-        description: 'Devenez membre de la Plateforme Technologique Portugaise de la Construction (PTPC) et découvrez tous les avantages'
+        description:
+          'Devenez membre de la Plateforme Technologique Portugaise de la Construction (PTPC) et découvrez tous les avantages',
       },
-      passwordRecover: 'Récupération de mot de passe'
+      passwordRecover: 'Récupération de mot de passe',
     },
     sideMenu: {
-      associates: 'Associés',
+      associates: 'Plateforme collaborative',
       projects: 'Projets',
       project: 'Projet',
       multiAEC: 'Marché multilatéral',
       news: 'Nouvelles',
-      tutoriais: 'Tutoriels'
+      tutoriais: 'Tutoriels',
+      faqs: "FAQ'S",
+      login: 'Login',
     },
     associates: {
-      title: 'ASSOCIÉS',
+      title: 'Plateforme collaborative',
       bigCompanies: 'Grandes entreprises',
       sctn: 'Entités SCTN',
       associations: 'Associations',
       public: 'Entités administration publique',
-      pme: 'PME'
+      pme: 'PME',
     },
     projects: {
       reference: 'Référence',
       data: 'Date',
       sector: 'Secteur',
       country: 'Pays',
-      bank: 'Banque'
+      bank: 'Banque',
     },
     project: {
       title: 'PROJET',
@@ -154,7 +169,7 @@ export default {
       obj2: 'Effectuer des visites de travail dans les institutions multilatérales;',
       obj3: `Élaboration d'un plan d'internationalisation;`,
       obj4: `Renforcement des capacités stratégiques, préparation des appels d'offres et démonstration;`,
-      obj5: 'Promotion collective de la filière AEC.'
+      obj5: 'Promotion collective de la filière AEC.',
     },
     multiaec: {
       title: 'MARCHÉ MULTILATÉRAL',
@@ -168,14 +183,17 @@ export default {
       obj6: "Banque de développement d'Amérique latine (CAF);",
       obj7: 'Banque asiatique de développement (BAD);',
       obj8: "Banque asiatique d'investissement dans les infrastructures (AIIB);",
-      obj9: "Banque de développement du Conseil de l'Europe (CEB)."
+      obj9: "Banque de développement du Conseil de l'Europe (CEB).",
+    },
+    faqs: {
+      title: "FAQ's",
     },
     news: {
-      title: 'Des nouvelles'
+      title: 'Des nouvelles',
     },
     tutorials: {
       title: 'TUTORIELS',
-      studies: 'Études'
+      studies: 'Études',
     },
     bank: {
       bm: 'World Bank',
@@ -185,7 +203,7 @@ export default {
       berd: 'European Bank for Reconstruction and Development',
       berdInitials: 'EBRD',
       bei: 'European Investment Bank',
-      beiInitials: 'EIB'
+      beiInitials: 'EIB',
     },
     bankBei: {
       p1: "La Banque européenne d'investissement est l'un des plus grands prêteurs multinationaux au monde, c'est le bras prêteur de l'UE. La BEI est active non seulement dans l'Union européenne, mais dans le reste du monde.",
@@ -194,7 +212,7 @@ export default {
       p4: "La BEI accorde des prêts à des clients de toutes tailles et sa présence est souvent déterminante pour attirer d'autres investisseurs.",
       p5: 'La BEI stimule et catalyse les capitaux privés par le biais de prises de participation.',
       p6: 'La BEI offre des garanties qui couvrent les risques des grands et petits projets. Il fournit également des portefeuilles de crédit qui rendent les projets plus attrayants pour les autres investisseurs.',
-      p7: "La BEI offre de nombreuses opportunités aux fournisseurs, entrepreneurs et consultants du monde entier. La plupart de ces opportunités d'acquisition sont liées à des projets financés par la BERD dans les régions où elle opère. Mais il existe également un nombre limité d'opportunités de contrats impliquant des projets et des départements internes de la BERD."
+      p7: "La BEI offre de nombreuses opportunités aux fournisseurs, entrepreneurs et consultants du monde entier. La plupart de ces opportunités d'acquisition sont liées à des projets financés par la BERD dans les régions où elle opère. Mais il existe également un nombre limité d'opportunités de contrats impliquant des projets et des départements internes de la BERD.",
     },
     bankBerd: {
       p1: "La Banque européenne pour la reconstruction et le développement (BERD) a été créée pour aider à construire une nouvelle ère post-guerre froide en Europe centrale et orientale. Il a joué un rôle historique et acquis une expérience unique dans la promotion du changement dans la région, ayant jusqu'à présent investi près de 150 milliards d'euros dans plus de 6 000 projets.",
@@ -205,7 +223,7 @@ export default {
       obj1: 'Prêts',
       obj2: 'Investissements égaux',
       obj3: 'Des garanties pour favoriser le commerce',
-      obj4: "Soutien aux PME, par le biais d'intermédiaires financiers."
+      obj4: "Soutien aux PME, par le biais d'intermédiaires financiers.",
     },
     bankBid: {
       p1: "La Banque interaméricaine de développement (BID) a été créée en 1959 et est la principale source de financement du développement de l'Amérique latine et des Caraïbes. Il accorde des prêts, des subventions et une assistance technique aux pays de la région et mène divers types de recherche.",
@@ -216,7 +234,7 @@ export default {
       p6: "En plus des trois catégories de prêts, la BID peut garantir des prêts consentis par des sources financières privées dans des projets du secteur public. Les garanties visent à améliorer les conditions de financement des projets en Amérique latine et dans les Caraïbes et à favoriser l'investissement dans les pays emprunteurs. Ces garanties sont des garanties partielles de crédit et de risque politique.",
       obj1: "Les prêts d'investissement aux pays membres emprunteurs de la BID financent des biens, des travaux et des services pour promouvoir le développement social et économique. Cette catégorie comprend des instruments spécifiques pour soutenir les pays membres emprunteurs de la BID en cas de catastrophe naturelle.",
       obj2: "Les prêts à l'appui de réformes fournissent aux pays membres emprunteurs de la Banque un financement pour soutenir les réformes politiques et/ou les changements institutionnels dans un secteur ou sous-secteur particulier.",
-      obj3: 'Les prêts spéciaux de développement soutiennent les pays emprunteurs pendant une crise macroéconomique et atténuent les effets sur le progrès économique et social des pays.'
+      obj3: 'Les prêts spéciaux de développement soutiennent les pays emprunteurs pendant une crise macroéconomique et atténuent les effets sur le progrès économique et social des pays.',
     },
     bankBm: {
       p1: 'La Banque mondiale est comme une coopérative, composée de 189 pays membres. Ces pays membres, ou actionnaires, sont représentés par un Conseil des gouverneurs, qui sont principalement responsables de la politique de la Banque mondiale. Généralement, les gouverneurs sont les ministres des finances ou les ministres du développement des pays membres. Ils se réunissent une fois par an lors des Assemblées annuelles des Conseils des gouverneurs du Groupe de la Banque mondiale et du Fonds monétaire international.',
@@ -230,11 +248,12 @@ export default {
       obj2: "L'IDA propose des prêts sans intérêt et encourage les subventions aux pays vermédium.",
       obj3: "L'IFC est une institution axée exclusivement sur le secteur privé. Il aide les pays en développement à atteindre une croissance durable en finançant des investissements et en mobilisant des capitaux sur les marchés financiers et en conseillant les entreprises et les gouvernements.",
       obj4: "La MIGA promeut l'investissement étranger direct dans les pays en développement en fournissant une assurance contre les risques politiques (garanties) aux investisseurs et aux créanciers.",
-      obj5: "Le CIRDI est un centre d'arbitrage pour les différends relatifs aux investissements dans les pays où opère la Banque mondiale."
+      obj5: "Le CIRDI est un centre d'arbitrage pour les différends relatifs aux investissements dans les pays où opère la Banque mondiale.",
     },
     registed: {
       invite: 'Inviter',
-      inviteMessage: "Venez découvrir la plateforme Multi AEC où vous pouvez vous inscrire et trouver des projets dans le cadre des multilatéraux financiers et faire partie d'un vaste réseau d'entreprises portugaises ayant une expérience dans ce secteur. https://multiaec.ptpc.pt "
+      inviteMessage:
+        "Venez découvrir la plateforme Multi AEC où vous pouvez vous inscrire et trouver des projets dans le cadre des multilatéraux financiers et faire partie d'un vaste réseau d'entreprises portugaises ayant une expérience dans ce secteur. https://multiaec.ptpc.pt ",
     },
     login: {
       registerAssociated: 'Nouvel associé PTPC',
@@ -257,11 +276,12 @@ export default {
        <li>Banque européenne d'investissement - BEI</li>
        </ul>
        <p>Si vous souhaitez entrer en contact avec des entreprises portugaises pour des contrats dans votre pays d'origine, veuillez laisser vos contacts, données et expérience sur la page suivante.</p>
-       <p>Vous serez ensuite contacté par nos entreprises intéressées.</p>`
+       <p>Vous serez ensuite contacté par nos entreprises intéressées.</p>`,
     },
     recover: {
-      recoverMessage: "Saisissez l'utilisateur pour modifier le mot de passe. Si vous êtes inscrit sur notre plateforme, vous recevrez un e-mail vous permettant de réinitialiser votre mot de passe.",
-      changePasswordMessage: 'Entrez le nouveau mot de passe'
+      recoverMessage:
+        "Saisissez l'utilisateur pour modifier le mot de passe. Si vous êtes inscrit sur notre plateforme, vous recevrez un e-mail vous permettant de réinitialiser votre mot de passe.",
+      changePasswordMessage: 'Entrez le nouveau mot de passe',
     },
     errors: {
       error: 'Erreur',
@@ -284,7 +304,7 @@ export default {
       errorLoadProjects: "Impossible d'obtenir des projets",
       errorLoadCompanies: "Impossible d'obtenir des entreprises",
       error: 'Impossible de terminer la demande',
-      noData: 'Pas de données'
+      noData: 'Pas de données',
     },
     registerPartner: {
       tabMain: 'Informations générales',
@@ -301,7 +321,7 @@ export default {
       return: 'Revenir',
       register: "S'inscrire",
       error: 'Impossible de créer un compte',
-      success: `Le compte a été créé avec succès. Il sera validé par PTPC et vous serez notifié par email dès qu'il sera actif.`
-    }
-  }
-}
+      success: `Le compte a été créé avec succès. Il sera validé par PTPC et vous serez notifié par email dès qu'il sera actif.`,
+    },
+  },
+};

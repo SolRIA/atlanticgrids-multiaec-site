@@ -2,7 +2,7 @@
   <q-page padding>
     <q-card>
       <q-card-section>
-        <p>{{ $t('html.index.projects') }}</p>
+        <p>{{ $t("html.index.search") }}</p>
       </q-card-section>
       <q-card-section>
         <div class="row q-col-gutter-md">
@@ -54,7 +54,7 @@
             class="col-xs-6"
           />
         </div>
-        <p>{{ banco?.descricao ?? '' }}</p>
+        <p>{{ banco?.descricao ?? "" }}</p>
       </q-card-section>
     </q-card>
     <q-table
@@ -117,80 +117,80 @@
 </template>
 
 <script>
-import { mdiAlertDecagram } from '@quasar/extras/mdi-v6'
-import { defineComponent, ref, onMounted, watch } from 'vue'
-import { get, post, apiPublicUrl } from 'boot/api'
-import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
+import { mdiAlertDecagram } from "@quasar/extras/mdi-v6";
+import { defineComponent, ref, onMounted, watch } from "vue";
+import { get, post, apiPublicUrl } from "boot/api";
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   setup() {
-    const $q = useQuasar()
-    const $router = useRouter()
-    const { t } = useI18n()
+    const $q = useQuasar();
+    const $router = useRouter();
+    const { t } = useI18n();
 
-    const tableRef = ref(null)
-    const loading = ref(false)
+    const tableRef = ref(null);
+    const loading = ref(false);
 
     onMounted(async () => {
-      loading.value = true
+      loading.value = true;
       try {
-        bancos.value = await get('bancos/read.php')
+        bancos.value = await get("bancos/read.php");
       } catch {
         $q.notify({
-          message: t('html.errors.errorLoadBanks'),
-          type: 'warning'
-        })
+          message: t("html.errors.errorLoadBanks"),
+          type: "warning",
+        });
       }
 
       try {
-        paises.value = await get('paises/read.php')
+        paises.value = await get("paises/read.php");
       } catch {
         $q.notify({
-          message: t('html.errors.errorLoadCountries'),
-          type: 'warning'
-        })
+          message: t("html.errors.errorLoadCountries"),
+          type: "warning",
+        });
       }
 
-      tableRef.value.requestServerInteraction()
-      loading.value = false
-    })
+      tableRef.value.requestServerInteraction();
+      loading.value = false;
+    });
 
-    const bancos = ref([])
-    const banco = ref()
-    const paises = ref([])
-    const pais = ref(null)
-    const filtro = ref(null)
+    const bancos = ref([]);
+    const banco = ref();
+    const paises = ref([]);
+    const pais = ref(null);
+    const filtro = ref(null);
 
-    const projetos = ref([])
+    const projetos = ref([]);
 
     const pagination = ref({
       descending: false,
       page: 1,
       rowsPerPage: 10,
       rowsNumber: 10,
-      sortBy: null
-    })
+      sortBy: null,
+    });
 
-    const projetoEscolhido = ref([])
+    const projetoEscolhido = ref([]);
 
     watch([banco, pais, filtro], (_current, _previus) => {
-      tableRef.value.requestServerInteraction()
-    })
+      tableRef.value.requestServerInteraction();
+    });
 
     const logobanco = (logo) => {
-      return apiPublicUrl(logo)
-    }
+      return apiPublicUrl(logo);
+    };
     const onServerRequest = async (props) => {
       try {
-        loading.value = true
-        const { page, rowsPerPage, sortBy, descending } = props.pagination
-        let banco_id = 0
-        if (typeof banco.value !== 'undefined' && banco.value !== null) {
-          banco_id = banco.value
+        loading.value = true;
+        const { page, rowsPerPage, sortBy, descending } = props.pagination;
+        let banco_id = 0;
+        if (typeof banco.value !== "undefined" && banco.value !== null) {
+          banco_id = banco.value;
         }
-        const result = await post('projetos/read.php', {
+        const result = await post("projetos/read.php", {
           page,
           rowsPerPage,
           sortBy,
@@ -200,31 +200,31 @@ export default defineComponent({
           filterProject: null,
           pais: pais.value,
           tipo_id: null,
-          accao: 0
-        })
+          accao: 0,
+        });
 
-        projetos.value = result.rows
+        projetos.value = result.rows;
 
-        pagination.value.rowsNumber = result.count
-        pagination.value.page = page
-        pagination.value.rowsPerPage = rowsPerPage
-        pagination.value.sortBy = sortBy
-        pagination.value.descending = descending
+        pagination.value.rowsNumber = result.count;
+        pagination.value.page = page;
+        pagination.value.rowsPerPage = rowsPerPage;
+        pagination.value.sortBy = sortBy;
+        pagination.value.descending = descending;
       } catch (e) {
-        console.log(e)
+        console.log(e);
         $q.notify({
-          message: t('html.errors.errorLoadProjects'),
-          type: 'warning'
-        })
+          message: t("html.errors.errorLoadProjects"),
+          type: "warning",
+        });
       }
-      loading.value = false
-    }
+      loading.value = false;
+    };
     const getBanco = (id) => {
-      return bancos.value.find((p) => p.id === id).codigo
-    }
+      return bancos.value.find((p) => p.id === id).codigo;
+    };
     const abreProjeto = (id) => {
-      $router.push({ path: '/registed', query: { id: id } })
-    }
+      $router.push({ path: "/registed", query: { id: id } });
+    };
 
     return {
       mdiAlertDecagram,
@@ -240,46 +240,46 @@ export default defineComponent({
       projetoEscolhido,
       columns: [
         {
-          name: 'referencia',
-          label: t('html.projects.reference'),
-          field: 'referencia',
-          align: 'left'
+          name: "referencia",
+          label: t("html.projects.reference"),
+          field: "referencia",
+          align: "left",
         },
-        { name: 'nome', label: 'Nome', field: 'nome', align: 'left' },
+        { name: "nome", label: "Nome", field: "nome", align: "left" },
         {
-          name: 'data',
-          label: t('html.projects.data'),
-          field: 'data',
-          align: 'left',
-          style: 'width: 100px'
-        },
-        {
-          name: 'setor',
-          label: t('html.projects.sector'),
-          field: 'setor',
-          align: 'left'
+          name: "data",
+          label: t("html.projects.data"),
+          field: "data",
+          align: "left",
+          style: "width: 100px",
         },
         {
-          name: 'pais',
-          label: t('html.projects.country'),
-          field: 'pais',
-          align: 'left'
+          name: "setor",
+          label: t("html.projects.sector"),
+          field: "setor",
+          align: "left",
         },
         {
-          name: 'banco_id',
-          label: t('html.projects.bank'),
-          field: 'banco_id',
-          align: 'center'
+          name: "pais",
+          label: t("html.projects.country"),
+          field: "pais",
+          align: "left",
         },
-        { name: 'bancologo', label: '', field: 'bancologo', align: 'center' }
+        {
+          name: "banco_id",
+          label: t("html.projects.bank"),
+          field: "banco_id",
+          align: "center",
+        },
+        { name: "bancologo", label: "", field: "bancologo", align: "center" },
       ],
       logobanco,
       onServerRequest,
       getBanco,
-      abreProjeto
-    }
-  }
-})
+      abreProjeto,
+    };
+  },
+});
 </script>
 
 <style lang="sass" scoped>

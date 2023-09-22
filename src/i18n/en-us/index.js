@@ -14,26 +14,32 @@ export default {
     create: 'Create',
     search: 'Search',
     filter: 'Filter',
-    refresh: 'Refresh'
+    refresh: 'Refresh',
   },
   date: {
     days: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
     daysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
-    months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
+    months:
+      'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+        '_'
+      ),
     monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
     firstDayOfWeek: 0, // 0-6, 0 - Sunday, 1 Monday, ...
     format24h: false,
-    pluralDay: 'days'
+    pluralDay: 'days',
   },
   table: {
     noData: 'No data available',
     noResults: 'No matching records found',
     loading: 'Loading...',
-    selectedRecords: (rows) => (rows === 1 ? '1 record selected.' : (rows === 0 ? 'No' : rows) + ' records selected.'),
+    selectedRecords: (rows) =>
+      rows === 1
+        ? '1 record selected.'
+        : (rows === 0 ? 'No' : rows) + ' records selected.',
     recordsPerPage: 'Records per page:',
     allRows: 'All',
     pagination: (start, end, total) => start + '-' + end + ' of ' + total,
-    columns: 'Columns'
+    columns: 'Columns',
   },
   editor: {
     url: 'URL',
@@ -78,11 +84,11 @@ export default {
     size6: 'Very big',
     size7: 'Maximum',
     defaultFont: 'Default Font',
-    viewSource: 'View Source'
+    viewSource: 'View Source',
   },
   tree: {
     noNodes: 'No nodes available',
-    noResults: 'No matching nodes found'
+    noResults: 'No matching nodes found',
   },
   html: {
     index: {
@@ -94,48 +100,56 @@ export default {
       search: 'Search',
       projectLc: 'Project',
       more: 'View more',
-      multiaecDesc: 'The MULTI AEC Project is a project promoted by the AEC Cluster, which aims to strengthen cooperation and partnership activities in the Architecture, Engineering and Construction sector, in the Financial Multilateral markets.',
+      multiaecDesc:
+        'The MULTI AEC Project is a project promoted by the AEC Cluster, which aims to strengthen cooperation and partnership activities in the Architecture, Engineering and Construction sector, in the Financial Multilateral markets.',
       multiaec: 'INTEGRATED MULTILATERAL MANAGEMENT',
       multiaecMarket: 'Multilateral Market',
-      multiaecMarketDesc: 'Financial Multilaterals are International Financial Institutions (IFIs), which promote economic and social development in developing countries, with the objective of reducing poverty levels in the countries of operation.',
+      multiaecMarketDesc:
+        'Financial Multilaterals are International Financial Institutions (IFIs), which promote economic and social development in developing countries, with the objective of reducing poverty levels in the countries of operation.',
       news: 'News',
-      newsDesc: 'See here information and news about the most recent activities of the multilateral banks that are part of this project',
+      newsDesc:
+        'See here information and news about the most recent activities of the multilateral banks that are part of this project',
       tutoriais: 'Tutorials',
-      tutoriaisDesc: 'Here you can find information about Webinars, Promotional Videos, Bank Annual Reports and Strategic Documents, etc…',
+      tutoriaisDesc:
+        'Here you can find information about Webinars, Promotional Videos, Bank Annual Reports and Strategic Documents, etc…',
       presentation: 'PRESENTATION',
       partner: {
         name: 'Local Partner',
-        description: 'Register your company as a local partner of the associate companies of the Portuguese Construction Technological Platform',
-        register: 'Register'
+        description:
+          'Register your company as a local partner of the associate companies of the Portuguese Construction Technological Platform',
+        register: 'Register',
       },
       associate: {
         name: 'Associate',
-        description: 'Become a member of the Portuguese Construction Technological Platform (PTPC) and discover all the advantages'
+        description:
+          'Become a member of the Portuguese Construction Technological Platform (PTPC) and discover all the advantages',
       },
-      passwordRecover: 'Password recovery'
+      passwordRecover: 'Password recovery',
     },
     sideMenu: {
-      associates: 'Associates',
+      associates: 'Collaborative Platform',
       projects: 'Projects',
       project: 'Project',
       multiAEC: 'Multilateral Market',
       news: 'News',
-      tutoriais: 'Tutorials'
+      tutoriais: 'Tutorials',
+      faqs: "FAQ'S",
+      login: 'Login',
     },
     associates: {
-      title: 'ASSOCIATES',
+      title: 'Collaborative Platform',
       bigCompanies: 'Big companies',
       sctn: 'SCTN Entities',
       associations: 'Associações',
       public: 'Entities public administration',
-      pme: 'PME'
+      pme: 'PME',
     },
     projects: {
       reference: 'Reference',
       data: 'Date',
       sector: 'Sector',
       country: 'Country',
-      bank: 'Bank'
+      bank: 'Bank',
     },
     project: {
       title: 'PROJECT',
@@ -146,7 +160,7 @@ export default {
       obj2: 'Conducting Working Visits to Multilateral Institutions;',
       obj3: 'Development of an Internationalization Plan;',
       obj4: 'Strategic Capacity Building, tender preparation and demonstration;',
-      obj5: 'Collective Promotion of the AEC sector.'
+      obj5: 'Collective Promotion of the AEC sector.',
     },
     multiaec: {
       title: 'MULTILATERAL MARKET',
@@ -160,14 +174,17 @@ export default {
       obj6: 'Development Bank of Latin America (CAF);',
       obj7: 'Asian Development Bank (ADB);',
       obj8: 'Asian Infrastructure Investment Bank (AIIB);',
-      obj9: 'Council of Europe Development Bank (CEB).'
+      obj9: 'Council of Europe Development Bank (CEB).',
+    },
+    faqs: {
+      title: "FAQ's",
     },
     news: {
-      title: 'News'
+      title: 'News',
     },
     tutorials: {
       title: 'TUTORIALS',
-      studies: 'Studies'
+      studies: 'Studies',
     },
     bank: {
       bm: 'World Bank',
@@ -177,7 +194,7 @@ export default {
       berd: 'European Bank for Reconstruction and Development',
       berdInitials: 'EBRD',
       bei: 'European Investment Bank',
-      beiInitials: 'EIB'
+      beiInitials: 'EIB',
     },
     bankBei: {
       p1: 'The European Investment Bank is one of the largest multinational lenders in the world, it is the lending arm of the EU. The EIB is active not only in the European Union but in the rest of the world.',
@@ -186,7 +203,7 @@ export default {
       p4: 'The EIB provides loans to clients of all sizes, and its presence is often instrumental in attracting other investors.',
       p5: 'The EIB stimulates and catalyzes private capital through equity investment.',
       p6: 'The EIB provides guarantees that cover the risks of large and small projects. It also provides credit portfolios that make projects more attractive to other investors.',
-      p7: 'The EIB offers many opportunities for suppliers, contractors and consultants around the world. Most of these acquisition opportunities are related to EBRD-financed projects in the regions where it operates. But there are also a limited number of contract opportunities involving internal EBRD projects and departments.'
+      p7: 'The EIB offers many opportunities for suppliers, contractors and consultants around the world. Most of these acquisition opportunities are related to EBRD-financed projects in the regions where it operates. But there are also a limited number of contract opportunities involving internal EBRD projects and departments.',
     },
     bankBerd: {
       p1: 'The European Bank for Reconstruction and Development (EBRD) was created to help build a new post-Cold War era in Central and Eastern Europe. He played a historic role and gained unique experience in promoting change in the region, having so far invested almost €150 billion in more than 6,000 projects.',
@@ -197,7 +214,7 @@ export default {
       obj1: 'Loans',
       obj2: 'Equal investments',
       obj3: 'Guarantees to promote trade',
-      obj4: 'Support to SMEs, through the assistance of financial intermediaries.'
+      obj4: 'Support to SMEs, through the assistance of financial intermediaries.',
     },
     bankBid: {
       p1: 'The Inter-American Development Bank (IDB) was established in 1959 and is the main source of financing for the development of Latin America and the Caribbean. It provides loans, grants and technical assistance to countries in the region and conducts various types of research.',
@@ -208,7 +225,7 @@ export default {
       p6: 'In addition to the three categories of loans, the IDB can guarantee loans made by private financial sources in public sector projects. The guarantees aim to improve the financing conditions for projects in Latin America and the Caribbean and help to promote investment in borrowing countries. These guarantees are partial credit and political risk guarantee.',
       obj1: 'Investment loans to borrowing member countries of the IDB finance goods, works and services to promote social and economic development. This category includes specific instruments to support IDB borrowing member countries in the event of a natural disaster.',
       obj2: 'Policy-based lending provides Bank borrowing member countries with financing to support policy reforms and/or institutional changes in a particular sector or subsector.',
-      obj3: "Special development loans support borrowing countries during a macroeconomic crisis and mitigate the effects on countries' economic and social progress."
+      obj3: "Special development loans support borrowing countries during a macroeconomic crisis and mitigate the effects on countries' economic and social progress.",
     },
     bankBm: {
       p1: 'The World Bank is like a cooperative, made up of 189 member countries. These member countries, or shareholders, are represented by a Board of Governors, who are primarily responsible for World Bank policy. Generally, governors are finance ministers or development ministers of member countries. They meet once a year at the Annual Meetings of the Boards of Governors of the World Bank Group and the International Monetary Fund.',
@@ -222,11 +239,12 @@ export default {
       obj2: 'IDA offers interest-free loans and promotes grants to very poor countries.',
       obj3: 'IFC is an institution focused exclusively on the private sectors. It helps developing countries achieve sustainable growth by financing investments and mobilizing capital in financial markets and advising companies and governments.',
       obj4: 'MIGA promotes foreign direct investment in developing countries by providing political risk insurance (Guarantees) to investors and creditors.',
-      obj5: 'ICSID is an arbitration center for investment disputes in the countries where the World Bank operates.'
+      obj5: 'ICSID is an arbitration center for investment disputes in the countries where the World Bank operates.',
     },
     registed: {
       invite: 'Invite',
-      inviteMessage: 'Come and discover the Multi AEC platform where you can register and find projects within the scope of financial multilaterals and be part of a wide network of Portuguese companies with experience in this sector. https://multiaec.ptpc.pt '
+      inviteMessage:
+        'Come and discover the Multi AEC platform where you can register and find projects within the scope of financial multilaterals and be part of a wide network of Portuguese companies with experience in this sector. https://multiaec.ptpc.pt ',
     },
     login: {
       registerAssociated: 'New PTPC Associate',
@@ -249,11 +267,12 @@ export default {
       <li>European Investment Bank - BEI</li>
       </ul>
       <p>If you want to establish contact with Portuguese companies for contracts in your home country, please leave your contacts, data, and experience on the next page.</p>
-      <p>You will then be contacted by our interested companies.</p>`
+      <p>You will then be contacted by our interested companies.</p>`,
     },
     recover: {
-      recoverMessage: 'Enter the user to change the password. If you are registered on our platform, you will receive an email where you can reset your password.',
-      changePasswordMessage: 'Enter the new password'
+      recoverMessage:
+        'Enter the user to change the password. If you are registered on our platform, you will receive an email where you can reset your password.',
+      changePasswordMessage: 'Enter the new password',
     },
     errors: {
       error: 'Error',
@@ -276,7 +295,7 @@ export default {
       errorLoadProjects: 'Unable to get projects',
       errorLoadCompanies: 'Unable to get companies',
       error: 'Unable to complete the request',
-      noData: 'No data'
+      noData: 'No data',
     },
     registerPartner: {
       tabMain: 'General information',
@@ -293,7 +312,8 @@ export default {
       return: 'Return',
       register: 'Register',
       error: 'Unable to create account',
-      success: 'The account was created successfully. It will be validated by PTPC and you will be notified by email once it is active.'
-    }
-  }
-}
+      success:
+        'The account was created successfully. It will be validated by PTPC and you will be notified by email once it is active.',
+    },
+  },
+};
