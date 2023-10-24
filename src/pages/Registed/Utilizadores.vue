@@ -111,6 +111,18 @@
           </div>
           <div class="row q-col-gutter-sm">
             <q-select
+              v-model="utilizador.empresa_id"
+              :options="empresas"
+              option-value="id"
+              option-label="nome"
+              emit-value
+              map-options
+              label="Empresa"
+              outlined
+              class="col-xs-12 col-md-6"
+            />
+
+            <q-select
               v-model="utilizador.perfil_id"
               :options="perfis"
               option-value="id"
@@ -144,99 +156,110 @@ import {
   mdiCloseCircle,
   mdiEye,
   mdiEyeOff,
-  mdiFilterOutline
-} from '@quasar/extras/mdi-v6'
-import { defineComponent, ref, onMounted } from 'vue'
-import { get, postAuth } from 'boot/api'
-import { useQuasar } from 'quasar'
+  mdiFilterOutline,
+} from "@quasar/extras/mdi-v6";
+import { defineComponent, ref, onMounted } from "vue";
+import { get, postAuth } from "boot/api";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
   setup() {
-    const $q = useQuasar()
+    const $q = useQuasar();
 
-    const loading = ref(false)
-    const mostraEditor = ref(false)
-    const isPwd = ref(true)
-    const tableRef = ref(null)
+    const loading = ref(false);
+    const mostraEditor = ref(false);
+    const isPwd = ref(true);
+    const tableRef = ref(null);
 
     onMounted(async () => {
       try {
-        perfis.value = await get('perfilutilizador/read.php')
+        perfis.value = await get("perfilutilizador/read.php");
       } catch (e) {
-        console.log(e)
+        console.log(e);
         $q.notify({
-          message: 'Não foi possível obter os perfis de utilizador',
-          type: 'warning'
-        })
+          message: "Não foi possível obter os perfis de utilizador",
+          type: "warning",
+        });
       }
-      tableRef.value.requestServerInteraction()
-    })
 
-    const perfis = ref([])
-    const utilizadores = ref([])
-    const utilizadorEscolhido = ref([])
+      try {
+        empresas.value = await get("empresas/read-ativo.php");
+      } catch (e) {
+        console.log(e);
+        $q.notify({
+          message: "Não foi possível obter as empresas",
+          type: "warning",
+        });
+      }
+      tableRef.value.requestServerInteraction();
+    });
+
+    const perfis = ref([]);
+    const utilizadores = ref([]);
+    const utilizadorEscolhido = ref([]);
+    const empresas = ref([]);
     const utilizador = ref({
       id: 0,
-      username: '',
-      password: '',
+      username: "",
+      password: "",
       perfil_id: 3,
-      ativo: true
-    })
+      ativo: true,
+    });
     const colunas = [
       {
-        name: 'username',
-        label: 'Utilizador',
-        field: 'username',
-        align: 'left'
+        name: "username",
+        label: "Utilizador",
+        field: "username",
+        align: "left",
       },
-      { name: 'perfil_id', label: 'Perfil', field: 'perfil_id', align: 'left' },
-      { name: 'empresa', label: 'Empresa', field: 'empresa', align: 'left' },
-      { name: 'parceiro', label: 'Parceiro', field: 'parceiro', align: 'left' },
-      { name: 'ativo', label: 'Ativo', field: 'ativo', align: 'left' },
-      { name: 'actions', label: '', field: 'actions' }
-    ]
+      { name: "perfil_id", label: "Perfil", field: "perfil_id", align: "left" },
+      { name: "empresa", label: "Empresa", field: "empresa", align: "left" },
+      { name: "parceiro", label: "Parceiro", field: "parceiro", align: "left" },
+      { name: "ativo", label: "Ativo", field: "ativo", align: "left" },
+      { name: "actions", label: "", field: "actions" },
+    ];
 
     const pagination = ref({
       descending: false,
       page: 1,
       rowsPerPage: 10,
       rowsNumber: 10,
-      sortBy: null
-    })
-    const filter = ref(null)
+      sortBy: null,
+    });
+    const filter = ref(null);
 
     const isPasswordValid = function (val) {
-      return !!val || 'Insira a password'
-    }
+      return !!val || "Insira a password";
+    };
     const onServerRequest = async (props) => {
-      const { page, rowsPerPage, sortBy, descending } = props.pagination
-      const filter = props.filter
+      const { page, rowsPerPage, sortBy, descending } = props.pagination;
+      const filter = props.filter;
 
-      loading.value = true
+      loading.value = true;
       try {
-        const result = await postAuth('utilizadores/read.php', {
+        const result = await postAuth("utilizadores/read.php", {
           page,
           rowsPerPage,
           sortBy,
           descending,
-          filter
-        })
+          filter,
+        });
 
-        utilizadores.value = result.rows
+        utilizadores.value = result.rows;
 
-        pagination.value.rowsNumber = result.count
-        pagination.value.page = page
-        pagination.value.rowsPerPage = rowsPerPage
-        pagination.value.sortBy = sortBy
-        pagination.value.descending = descending
+        pagination.value.rowsNumber = result.count;
+        pagination.value.page = page;
+        pagination.value.rowsPerPage = rowsPerPage;
+        pagination.value.sortBy = sortBy;
+        pagination.value.descending = descending;
       } catch {
         $q.notify({
-          message: 'Não foi possível obter os utilizadores',
-          type: 'warning'
-        })
+          message: "Não foi possível obter os utilizadores",
+          type: "warning",
+        });
       }
-      loading.value = false
-    }
+      loading.value = false;
+    };
 
     return {
       mdiAccountHardHat,
@@ -254,6 +277,7 @@ export default defineComponent({
       perfis,
       utilizadores,
       utilizadorEscolhido,
+      empresas,
       utilizador,
       colunas,
       pagination,
@@ -263,31 +287,44 @@ export default defineComponent({
       onNovo: () => {
         utilizador.value = {
           id: 0,
-          username: '',
-          password: '',
-          perfil_id: 1,
+          username: "",
+          password: "",
+          perfil_id: 2,
           empresa_id: null,
-          ativo: true
-        }
-        mostraEditor.value = true
+          parceiro_id: null,
+          ativo: true,
+        };
+        mostraEditor.value = true;
       },
       onEdit: (p) => {
-        p.password = null
-        utilizador.value = p
-        utilizadorEscolhido.value = [p]
-        mostraEditor.value = true
+        p.password = null;
+        utilizador.value = p;
+        utilizadorEscolhido.value = [p];
+        mostraEditor.value = true;
       },
       onOk: async () => {
         try {
-          if (utilizador.value.id > 0) {
-            await postAuth('utilizadores/update.php', utilizador.value)
-          } else {
-            await postAuth('utilizadores/create.php', utilizador.value)
+          // check username and id
+          const usernameValid = await postAuth("utilizadores/check-user.php", {
+            id: utilizador.value.id,
+            username: utilizador.value.username,
+          });
+          if (usernameValid.username_valid === false) {
+            $q.notify({
+              message: "O nome de utilizador já existe",
+              type: "warning",
+            });
+            return;
           }
-          tableRef.value.requestServerInteraction()
-          mostraEditor.value = false
+          if (utilizador.value.id > 0) {
+            await postAuth("utilizadores/update.php", utilizador.value);
+          } else {
+            await postAuth("utilizadores/create.php", utilizador.value);
+          }
+          tableRef.value.requestServerInteraction();
+          mostraEditor.value = false;
         } catch (error) {
-          $q.notify({ message: 'Não foi possível guardar', type: 'warning' })
+          $q.notify({ message: "Não foi possível guardar", type: "warning" });
         }
       },
       displayTipo: (t) => {
@@ -296,13 +333,13 @@ export default defineComponent({
           perfis.value === null ||
           perfis.value.length === 0
         ) {
-          return ''
+          return "";
         }
-        const perfil = perfis.value.find((p) => p.id === t.perfil_id)
+        const perfil = perfis.value.find((p) => p.id === t.perfil_id);
 
-        return perfil !== null ? perfil.nome : ''
-      }
-    }
-  }
-})
+        return perfil !== null ? perfil.nome : "";
+      },
+    };
+  },
+});
 </script>
