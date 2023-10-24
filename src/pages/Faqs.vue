@@ -12,7 +12,7 @@
         :content-inset-level="0.5"
         expand-separator
         label="Projetos"
-        caption="Listagem dos projetos"
+        caption="Como consigo pesquisar os projetos?"
         default-opened
       >
         <q-card>
@@ -40,7 +40,7 @@
         :content-inset-level="0.5"
         expand-separator
         label="Registo"
-        caption="Criar conta associado PTPC"
+        caption="O que é e como posso criar conta associado PTPC?"
       >
         <q-card>
           <q-card-section>
@@ -62,7 +62,7 @@
         :content-inset-level="0.5"
         expand-separator
         label="Registo"
-        caption="Criar conta parceiro local"
+        caption="O que é e como posso criar conta parceiro local?"
       >
         <q-card>
           <q-card-section>
@@ -78,7 +78,7 @@
         :content-inset-level="0.5"
         expand-separator
         label="Área privada"
-        caption="Área com acesso restrito a associados PTPC"
+        caption="Que operações existem na área privada e quais os benefícios?"
       >
         <q-card>
           <q-card-section>

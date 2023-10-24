@@ -1,9 +1,2 @@
-###
-GET https://www.ptpc.pt/index.html
-
-###
-GET https://multiaec.ptpc.pt/index.html
-
-###
-GET https://multiaecapi.ptpc.pt/index.php
-
+### test email local
+GET http://localhost:8000/api/emails/send.php
