@@ -259,7 +259,7 @@ export default {
       registerAssociated: 'Nouvel associé PTPC',
       registerPartner: 'Partenaire local',
       recoverPassword: 'Récupérer mot de passe',
-      associateWarning: `<p>Cette inscription est exclusivement destinée aux entreprises portugaises dont le domaine d'activité est l'Architecture, l'Ingénierie, la Construction, et qui ont l'intention de demander leur adhésion au cluster AEC/PTPC. À cette fin, ils devraient être intéressés à participer au réseau opérationnel des multilatérales financières, ce qui leur permettra de recevoir des informations actualisées, de se qualifier pour des consortiums nationaux et des partenariats en vue des appels d'offres internationaux en cours avec les entités suivantes :</p >
+      associateWarning: `<p>Cette inscription est exclusivement destinée aux entreprises portugaises dont le domaine d'activité est l'Architecture, l'Ingénierie, la Construction, et qui ont l'intention de demander leur adhésion au cluster AEC/PTPC.</p><p>À cette fin, ils devraient être intéressés à participer au réseau opérationnel des multilatérales financières, ce qui leur permettra de recevoir des informations actualisées, de se qualifier pour des consortiums nationaux et des partenariats en vue des appels d'offres internationaux en cours avec les entités suivantes :</p >
       <ul>
       <li>Banque mondiale - BM</li>
       <li>Banque européenne pour la reconstruction et le développement - BERD</li>

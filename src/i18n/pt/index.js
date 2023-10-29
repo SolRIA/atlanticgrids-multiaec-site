@@ -257,7 +257,7 @@ export default {
       registerAssociated: 'Novo Associado PTPC',
       registerPartner: 'Parceiro local',
       recoverPassword: 'Recuperar senha',
-      associateWarning: `<p>Este registo destina-se exclusivamente a empresas portuguesas cujo ramo de atividade seja a Arquitetura, Engenharia, Construção, e que se pretendam candidatar a associado do cluster AEC/PTPC.  Para tal deverão ter interesse em participar na rede operacional das multilaterais financeiras, que permitirá receber informação atualizada, se qualificarem para consórcios e parcerias nacionais tendo em vista os concursos internacionais a decorrer junto das seguintes entidades:</p>
+      associateWarning: `<p>Este registo destina-se exclusivamente a empresas portuguesas cujo ramo de atividade seja a Arquitetura, Engenharia, Construção, e que se pretendam candidatar a associado do cluster AEC/PTPC.</p><p>Para tal deverão ter interesse em participar na rede operacional das multilaterais financeiras, que permitirá receber informação atualizada, se qualificarem para consórcios e parcerias nacionais tendo em vista os concursos internacionais a decorrer junto das seguintes entidades:</p>
       <ul>
       <li>Banco Mundial - BM</li>
       <li>Banco europeu de reconstrução e desenvolvimento - BERD</li>
