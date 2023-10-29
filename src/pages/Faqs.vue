@@ -7,9 +7,9 @@
       <SimpleSeparator />
     </q-card>
 
-    <q-list bordered class="rounded-borders q-my-lg">
+    <q-list class="rounded-borders q-my-lg">
       <q-expansion-item
-        :content-inset-level="0.5"
+        popup
         expand-separator
         label="Projetos"
         caption="Como consigo pesquisar os projetos?"
@@ -37,7 +37,7 @@
       </q-expansion-item>
 
       <q-expansion-item
-        :content-inset-level="0.5"
+        popup
         expand-separator
         label="Registo"
         caption="O que é e como posso criar conta associado PTPC?"
@@ -59,7 +59,7 @@
       </q-expansion-item>
 
       <q-expansion-item
-        :content-inset-level="0.5"
+        popup
         expand-separator
         label="Registo"
         caption="O que é e como posso criar conta parceiro local?"
@@ -75,7 +75,7 @@
       </q-expansion-item>
 
       <q-expansion-item
-        :content-inset-level="0.5"
+        popup
         expand-separator
         label="Área privada"
         caption="Que operações existem na área privada e quais os benefícios?"
